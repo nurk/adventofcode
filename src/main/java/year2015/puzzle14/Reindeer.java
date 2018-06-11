@@ -17,7 +17,7 @@ public class Reindeer {
         Integer distance;
         Integer loopSize = flySeconds + restSeconds;
         Integer fullLoops = seconds / loopSize;
-        Integer remainingSeconds = seconds - (fullLoops * loopSize);
+        Integer remainingSeconds = seconds % loopSize;
 
         distance = fullLoops * flySeconds * speed;
 
