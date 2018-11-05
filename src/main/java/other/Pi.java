@@ -10,7 +10,7 @@ public class Pi {
 
     public static void main(String[] args) {
         float coprime = 0;
-        for (int i = 1; i < 100000; i++) {
+        for (int i = 1; i < 1000000; i++) {
             if (getRandomBigInteger().gcd(getRandomBigInteger()).equals(BigInteger.ONE)) {
                 coprime++;
             }
