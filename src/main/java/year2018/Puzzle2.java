@@ -18,6 +18,10 @@ public class Puzzle2 {
     }
 
     public static void main(String[] args) throws URISyntaxException, IOException {
+        puzzleA();
+    }
+
+    private static void puzzleA() throws IOException, URISyntaxException {
         AtomicInteger twoOfAKind = new AtomicInteger(0);
         AtomicInteger threeOfAKind = new AtomicInteger(0);
         Files.readAllLines(getInputUri()).forEach(
