@@ -1,7 +1,5 @@
 package year2018;
 
-import year2017.Puzzle4b;
-
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -25,7 +23,7 @@ public class Puzzle1 {
                     total.getAndAdd(Integer.valueOf(line));
                 }
         );
-        System.out.println("Puzzle a: "+ total.get());
+        System.out.println("Puzzle a: " + total.get());
     }
 
     private static void puzzleB() throws IOException, URISyntaxException {
@@ -34,10 +32,10 @@ public class Puzzle1 {
         AtomicInteger currentFrequentie = new AtomicInteger(0);
         AtomicBoolean seenBefore = new AtomicBoolean(false);
 
-        while(!seenBefore.get()) {
+        while (!seenBefore.get()) {
             Files.readAllLines(getInputUri()).forEach(
                     line -> {
-                        if(seenBefore.get()){
+                        if (seenBefore.get()) {
                             return;
                         }
                         currentFrequentie.getAndAdd(Integer.valueOf(line));
@@ -45,10 +43,10 @@ public class Puzzle1 {
                     }
             );
         }
-        System.out.println("Puzzle b: "+ currentFrequentie.get());
+        System.out.println("Puzzle b: " + currentFrequentie.get());
     }
 
     private static Path getInputUri() throws URISyntaxException {
-        return Paths.get(Puzzle4b.class.getClassLoader().getResource("2018/input1a.txt").toURI());
+        return Paths.get(Puzzle1.class.getClassLoader().getResource("2018/input1a.txt").toURI());
     }
 }
