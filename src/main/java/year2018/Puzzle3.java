@@ -22,30 +22,6 @@ public class Puzzle3 {
         puzzleB(fabric);
     }
 
-    private static void puzzleB(int[][] fabric) throws IOException, URISyntaxException {
-        Files.readAllLines(getInputUri()).forEach(
-                line -> {
-                    String[] parts = StringUtils.split(line, " ");
-                    String[] xAndY = StringUtils.split(StringUtils.remove(parts[2], ":"), ",");
-                    String[] widthAndHeigth = StringUtils.split(parts[3], "x");
-
-                    boolean allOne = true;
-                    for (int i = getX(xAndY); i < getX(xAndY) + getWidth(widthAndHeigth); i++) {
-                        for (int j = getY(xAndY); j < getY(xAndY) + getHeigth(widthAndHeigth); j++) {
-                            if (fabric[i][j] != 1) {
-                                allOne = false;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (allOne) {
-                        System.out.println(parts[0]);
-                    }
-                }
-        );
-    }
-
     private static void puzzleA(int[][] fabric) throws IOException, URISyntaxException {
         Files.readAllLines(getInputUri()).forEach(
                 line -> {
@@ -72,6 +48,30 @@ public class Puzzle3 {
         }
 
         System.out.println(largerThenOne);
+    }
+
+    private static void puzzleB(int[][] fabric) throws IOException, URISyntaxException {
+        Files.readAllLines(getInputUri()).forEach(
+                line -> {
+                    String[] parts = StringUtils.split(line, " ");
+                    String[] xAndY = StringUtils.split(StringUtils.remove(parts[2], ":"), ",");
+                    String[] widthAndHeigth = StringUtils.split(parts[3], "x");
+
+                    boolean allOne = true;
+                    for (int i = getX(xAndY); i < getX(xAndY) + getWidth(widthAndHeigth); i++) {
+                        for (int j = getY(xAndY); j < getY(xAndY) + getHeigth(widthAndHeigth); j++) {
+                            if (fabric[i][j] != 1) {
+                                allOne = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (allOne) {
+                        System.out.println(parts[0]);
+                    }
+                }
+        );
     }
 
     private static Integer getWidth(String[] widthAndHeigth) {
