@@ -39,10 +39,7 @@ public class Puzzle2 {
     }
 
     private static void puzzleB() throws IOException, URISyntaxException {
-        List<String> lines = new ArrayList<>();
-        Files.readAllLines(getInputUri()).forEach(
-                line -> lines.add(line)
-        );
+        List<String> lines = new ArrayList<>(Files.readAllLines(getInputUri()));
 
         char[] lineA = new char[0];
         char[] lineB = new char[0];
