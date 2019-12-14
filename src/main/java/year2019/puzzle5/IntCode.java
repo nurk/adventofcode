@@ -7,6 +7,7 @@ public class IntCode {
     private final int input;
     private int[] integers;
     private int currentPosition = 0;
+    private int result;
 
     public IntCode(int[] integers, int input) {
         this.integers = integers;
@@ -14,12 +15,14 @@ public class IntCode {
     }
 
     public void run() {
-        while (true) {
-            runOperation();
+        while (!runOperation()) {
+
         }
+
+        System.out.println(result);
     }
 
-    private void runOperation() {
+    private boolean runOperation() {
         int curPos = integers[currentPosition];
         int opCode = getOpCode(curPos);
 
@@ -29,42 +32,42 @@ public class IntCode {
             int pos3 = integers[currentPosition + 3];
             integers[pos3] = integers[pos1] + integers[pos2];
             currentPosition += 4;
-            return;
+            return false;
         } else if (opCode == 2) {
             int pos1 = isImmediate(curPos, 1) ? currentPosition + 1 : integers[currentPosition + 1];
             int pos2 = isImmediate(curPos, 2) ? currentPosition + 2 : integers[currentPosition + 2];
             int pos3 = integers[currentPosition + 3];
             integers[pos3] = integers[pos1] * integers[pos2];
             currentPosition += 4;
-            return;
+            return false;
         } else if (opCode == 3) {
             int pos1 = isImmediate(curPos, 1) ? currentPosition + 1 : integers[currentPosition + 1];
             integers[pos1] = input;
             currentPosition += 2;
-            return;
+            return false;
         } else if (opCode == 4) {
             int pos1 = isImmediate(curPos, 1) ? currentPosition + 1 : integers[currentPosition + 1];
-            System.out.println(integers[pos1]);
+            this.result = integers[pos1];
             currentPosition += 2;
-            return;
+            return this.result != 0;
         } else if (opCode == 5) {
             int pos1 = isImmediate(curPos, 1) ? currentPosition + 1 : integers[currentPosition + 1];
             if (integers[pos1] != 0) {
                 int pos2 = isImmediate(curPos, 2) ? currentPosition + 2 : integers[currentPosition + 2];
                 currentPosition = integers[pos2];
-                return;
+                return false;
             }
             currentPosition += 3;
-            return;
+            return false;
         } else if (opCode == 6) {
             int pos1 = isImmediate(curPos, 1) ? currentPosition + 1 : integers[currentPosition + 1];
             if (integers[pos1] == 0) {
                 int pos2 = isImmediate(curPos, 2) ? currentPosition + 2 : integers[currentPosition + 2];
                 currentPosition = integers[pos2];
-                return;
+                return false;
             }
             currentPosition += 3;
-            return;
+            return false;
         } else if (opCode == 7) {
             int pos1 = isImmediate(curPos, 1) ? currentPosition + 1 : integers[currentPosition + 1];
             int pos2 = isImmediate(curPos, 2) ? currentPosition + 2 : integers[currentPosition + 2];
@@ -75,7 +78,7 @@ public class IntCode {
                 integers[pos3] = 0;
             }
             currentPosition += 4;
-            return;
+            return false;
         } else if (opCode == 8) {
             int pos1 = isImmediate(curPos, 1) ? currentPosition + 1 : integers[currentPosition + 1];
             int pos2 = isImmediate(curPos, 2) ? currentPosition + 2 : integers[currentPosition + 2];
@@ -86,9 +89,9 @@ public class IntCode {
                 integers[pos3] = 0;
             }
             currentPosition += 4;
-            return;
+            return false;
         } else if (opCode == 99) {
-            System.exit(0);
+            return true;
         }
 
         throw new IllegalArgumentException("uh oh");
@@ -108,7 +111,9 @@ public class IntCode {
         String mode = StringUtils.substring(reverse, parameter - 1, parameter);
 
         return mode.equals("1");
-
     }
 
+    public int getResult() {
+        return result;
+    }
 }
