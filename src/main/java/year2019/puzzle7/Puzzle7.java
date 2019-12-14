@@ -16,10 +16,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Puzzle7 {
 
     public static void main(String[] args) throws IOException, URISyntaxException {
-        //IntCode intCode = new IntCode(parse("3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99"), 7);
-        //intCode.run();
         puzzleA();
-        //puzzleB();
+        puzzleB();
     }
 
     private static void puzzleA() throws URISyntaxException, IOException {
@@ -34,19 +32,20 @@ public class Puzzle7 {
                                 for (int l = 0; l < 5; l++) {
                                     for (int m = 0; m < 5; m++) {
                                         if (isUniquePhase("" + i + j + k + l + m)) {
-                                            IntCode intCodeA = new IntCode(integers, new ArrayDeque<>(List.of(i, 0)));
+                                            IntCode intCodeA = new IntCode(integers);
+                                            intCodeA.setInputs(new ArrayDeque<>(List.of(i, 0)));
                                             int outputA = intCodeA.run();
-                                            IntCode intCodeB = new IntCode(integers,
-                                                    new ArrayDeque<>(List.of(j, outputA)));
+                                            IntCode intCodeB = new IntCode(integers);
+                                            intCodeB.setInputs(new ArrayDeque<>(List.of(j, outputA)));
                                             int outputB = intCodeB.run();
-                                            IntCode intCodeC = new IntCode(integers,
-                                                    new ArrayDeque<>(List.of(k, outputB)));
+                                            IntCode intCodeC = new IntCode(integers);
+                                            intCodeC.setInputs(new ArrayDeque<>(List.of(k, outputB)));
                                             int outputC = intCodeC.run();
-                                            IntCode intCodeD = new IntCode(integers,
-                                                    new ArrayDeque<>(List.of(l, outputC)));
+                                            IntCode intCodeD = new IntCode(integers);
+                                            intCodeD.setInputs(new ArrayDeque<>(List.of(l, outputC)));
                                             int outputD = intCodeD.run();
-                                            IntCode intCodeE = new IntCode(integers,
-                                                    new ArrayDeque<>(List.of(m, outputD)));
+                                            IntCode intCodeE = new IntCode(integers);
+                                            intCodeE.setInputs(new ArrayDeque<>(List.of(m, outputD)));
                                             int outputE = intCodeE.run();
                                             eOutputs.add(outputE);
                                         }
@@ -56,6 +55,53 @@ public class Puzzle7 {
                         }
                     }
                     System.out.println(eOutputs.last());
+                }
+        );
+    }
+
+    private static void puzzleB() throws URISyntaxException, IOException {
+        Files.readAllLines(Utils.getInputPath("2019/input7.txt")).forEach(
+                line -> {
+                    int[] integers = parse(line);
+
+                    SortedSet<Integer> haltedOutputs = new TreeSet<>();
+                    for (int i = 5; i < 10; i++) {
+                        for (int j = 5; j < 10; j++) {
+                            for (int k = 5; k < 10; k++) {
+                                for (int l = 5; l < 10; l++) {
+                                    for (int m = 5; m < 10; m++) {
+                                        if (isUniquePhase("" + i + j + k + l + m)) {
+                                            List<IntCode> intCodeMachines = new ArrayList<>();
+                                            intCodeMachines.add(new IntCode(integers).addInput(i).addInput(0));
+                                            intCodeMachines.add(new IntCode(integers).addInput(j));
+                                            intCodeMachines.add(new IntCode(integers).addInput(k));
+                                            intCodeMachines.add(new IntCode(integers).addInput(l));
+                                            intCodeMachines.add(new IntCode(integers).addInput(m));
+
+                                            boolean halted = false;
+                                            int currentIntCodeMachine = 0;
+
+                                            while (!halted) {
+                                                IntCode intCode = intCodeMachines.get(currentIntCodeMachine);
+                                                intCode.run();
+
+
+                                                if (intCode.isHalted()) {
+                                                    haltedOutputs.add(intCodeMachines.get(4).getResult());
+                                                    halted = true;
+                                                } else {
+                                                    currentIntCodeMachine = (currentIntCodeMachine + 1) % 5;
+                                                    intCodeMachines.get(currentIntCodeMachine)
+                                                            .addInput(intCode.getResult());
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    System.out.println(haltedOutputs.last());
                 }
         );
     }
@@ -76,17 +122,8 @@ public class Puzzle7 {
 
     }
 
-    private static void puzzleB() throws URISyntaxException, IOException {
-        /*Files.readAllLines(Utils.getInputPath("2019/input5.txt")).forEach(
-                line -> {
-                    IntCode intCode = new IntCode(parse(line), 5);
-                    intCode.run();
-                }
-        );*/
-    }
-
     public static int[] parse(String line) {
-        //line = "3,23,3,24,1002,24,10,24,1002,23,-1,23,101,5,23,23,1,24,23,23,4,23,99,0,0";
+        //line = "3,52,1001,52,-5,52,3,53,1,52,56,54,1007,54,5,55,1005,55,26,1001,54,-5,54,1105,1,12,1,53,54,53,1008,54,0,55,1001,55,1,55,2,53,55,53,4,53,1001,56,-1,56,1005,56,6,99,0,0,0,0,10";
         String[] split = StringUtils.split(line, ",");
         int[] ints = new int[split.length];
         for (int i = 0; i < split.length; i++) {

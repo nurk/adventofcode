@@ -2,18 +2,27 @@ package year2019.puzzle7;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayDeque;
 import java.util.Deque;
 
 public class IntCode {
 
-    private final Deque<Integer> inputs;
+    private Deque<Integer> inputs = new ArrayDeque<>();
     private int[] integers;
     private int currentPosition = 0;
     private int result;
+    private boolean halted = false;
 
-    public IntCode(int[] integers, Deque<Integer> inputs) {
+    public IntCode(int[] integers) {
         this.integers = integers.clone();
+    }
+
+    public void setInputs(Deque<Integer> inputs) {
         this.inputs = inputs;
+    }
+
+    public boolean isHalted() {
+        return halted;
     }
 
     public int run() {
@@ -46,16 +55,14 @@ public class IntCode {
             return false;
         } else if (opCode == 3) {
             int pos1 = isImmediate(curPos, 1) ? currentPosition + 1 : integers[currentPosition + 1];
-            Integer integer = inputs.pollFirst();
-            System.out.println("inputting " + integer);
-            integers[pos1] = integer;
+            integers[pos1] = inputs.pollFirst();
             currentPosition += 2;
             return false;
         } else if (opCode == 4) {
             int pos1 = isImmediate(curPos, 1) ? currentPosition + 1 : integers[currentPosition + 1];
             this.result = integers[pos1];
             currentPosition += 2;
-            return false;
+            return true;
         } else if (opCode == 5) {
             int pos1 = isImmediate(curPos, 1) ? currentPosition + 1 : integers[currentPosition + 1];
             if (integers[pos1] != 0) {
@@ -97,6 +104,7 @@ public class IntCode {
             currentPosition += 4;
             return false;
         } else if (opCode == 99) {
+            halted = true;
             return true;
         }
 
@@ -124,5 +132,10 @@ public class IntCode {
 
     public int getResult() {
         return result;
+    }
+
+    public IntCode addInput(int input){
+        this.inputs.add(input);
+        return this;
     }
 }
