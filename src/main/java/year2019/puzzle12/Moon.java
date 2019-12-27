@@ -10,9 +10,39 @@ public class Moon {
     }
 
     public void applyVelocity() {
-        this.x += vx;
-        this.y += vy;
+        applyVelocityX();
+        applyVelocityY();
+        applyVelocityZ();
+    }
+
+    public void applyVelocityZ() {
         this.z += vz;
+    }
+
+    public void applyVelocityY() {
+        this.y += vy;
+    }
+
+    public void applyVelocityX() {
+        this.x += vx;
+    }
+
+    public void applyGravityX(Moon moon1, Moon moon2, Moon moon3) {
+        applyGravityX(moon1);
+        applyGravityX(moon2);
+        applyGravityX(moon3);
+    }
+
+    public void applyGravityY(Moon moon1, Moon moon2, Moon moon3) {
+        applyGravityY(moon1);
+        applyGravityY(moon2);
+        applyGravityY(moon3);
+    }
+
+    public void applyGravityZ(Moon moon1, Moon moon2, Moon moon3) {
+        applyGravityZ(moon1);
+        applyGravityZ(moon2);
+        applyGravityZ(moon3);
     }
 
     public void applyGravity(Moon moon1, Moon moon2, Moon moon3) {
@@ -22,22 +52,32 @@ public class Moon {
     }
 
     private void applyGravity(Moon other) {
-        if (this.x < other.getX()) {
-            vx++;
-        } else if (this.x > other.getX()) {
-            vx--;
-        }
+        applyGravityX(other);
+        applyGravityY(other);
+        applyGravityZ(other);
+    }
 
+    private void applyGravityZ(Moon other) {
+        if (this.z < other.getZ()) {
+            vz++;
+        } else if (this.z > other.getZ()) {
+            vz--;
+        }
+    }
+
+    private void applyGravityY(Moon other) {
         if (this.y < other.getY()) {
             vy++;
         } else if (this.y > other.getY()) {
             vy--;
         }
+    }
 
-        if (this.z < other.getZ()) {
-            vz++;
-        } else if (this.z > other.getZ()) {
-            vz--;
+    private void applyGravityX(Moon other) {
+        if (this.x < other.getX()) {
+            vx++;
+        } else if (this.x > other.getX()) {
+            vx--;
         }
     }
 
@@ -55,6 +95,10 @@ public class Moon {
 
     public int getEnergy() {
         return (Math.abs(x) + Math.abs(y) + Math.abs(z)) * (Math.abs(vx) + Math.abs(vy) + Math.abs(vz));
+    }
+
+    public Moon clone() {
+        return new Moon(x, y, z);
     }
 
     @Override
