@@ -9,6 +9,6 @@ import java.nio.file.Paths;
 public class Utils {
 
     public static Path getInputPath(String fileName) throws URISyntaxException {
-        return Paths.get(Puzzle5a.class.getClassLoader().getResource(fileName).toURI());
+        return Paths.get(Utils.class.getClassLoader().getResource(fileName).toURI());
     }
 }
