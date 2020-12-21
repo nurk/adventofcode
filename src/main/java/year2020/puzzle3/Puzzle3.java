@@ -10,8 +10,6 @@ import java.util.List;
 
 public class Puzzle3 {
     public static void main(String[] args) throws URISyntaxException, IOException {
-
-
         List<String> lines = new ArrayList<>();
         Files.readAllLines(Utils.getInputPath("2020/input3.txt")).forEach(
                 line -> {
