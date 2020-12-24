@@ -20,6 +20,17 @@ public class Puzzle11 {
             currentOccupiedSeats = seating.getNumberOfOccupiedSeats();
             seating.doRound();
         }
-        System.out.println(seating.getNumberOfOccupiedSeats());
+        System.out.println("PuzzleA: " + seating.getNumberOfOccupiedSeats());
+
+
+        Seating2 seating2 = new Seating2(plan);
+
+         currentOccupiedSeats = -1;
+
+        while (seating2.getNumberOfOccupiedSeats() != currentOccupiedSeats) {
+            currentOccupiedSeats = seating2.getNumberOfOccupiedSeats();
+            seating2.doRound();
+        }
+        System.out.println("PuzzleB: " + seating2.getNumberOfOccupiedSeats());
     }
 }
