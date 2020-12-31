@@ -39,8 +39,8 @@ public class RulesSecondAttempt {
 
         public boolean isFullyParsed() {
             for (RuleElement ruleElement : ruleElements) {
-                for (char c : ruleElement.getElement().toCharArray()) {
-                    if (Character.isDigit(c)) {
+                for (String c : ruleElement.getElement().split(" ")) {
+                    if (StringUtils.isNumeric(c) ) {
                         return false;
                     }
                 }
@@ -51,23 +51,25 @@ public class RulesSecondAttempt {
         public void parse(Map<Integer, Rule> rules) {
             for (int j = ruleElements.size() - 1; j >= 0; j--) {
                 RuleElement ruleElement = ruleElements.get(j);
-                for (String c : ruleElement.getElement().split(" ")) {
-                    if (StringUtils.isNumeric(c) && StringUtils.contains(ruleElement.getElement(), " " + c + " ")) {
+                String originalRuleElementText = ruleElement.getElement();
+                for (String c : originalRuleElementText.split(" ")) {
+                    if (StringUtils.isNumeric(c)) {
                         Rule otherRule = rules.get(Integer.parseInt(c));
-                        String originalRuleElementText = ruleElement.getElement();
+                        String someotherOriginalRuleElementText = ruleElement.getElement();
                         for (int i = 0; i < otherRule.ruleElements.size(); i++) {
                             if (i == 0) {
-                                ruleElement.setElement(StringUtils.replace(originalRuleElementText,
+                                String replacement = StringUtils.replace(someotherOriginalRuleElementText,
                                     " " + c + " ",
-                                    " " + otherRule.ruleElements.get(i).getElement()) + " ");
+                                    " " + otherRule.ruleElements.get(i).getElement()) + " ";
+                                ruleElement.setElement(replacement);
                             } else {
-                                ruleElements.add(new RuleElement(StringUtils.replace(originalRuleElementText, c,
-                                    otherRule.ruleElements.get(i).getElement())));
+                                ruleElements.add(new RuleElement(StringUtils.replace(someotherOriginalRuleElementText,
+                                    " " + c + " ",
+                                    " " + otherRule.ruleElements.get(i).getElement() + " ")));
                             }
                         }
                     }
                 }
-                System.out.println(ruleElements.size());
             }
         }
     }
@@ -85,6 +87,13 @@ public class RulesSecondAttempt {
 
         public void setElement(String element) {
             this.element = element;
+        }
+
+        @Override
+        public String toString() {
+            return "RuleElement{" +
+                "element='" + element + '\'' +
+                '}';
         }
     }
 }
