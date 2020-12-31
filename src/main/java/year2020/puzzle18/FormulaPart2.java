@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FormulaPart2 {
-    private String formula;
-    private long result = 0;
+    private final String formula;
 
     public FormulaPart2(String formula) {
         this.formula = formula;
@@ -17,13 +16,12 @@ public class FormulaPart2 {
         String localFormula = formula;
         while (localFormula.contains("(")) {
             String part = StringUtils.substringBefore(StringUtils.substringAfterLast(localFormula, "("), ")");
-            localFormula = StringUtils.replace(localFormula, "(" + part + ")", String.valueOf(calculatePart(part)));
+            localFormula = StringUtils.replace(localFormula, "(" + part + ")", String.valueOf(calculatePart2(part)));
         }
-        result = calculatePart(localFormula);
-        return result;
+        return calculatePart2(localFormula);
     }
 
-    private long calculatePart(String part) {
+    private long calculatePart2(String part) {
         List<String> parts = new ArrayList<>(List.of(part.split(" ")));
 
         while (parts.size() > 1) {
@@ -44,9 +42,5 @@ public class FormulaPart2 {
             }
         }
         return Long.parseLong(parts.get(0));
-    }
-
-    public long getResult() {
-        return result;
     }
 }

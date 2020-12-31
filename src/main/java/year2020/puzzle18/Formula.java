@@ -3,8 +3,7 @@ package year2020.puzzle18;
 import org.apache.commons.lang3.StringUtils;
 
 public class Formula {
-    private String formula;
-    private long result = 0;
+    private final String formula;
 
     public Formula(String formula) {
         this.formula = formula;
@@ -16,8 +15,7 @@ public class Formula {
             String part = StringUtils.substringBefore(StringUtils.substringAfterLast(localFormula, "("), ")");
             localFormula = StringUtils.replace(localFormula, "(" + part + ")", String.valueOf(calculatePart(part)));
         }
-        result = calculatePart(localFormula);
-        return result;
+        return calculatePart(localFormula);
     }
 
     private long calculatePart(String part) {
@@ -26,19 +24,11 @@ public class Formula {
 
         for (int i = 1; i < parts.length; i += 2) {
             switch (parts[i]) {
-                case "*":
-                    localResult *= Long.parseLong(parts[i + 1]);
-                    break;
-                case "+":
-                    localResult += Long.parseLong(parts[i + 1]);
-                    break;
+                case "*" -> localResult *= Long.parseLong(parts[i + 1]);
+                case "+" -> localResult += Long.parseLong(parts[i + 1]);
             }
         }
 
         return localResult;
-    }
-
-    public long getResult() {
-        return result;
     }
 }
