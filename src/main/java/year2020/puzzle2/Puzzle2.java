@@ -1,4 +1,4 @@
-package year2020;
+package year2020.puzzle2;
 
 import org.apache.commons.lang3.StringUtils;
 import util.Utils;

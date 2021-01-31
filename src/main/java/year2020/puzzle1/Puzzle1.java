@@ -1,4 +1,4 @@
-package year2020;
+package year2020.puzzle1;
 
 import util.Utils;
 
