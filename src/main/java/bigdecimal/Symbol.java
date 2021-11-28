@@ -6,12 +6,11 @@ public enum Symbol {
     PLUS('+'), MINUS('-'), STAR('*'), SLASH('/'),
     OPEN('('), CLOSE(')'), COMMA(','),
     END(StreamTokenizer.TT_EOF),
-    WORD(StreamTokenizer.TT_WORD),
-    NUMBER(StreamTokenizer.TT_NUMBER);
+    WORD(StreamTokenizer.TT_WORD);
 
-    private int token;
+    private final int token;
 
-    private Symbol(int token) {
+    Symbol(int token) {
         this.token = token;
     }
 

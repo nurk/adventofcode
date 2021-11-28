@@ -14,23 +14,28 @@ public class BigDecimalCalculator {
     private String error;
     private int decimals;
 
-    private BigDecimalCalculator(String s, int decimals) {
+    private BigDecimalCalculator(String s, int decimals) throws IOException {
         this.decimals = decimals;
         Reader reader = new StringReader(s);
         tokens = new StreamTokenizer(reader);
         tokens.resetSyntax();
-        tokens.whitespaceChars(0, 32);
-        tokens.wordChars('0', '9');
-        tokens.wordChars('-', '.');
-        //tokens.wordChars('+', '+');
         tokens.wordChars('a', 'z');
         tokens.wordChars('A', 'Z');
-        tokens.slashSlashComments(true);
-        tokens.slashStarComments(true);
-
-        tokens.quoteChar('"');
-        tokens.quoteChar('\'');
+        tokens.wordChars(128 + 32, 255);
+        tokens.whitespaceChars(0, 32);
+        //tokens.commentChar('/');
+        //tokens.quoteChar('"');
+        //tokens.quoteChar('\'');
+        tokens.wordChars('0', '9');
+        tokens.wordChars('.', '.');
+        //tokens.wordChars('-', '.');
+        //tokens.wordChars('+', '-');
         tokens.ordinaryChar(Symbol.SLASH.toChar());
+
+        /*int t;
+        while((t = tokens.nextToken()) != StreamTokenizer.TT_EOF){
+            System.out.println(tokens.sval + " " + tokens.nval + " " + (char)t);
+        }*/
 
         getToken();
         value = expr();
@@ -39,7 +44,7 @@ public class BigDecimalCalculator {
         }
     }
 
-    public static BigDecimalCalculator parse(String s, int decimals) {
+    public static BigDecimalCalculator parse(String s, int decimals) throws IOException {
         return new BigDecimalCalculator(s, decimals);
     }
 
