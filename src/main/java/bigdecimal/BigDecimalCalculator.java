@@ -7,6 +7,9 @@ import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+/**
+ * source https://sites.google.com/site/drjohnbmatthews/enumerated-functions
+ */
 public class BigDecimalCalculator {
     private StreamTokenizer tokens;
     private int token;
