@@ -2,18 +2,11 @@ package year2021.puzzle1;
 
 import util.Utils;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Puzzle1 {
-    public static void main(String[] args) throws URISyntaxException, IOException {
-        List<Integer> numbers = new ArrayList<>();
-        Files.readAllLines(Utils.getInputPath("2021/input1.txt")).forEach(
-                line -> numbers.add(Integer.valueOf(line))
-        );
+    public static void main(String[] args) throws Exception {
+        List<Integer> numbers = Utils.getInput("2021/input1.txt", Integer::valueOf);
 
         int resultA = 0;
 
