@@ -13,7 +13,11 @@ public class Utils {
         return Paths.get(Utils.class.getClassLoader().getResource(fileName).toURI());
     }
 
-    public static <T> List<T> getInput(String fileName, Function<? super String, T> parser) throws Exception {
-        return Files.readAllLines(Utils.getInputPath(fileName)).stream().map(parser).toList();
+    public static <T> List<T> getInput(String fileName, Function<? super String, T> parser) {
+        try {
+            return Files.readAllLines(Utils.getInputPath(fileName)).stream().map(parser).toList();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

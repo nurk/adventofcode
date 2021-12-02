@@ -6,7 +6,7 @@ import util.Utils;
 import java.util.List;
 
 public class Puzzle2 {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         List<String> input = Utils.getInput("2021/input2.txt", (s) -> s);
 
         partA(input);
@@ -29,6 +29,17 @@ public class Puzzle2 {
         }
 
         System.out.println(position * depth);
+        System.out.println(
+                (input.stream()
+                        .map(s -> StringUtils.split(s, " "))
+                        .filter(l -> l[0].equalsIgnoreCase("forward"))
+                        .mapToLong(l -> Long.parseLong(l[1]))
+                        .sum()) *
+                        (input.stream()
+                                .map(s -> StringUtils.split(s, " "))
+                                .filter(l -> !l[0].equalsIgnoreCase("forward"))
+                                .mapToLong(l -> Long.parseLong(l[1]) * (l[0].equalsIgnoreCase("up") ? -1 : 1))
+                                .sum()));
     }
 
     private static void partB(List<String> input) {
