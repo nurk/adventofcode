@@ -3,6 +3,7 @@ package year2021.puzzle3;
 import util.Utils;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.*;
@@ -34,8 +35,8 @@ public class Puzzle3 {
 
 
     public static void partB(List<String> input) {
-        String oxygen = getOxygen(input);
-        String co2 = getCo2(input);
+        String oxygen = getSelectedString(input, Puzzle3::getMostCommonBit);
+        String co2 = getSelectedString(input, Puzzle3::getLeastCommonBit);
 
         System.out.println(oxygen);
         System.out.println(co2);
@@ -43,31 +44,15 @@ public class Puzzle3 {
 
     }
 
-    private static String getCo2(List<String> input) {
+    private static String getSelectedString(List<String> input, BiFunction<List<String>, Integer, String> bitSelector) {
         List<String> subList = input;
         int position = 0;
 
         while (subList.size() > 1) {
-            String leastCommonBit = getLeastCommonBit(subList, position);
+            String selectedBit = bitSelector.apply(subList, position);
             int finalPosition = position;
             subList = subList.stream()
-                    .filter(s -> leastCommonBit.equalsIgnoreCase(s.substring(finalPosition, finalPosition + 1)))
-                    .collect(toList());
-            position++;
-        }
-
-        return subList.get(0);
-    }
-
-    private static String getOxygen(List<String> input) {
-        List<String> subList = input;
-        int position = 0;
-
-        while (subList.size() > 1) {
-            String mostCommonBit = getMostCommonBit(subList, position);
-            int finalPosition = position;
-            subList = subList.stream()
-                    .filter(s -> mostCommonBit.equalsIgnoreCase(s.substring(finalPosition, finalPosition + 1)))
+                    .filter(s -> selectedBit.equalsIgnoreCase(s.substring(finalPosition, finalPosition + 1)))
                     .collect(toList());
             position++;
         }
