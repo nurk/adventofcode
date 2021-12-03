@@ -1,0 +1,96 @@
+package year2021.puzzle3;
+
+import util.Utils;
+
+import java.util.List;
+import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.*;
+
+public class Puzzle3 {
+    public static void main(String[] args) {
+        List<String> input = Utils.getInput("2021/input3.txt", (s) -> s);
+
+        partA(input);
+        System.out.println();
+        partB(input);
+    }
+
+    private static void partA(List<String> input) {
+        String gamma = IntStream.range(0, input.get(0).length())
+                .mapToObj(i -> getMostCommonBit(input, i))
+                .reduce((s, s2) -> s + s2)
+                .orElseThrow();
+
+        String epsilon = invertBits(gamma);
+
+        System.out.println(gamma);
+        System.out.println(epsilon);
+        System.out.println(Long.valueOf(gamma, 2));
+        System.out.println(Long.valueOf(epsilon, 2));
+
+        System.out.println(Long.valueOf(gamma, 2) * Long.valueOf(epsilon, 2));
+    }
+
+
+    public static void partB(List<String> input) {
+        String oxygen = getOxygen(input);
+        String co2 = getCo2(input);
+
+        System.out.println(oxygen);
+        System.out.println(co2);
+        System.out.println(Long.valueOf(oxygen, 2) * Long.valueOf(co2, 2));
+
+    }
+
+    private static String getCo2(List<String> input) {
+        List<String> subList = input;
+        int position = 0;
+
+        while (subList.size() > 1) {
+            String leastCommonBit = getLeastCommonBit(subList, position);
+            int finalPosition = position;
+            subList = subList.stream()
+                    .filter(s -> leastCommonBit.equalsIgnoreCase(s.substring(finalPosition, finalPosition + 1)))
+                    .collect(toList());
+            position++;
+        }
+
+        return subList.get(0);
+    }
+
+    private static String getOxygen(List<String> input) {
+        List<String> subList = input;
+        int position = 0;
+
+        while (subList.size() > 1) {
+            String mostCommonBit = getMostCommonBit(subList, position);
+            int finalPosition = position;
+            subList = subList.stream()
+                    .filter(s -> mostCommonBit.equalsIgnoreCase(s.substring(finalPosition, finalPosition + 1)))
+                    .collect(toList());
+            position++;
+        }
+
+        return subList.get(0);
+    }
+
+    public static String getMostCommonBit(List<String> input, int position) {
+        int ones = input.stream()
+                .map(s -> s.substring(position, position + 1))
+                .map(s -> s.equalsIgnoreCase("1") ? 1 : 0)
+                .mapToInt(Integer::intValue)
+                .sum();
+        return ones >= (input.size() / 2f) ? "1" : "0";
+    }
+
+    public static String getLeastCommonBit(List<String> input, int position) {
+        return invertBits(getMostCommonBit(input, position));
+    }
+
+    private static String invertBits(String input) {
+        return input.replaceAll("0", "x")
+                .replaceAll("1", "0")
+                .replaceAll("x", "1");
+    }
+}
