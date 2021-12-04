@@ -2,7 +2,7 @@ package year2021.puzzle4;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class Point {
+class Point {
     private final int number;
     private boolean marked = false;
 

@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.*;
 
-public class Board {
+class Board {
     private final List<List<Point>> points = new ArrayList<>();
 
     public Board(List<String> input) {

@@ -17,11 +17,8 @@ public class Puzzle4 {
     }
 
     private static void partA(List<String> input) {
-        List<Integer> randomInput = new ArrayList<>(Arrays.stream(input.get(0).split(","))
+        List<Integer> randomInput = new ArrayList<>(Arrays.stream(input.remove(0).split(","))
                 .map(Integer::valueOf).toList());
-
-        input.remove(0);
-        input.remove(0);
 
         List<Board> boards = Lists.partition(input, 6).stream()
                 .map(Board::new).toList();
@@ -43,11 +40,8 @@ public class Puzzle4 {
     }
 
     private static void partB(List<String> input) {
-        List<Integer> randomInput = new ArrayList<>(Arrays.stream(input.get(0).split(","))
+        List<Integer> randomInput = new ArrayList<>(Arrays.stream(input.remove(0).split(","))
                 .map(Integer::valueOf).toList());
-
-        input.remove(0);
-        input.remove(0);
 
         List<Board> boards = Lists.partition(input, 6).stream()
                 .map(Board::new).toList();

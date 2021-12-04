@@ -46,15 +46,16 @@ public class Puzzle3 {
 
     private static String getSelectedString(List<String> input, BiFunction<List<String>, Integer, String> bitSelector) {
         List<String> subList = input;
-        int position = 0;
+        var ref = new Object() {
+            int position = 0;
+        };
 
         while (subList.size() > 1) {
-            String selectedBit = bitSelector.apply(subList, position);
-            int finalPosition = position;
+            String selectedBit = bitSelector.apply(subList, ref.position);
             subList = subList.stream()
-                    .filter(s -> selectedBit.equalsIgnoreCase(s.substring(finalPosition, finalPosition + 1)))
+                    .filter(s -> selectedBit.equalsIgnoreCase(s.substring(ref.position, ref.position + 1)))
                     .collect(toList());
-            position++;
+            ref.position++;
         }
 
         return subList.get(0);
