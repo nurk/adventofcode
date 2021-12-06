@@ -2,9 +2,6 @@ package year2021.puzzle6;
 
 import util.Utils;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -12,11 +9,11 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 public class Puzzle6 {
-    public static void main(String[] args) throws URISyntaxException, IOException {
-        List<Integer> input = Files.readAllLines(Utils.getInputPath("2021/input6.txt")).stream()
-                .map(line -> line.split(","))
-                .flatMap(Arrays::stream)
-                .map(Integer::valueOf)
+    public static void main(String[] args) {
+        List<Integer> input = Utils.getInput("2021/input6.txt",
+                        line -> Arrays.stream(line.split(",")).map(Integer::valueOf))
+                .stream()
+                .flatMap(s -> s)
                 .toList();
 
         Map<Integer, Long> fish = new HashMap<>();
