@@ -28,13 +28,13 @@ public class Puzzle7 {
                                                 Integer max,
                                                 IntUnaryOperator fuelStepCostConverter) {
         return IntStream.rangeClosed(min, max)
-                .map(position -> costOfPosition(input, position, fuelStepCostConverter))
+                .map(position -> alignmentCost(input, position, fuelStepCostConverter))
                 .min().orElseThrow();
     }
 
-    private static Integer costOfPosition(List<Integer> input,
-                                          Integer position,
-                                          IntUnaryOperator fuelStepCostConverter) {
+    private static Integer alignmentCost(List<Integer> input,
+                                         Integer position,
+                                         IntUnaryOperator fuelStepCostConverter) {
         return input.stream()
                 .map(i -> fuelStepCostConverter.applyAsInt(Math.abs(i - position)))
                 .mapToInt(Integer::intValue)
