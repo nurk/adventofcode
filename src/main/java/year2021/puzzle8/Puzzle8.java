@@ -4,7 +4,6 @@ import util.Utils;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Puzzle8 {
     public static void main(String[] args) {
@@ -33,30 +32,28 @@ public class Puzzle8 {
                 .map(Puzzle8::sortedString)
                 .collect(Collectors.groupingBy(String::length));
 
-        Map<Integer, String> digitsMap = IntStream.rangeClosed(0, 9)
-                .boxed()
-                .collect(Collectors.toMap(i -> i, i -> ""));
+        Map<Integer, String> digitsMap = new HashMap<>();
 
-        digitsMap.replace(1, signalLengthMap.get(2).get(0));
-        digitsMap.replace(4, signalLengthMap.get(4).get(0));
-        digitsMap.replace(7, signalLengthMap.get(3).get(0));
-        digitsMap.replace(8, signalLengthMap.get(7).get(0));
+        digitsMap.put(1, signalLengthMap.get(2).get(0));
+        digitsMap.put(4, signalLengthMap.get(4).get(0));
+        digitsMap.put(7, signalLengthMap.get(3).get(0));
+        digitsMap.put(8, signalLengthMap.get(7).get(0));
         signalLengthMap.get(6).forEach(ss -> {
             if (!hasSameSegments(ss, digitsMap.get(1))) {
-                digitsMap.replace(6, ss);
+                digitsMap.put(6, ss);
             } else if (hasSameSegments(ss, digitsMap.get(4))) {
-                digitsMap.replace(9, ss);
+                digitsMap.put(9, ss);
             } else {
-                digitsMap.replace(0, ss);
+                digitsMap.put(0, ss);
             }
         });
         signalLengthMap.get(5).forEach(ss -> {
             if (hasSameSegments(ss, digitsMap.get(7))) {
-                digitsMap.replace(3, ss);
+                digitsMap.put(3, ss);
             } else if (hasSameSegments(digitsMap.get(6), ss)) {
-                digitsMap.replace(5, ss);
+                digitsMap.put(5, ss);
             } else {
-                digitsMap.replace(2, ss);
+                digitsMap.put(2, ss);
             }
         });
         return digitsMap;
@@ -83,8 +80,8 @@ public class Puzzle8 {
                 .containsAll(Arrays.stream(givenString.split("")).toList());
     }
 
-    private static String getDigitFromSegmentString(String segmentString, Map<Integer, String> values) {
-        return values.entrySet()
+    private static String getDigitFromSegmentString(String segmentString, Map<Integer, String> digitsMap) {
+        return digitsMap.entrySet()
                 .stream()
                 .filter(integerStringEntry -> integerStringEntry.getValue().equals(sortedString(segmentString)))
                 .findFirst()
