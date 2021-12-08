@@ -4,8 +4,7 @@ import util.Utils;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 public class Puzzle8 {
     public static void main(String[] args) {
@@ -16,55 +15,51 @@ public class Puzzle8 {
     }
 
     private static void partB(List<String[]> input) {
-        long sum = input.stream().map(s -> {
-                    String[] signals = s[0].split(" ");
-
-                    Map<Long, String> digitsMap = new HashMap<>();
-                    LongStream.rangeClosed(0, 9).forEach(l -> digitsMap.put(l, ""));
-
-                    Arrays.stream(signals).map(Puzzle8::sortedString).forEach(ss -> {
-                        switch (ss.length()) {
-                            case 2 -> digitsMap.replace(1L, ss);
-                            case 4 -> digitsMap.replace(4L, ss);
-                            case 3 -> digitsMap.replace(7L, ss);
-                            case 7 -> digitsMap.replace(8L, ss);
-                        }
-                    });
-
-                    Arrays.stream(signals).map(Puzzle8::sortedString)
-                            .filter(ss -> ss.length() == 6)
-                            .forEach(ss -> {
-                                        if (!hasSameSegments(ss, digitsMap.get(1L))) {
-                                            digitsMap.replace(6L, ss);
-                                        } else if (hasSameSegments(ss, digitsMap.get(4L))) {
-                                            digitsMap.replace(9L, ss);
-                                        } else {
-                                            digitsMap.replace(0L, ss);
-                                        }
-                                    }
-                            );
-
-                    Arrays.stream(signals).map(Puzzle8::sortedString)
-                            .filter(ss -> ss.length() == 5)
-                            .forEach(ss -> {
-                                if (hasSameSegments(ss, digitsMap.get(7L))) {
-                                    digitsMap.replace(3L, ss);
-                                } else if (hasSameSegments(digitsMap.get(6L), ss)) {
-                                    digitsMap.replace(5L, ss);
-                                } else {
-                                    digitsMap.replace(2L, ss);
-                                }
-                            });
-
-                    return Arrays.stream(s[1].split(" "))
-                            .map(ss -> getNominalValue(ss, digitsMap))
+        long sum = input.stream()
+                .map(line -> {
+                    Map<Integer, String> digitsMap = convertSignalsToDigits(line[0]);
+                    return Arrays.stream(line[1].split(" "))
+                            .map(ss -> getDigitFromSegmentString(ss, digitsMap))
                             .collect(Collectors.joining(""));
                 })
-                .map(Long::valueOf)
-                .mapToLong(l -> l)
+                .mapToLong(Long::valueOf)
                 .sum();
 
         System.out.println(sum);
+    }
+
+    private static Map<Integer, String> convertSignalsToDigits(String signals) {
+        Map<Integer, List<String>> signalLengthMap = Arrays.stream(signals.split(" "))
+                .map(Puzzle8::sortedString)
+                .collect(Collectors.groupingBy(String::length));
+
+        Map<Integer, String> digitsMap = IntStream.rangeClosed(0, 9)
+                .boxed()
+                .collect(Collectors.toMap(i -> i, i -> ""));
+
+        digitsMap.replace(1, signalLengthMap.get(2).get(0));
+        digitsMap.replace(4, signalLengthMap.get(4).get(0));
+        digitsMap.replace(7, signalLengthMap.get(3).get(0));
+        digitsMap.replace(8, signalLengthMap.get(7).get(0));
+        signalLengthMap.get(6).forEach(ss -> {
+            if (!hasSameSegments(ss, digitsMap.get(1))) {
+                digitsMap.replace(6, ss);
+            } else if (hasSameSegments(ss, digitsMap.get(4))) {
+                digitsMap.replace(9, ss);
+            } else {
+                digitsMap.replace(0, ss);
+            }
+        });
+        signalLengthMap.get(5).forEach(ss -> {
+            if (hasSameSegments(ss, digitsMap.get(7))) {
+                digitsMap.replace(3, ss);
+            } else if (hasSameSegments(digitsMap.get(6), ss)) {
+                digitsMap.replace(5, ss);
+            } else {
+                digitsMap.replace(2, ss);
+            }
+        });
+        return digitsMap;
     }
 
     private static void partA(List<String[]> input) {
@@ -72,15 +67,10 @@ public class Puzzle8 {
                 .map(s -> s[1])
                 .map(s -> s.split(" "))
                 .flatMap(Arrays::stream)
-                .filter(Puzzle8::isUniqueDigit)
+                .map(String::length)
+                .filter(length -> List.of(2, 4, 3, 7).contains(length))
                 .count();
         System.out.println(uniqueDigitsByLength);
-    }
-
-    private static boolean isUniqueDigit(String digit) {
-        return Stream.of(2, 4, 3, 7)
-                .anyMatch(i -> digit.length() == i);
-
     }
 
     private static String sortedString(String s) {
@@ -93,10 +83,10 @@ public class Puzzle8 {
                 .containsAll(Arrays.stream(givenString.split("")).toList());
     }
 
-    private static String getNominalValue(String ss, Map<Long, String> values) {
+    private static String getDigitFromSegmentString(String segmentString, Map<Integer, String> values) {
         return values.entrySet()
                 .stream()
-                .filter(longStringEntry -> longStringEntry.getValue().equals(sortedString(ss)))
+                .filter(integerStringEntry -> integerStringEntry.getValue().equals(sortedString(segmentString)))
                 .findFirst()
                 .map(Map.Entry::getKey)
                 .map(Object::toString)
