@@ -53,7 +53,7 @@ class Board {
         return points;
     }
 
-    public Optional<Point> getPoint(int row,
+    private Optional<Point> getPoint(int row,
                                     int col) {
         try {
             return Optional.ofNullable(board[row][col]);
