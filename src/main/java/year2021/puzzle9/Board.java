@@ -54,7 +54,7 @@ class Board {
     }
 
     private Optional<Point> getPoint(int row,
-                                    int col) {
+                                     int col) {
         try {
             return Optional.ofNullable(board[row][col]);
         } catch (ArrayIndexOutOfBoundsException e) {
