@@ -34,9 +34,7 @@ class Octopus {
     }
 
     public void resetLevel() {
-        if (flashing()) {
-            level = 0;
-        }
+        level = 0;
     }
 
     public boolean flashed() {
