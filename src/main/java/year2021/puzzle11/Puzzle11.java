@@ -17,11 +17,18 @@ public class Puzzle11 {
     private static void partB(List<String> input) {
         Board board = new Board(input);
 
-        System.out.println(LongStream.iterate(1, step -> step + 1)
-                .peek(step -> board.doStep())
-                .takeWhile(step -> !board.isSynchronized())
-                .max()
-                .orElseThrow());
+        /*int step = 0;
+        while (!board.isSynchronized()) {
+            board.doStep();
+            step++;
+        }
+        System.out.println(step);*/
+
+        System.out.println(LongStream.iterate(1, step -> !board.isSynchronized(), step -> {
+                    board.doStep();
+                    return ++step;
+                })
+                .max().orElseThrow());
     }
 
     private static void partA(List<String> input) {
