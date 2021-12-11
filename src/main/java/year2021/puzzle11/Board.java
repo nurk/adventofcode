@@ -1,6 +1,9 @@
 package year2021.puzzle11;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -44,25 +47,23 @@ class Board {
         }
     }
 
-    public int doStep() {
-        Set<Octopus> flashMap = new HashSet<>();
-        /*getOctopusStream()
-                .map(Octopus::incrementLevel)
-                .toList().stream()
-                .peek(o -> buildFlashMap(o, flashMap))
-                .toList()
-                .forEach(Octopus::resetLevel);*/
+    public boolean isSynchronized() {
+        return getOctopusStream()
+                .allMatch(Octopus::flashed);
+    }
 
+    public long countOctopiThatFlashed() {
+        return getOctopusStream()
+                .filter(Octopus::flashed)
+                .count();
+    }
+
+    public void doStep() {
         getOctopusStream()
                 .forEach(Octopus::incrementLevel);
 
         getOctopusStream()
-                .forEach(o -> buildFlashMap(o, flashMap));
-
-        getOctopusStream()
-                .forEach(Octopus::resetLevel);
-
-        return flashMap.size();
+                .forEach(this::doFlashes);
     }
 
     private Stream<Octopus> getOctopusStream() {
@@ -70,12 +71,13 @@ class Board {
                 .flatMap(Arrays::stream);
     }
 
-    private void buildFlashMap(Octopus octopus, Set<Octopus> flashMap) {
-        if (octopus.flashing() && !flashMap.contains(octopus)) {
-            flashMap.add(octopus);
+    private void doFlashes(Octopus octopus) {
+        if (octopus.flashing()) {
+            octopus.resetLevel();
             getAdjacentOctopi(octopus).stream()
+                    .filter(Predicate.not(Octopus::flashed))
                     .map(Octopus::incrementLevel)
-                    .forEach(o -> buildFlashMap(o, flashMap));
+                    .forEach(this::doFlashes);
         }
     }
 

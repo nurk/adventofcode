@@ -38,4 +38,8 @@ class Octopus {
             level = 0;
         }
     }
+
+    public boolean flashed() {
+        return level == 0;
+    }
 }

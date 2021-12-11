@@ -4,7 +4,7 @@ import util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 public class Puzzle11 {
     public static void main(String[] args) {
@@ -15,19 +15,21 @@ public class Puzzle11 {
     }
 
     private static void partB(List<String> input) {
-        int step = 1;
         Board board = new Board(input);
 
-        while (board.doStep() != 100) {
-            step++;
-        }
-        System.out.println(step);
+        System.out.println(LongStream.iterate(1, step -> step + 1)
+                .peek(step -> board.doStep())
+                .takeWhile(step -> !board.isSynchronized())
+                .max()
+                .orElseThrow());
     }
 
     private static void partA(List<String> input) {
         Board board = new Board(input);
-        System.out.println(IntStream.rangeClosed(1, 100)
-                .map(i -> board.doStep())
+
+        System.out.println(LongStream.rangeClosed(1, 100)
+                .peek(i -> board.doStep())
+                .map(i -> board.countOctopiThatFlashed())
                 .sum());
     }
 }
