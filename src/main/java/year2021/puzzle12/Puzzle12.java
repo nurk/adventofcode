@@ -29,7 +29,7 @@ public class Puzzle12 {
             if (StringUtils.isAllUpperCase(neighbour)) {
                 path.push(neighbour);
                 count.getAndAdd(countPaths(path, caves, allowTwice));
-                path.pop();
+                path.remove();
             } else if (!path.contains(neighbour)) {
                 path.push(neighbour);
                 count.getAndAdd(countPaths(path, caves, allowTwice));
