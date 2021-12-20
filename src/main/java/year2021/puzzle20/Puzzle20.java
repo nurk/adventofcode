@@ -17,7 +17,6 @@ public class Puzzle20 {
 
         Board b = new Board(decode, input);
         b.enhance(50);
-        System.out.println(b);
 
     }
 }

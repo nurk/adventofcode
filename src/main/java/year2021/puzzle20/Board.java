@@ -45,6 +45,7 @@ class Board {
             this.board = newestBoard;
         }
 
+        System.out.println(this);
         System.out.println(countLit(times));
     }
 
