@@ -11,12 +11,11 @@ public class Puzzle25 {
 
         Board b = new Board(input);
         int steps = 0;
-        boolean movedEast = true;
-        boolean movedSouth = true;
-        while (movedEast || movedSouth) {
+        boolean moved = true;
+        while (moved) {
             steps++;
-            movedEast = b.doEastStep();
-            movedSouth = b.doSouthStep();
+            moved = b.doStep(">", row -> row, col -> (col + 1) % b.getCols());
+            moved = b.doStep("v", row -> ((row + 1) % b.getRows()), col -> col) || moved;
         }
         System.out.println(steps);
     }

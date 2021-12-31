@@ -2,6 +2,7 @@ package year2021.puzzle25;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.IntFunction;
 
 import static java.util.stream.Collectors.*;
 
@@ -17,42 +18,29 @@ class Board {
         }
     }
 
-    public boolean doEastStep() {
-        String[][] newBoard = new String[board.length][board[0].length];
-        boolean moved = false;
-
-        for (int row = 0; row < board.length; row++) {
-            for (int col = 0; col < board[row].length; col++) {
-                if (">".equals(board[row][col])) {
-                    int targetCol = (col + 1) % (board[row].length);
-                    if (".".equals(board[row][targetCol])) {
-                        moved = true;
-                        newBoard[row][col] = ".";
-                        newBoard[row][targetCol] = board[row][col];
-                    } else {
-                        newBoard[row][col] = board[row][col];
-                    }
-                } else if (newBoard[row][col] == null) {
-                    newBoard[row][col] = board[row][col];
-                }
-            }
-        }
-        this.board = newBoard;
-        return moved;
+    public int getRows() {
+        return board.length;
     }
 
-    public boolean doSouthStep() {
+    public int getCols() {
+        return board[0].length;
+    }
+
+    public boolean doStep(String symbol,
+                          IntFunction<Integer> targetRowFunction,
+                          IntFunction<Integer> targetColFunction) {
         String[][] newBoard = new String[board.length][board[0].length];
         boolean moved = false;
 
         for (int row = 0; row < board.length; row++) {
             for (int col = 0; col < board[row].length; col++) {
-                if ("v".equals(board[row][col])) {
-                    int targetRow = (row + 1) % (board.length);
-                    if (".".equals(board[targetRow][col])) {
+                if (symbol.equals(board[row][col])) {
+                    int targetCol = targetColFunction.apply(col);
+                    int targetRow = targetRowFunction.apply(row);
+                    if (".".equals(board[targetRow][targetCol])) {
                         moved = true;
                         newBoard[row][col] = ".";
-                        newBoard[targetRow][col] = board[row][col];
+                        newBoard[targetRow][targetCol] = board[row][col];
                     } else {
                         newBoard[row][col] = board[row][col];
                     }
