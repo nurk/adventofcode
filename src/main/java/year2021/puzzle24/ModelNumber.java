@@ -20,4 +20,15 @@ public class ModelNumber {
     public String getModelNumber() {
         return modelNumber;
     }
+
+    public String decrement() {
+        long number = Long.parseLong(modelNumber);
+        number--;
+        while (String.valueOf(number).length() != 14 || String.valueOf(number).contains("0")) {
+            number--;
+        }
+        modelNumber = String.valueOf(number);
+        remaining = modelNumber;
+        return modelNumber;
+    }
 }
