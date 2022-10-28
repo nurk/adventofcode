@@ -25,7 +25,7 @@ public class Puzzle1 {
         AtomicInteger y = new AtomicInteger();
         AtomicReference<Direction> direction = new AtomicReference<>(Direction.NORTH);
         List<Pair<Integer, Integer>> visited = new ArrayList<>();
-        visited.add(Pair.of(x.get(), y.get()));
+        verifyVisited(visited, x.get(), y.get());
         input.forEach(
                 movement -> {
                     switch (movement.substring(0, 1)) {
