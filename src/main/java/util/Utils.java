@@ -20,4 +20,12 @@ public class Utils {
             throw new RuntimeException(e);
         }
     }
+
+    public static List<String> getInput(String fileName) {
+        try {
+            return Files.readAllLines(Utils.getInputPath(fileName));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

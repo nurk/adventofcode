@@ -5,7 +5,6 @@ import util.Utils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -18,12 +17,16 @@ public class Puzzle4 {
         System.out.println(new Room("a-b-c-d-e-f-g-h-987[abcde]").isValidRoom());
         System.out.println(new Room("not-a-real-room-404[oarel]").isValidRoom());
         System.out.println(new Room("totally-real-room-200[decoy]").isValidRoom());
+        System.out.println(new Room("qzmt-zixmtkozy-ivhz-343[kj;l]").decrypt());
 
         AtomicReference<Long> totalSectorIds = new AtomicReference<>(0L);
 
-        Files.readAllLines(Utils.getInputPath("2016/input4.txt")).forEach(
+        Utils.getInput("2016/input4.txt").forEach(
                 line -> {
                     Room room = new Room(line);
+                    if ("northpole object storage".equals(room.decrypt())) {
+                        System.out.println("northpole object storage: " + room.getSectorId());
+                    }
                     if (room.isValidRoom()) {
                         totalSectorIds.updateAndGet(v -> v + room.getSectorId());
                     }
@@ -35,15 +38,18 @@ public class Puzzle4 {
     }
 
     public static class Room {
-        private String checksum;
-        private Integer sectorId;
+        private final String checksum;
+        private final Integer sectorId;
+        private final String encryptedRoomName;
         private Map<String, Integer> characters = new HashMap<>();
+        private static final String[] ALPHABET = "abcdefghijklmnopqrstuvwxyz".split("");
 
         public Room(String name) {
             String sectorIdAndChecksum = StringUtils.substringAfterLast(name, "-");
             sectorId = Integer.valueOf(StringUtils.substringBefore(sectorIdAndChecksum, "["));
             checksum = StringUtils.removeEnd(StringUtils.substringAfterLast(sectorIdAndChecksum, "["), "]");
             AtomicReference<String> codes = new AtomicReference<>("");
+            encryptedRoomName = StringUtils.substringBeforeLast(name, "-");
             Arrays.stream(StringUtils.split(StringUtils.substringBeforeLast(name, "-"), "-")).forEach(
                     part -> codes.set(codes + part)
             );
@@ -90,6 +96,19 @@ public class Puzzle4 {
             }
 
             return true;
+        }
+
+        public String decrypt() {
+            return Arrays.stream(encryptedRoomName.split(""))
+                    .map(letter -> {
+                                if ("-".equals(letter)) {
+                                    return " ";
+                                } else {
+                                    return ALPHABET[(Arrays.binarySearch(ALPHABET, letter) + sectorId) % 26];
+                                }
+                            }
+                    )
+                    .collect(Collectors.joining());
         }
     }
 }
