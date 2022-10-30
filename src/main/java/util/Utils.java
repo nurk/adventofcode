@@ -9,6 +9,19 @@ import java.util.function.Function;
 
 public class Utils {
 
+    public static final String ALPHABET = "abcdefghijklmnopqrstuvwxyz";
+    public static final String[] ALPHABET_ARRAY = ALPHABET.split("");
+
+    public static int getAlphabetLetterIndex(String letter) {
+        for (int i = 0; i < ALPHABET_ARRAY.length; i++) {
+            if (letter.equals(ALPHABET_ARRAY[i])) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     public static Path getInputPath(String fileName) throws URISyntaxException {
         return Paths.get(Utils.class.getClassLoader().getResource(fileName).toURI());
     }
