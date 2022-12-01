@@ -21,7 +21,6 @@ public class Puzzle1 {
                 .map(strings -> strings.stream()
                         .map(Integer::valueOf)
                         .reduce(0, Integer::sum))
-                .sorted(Integer::compareTo)
                 .sorted(Comparator.reverseOrder())
                 .toList();
 
