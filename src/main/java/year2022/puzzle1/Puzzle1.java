@@ -25,7 +25,6 @@ public class Puzzle1 {
                 .toList();
 
         System.out.println(sortedCalories.get(0));
-        System.out.println(sortedCalories
-                .get(0) + sortedCalories.get(1) + sortedCalories.get(2));
+        System.out.println(sortedCalories.get(0) + sortedCalories.get(1) + sortedCalories.get(2));
     }
 }
