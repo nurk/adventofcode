@@ -8,8 +8,7 @@ import java.util.stream.IntStream;
 
 public class Puzzle4 {
     public static void main(String[] args) {
-        System.out.println(Utils.getInput("2022/input4.txt", s -> s.split(","))
-                .stream()
+        System.out.println(Utils.getInputAsStream("2022/input4.txt", s -> s.split(","))
                 .map(split -> new Object() {
                     final Set<Integer> left = rangeToSet(split[0]);
                     final Set<Integer> right = rangeToSet(split[1]);
@@ -17,8 +16,7 @@ public class Puzzle4 {
                 .filter(v -> v.left.containsAll(v.right) || v.right.containsAll(v.left))
                 .count());
 
-        System.out.println(Utils.getInput("2022/input4.txt", s -> s.split(","))
-                .stream()
+        System.out.println(Utils.getInputAsStream("2022/input4.txt", s -> s.split(","))
                 .map(split -> new Object() {
                     final Set<Integer> left = rangeToSet(split[0]);
                     final Set<Integer> right = rangeToSet(split[1]);
