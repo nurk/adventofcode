@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Utils {
@@ -21,6 +22,11 @@ public class Utils {
         }
 
         return -1;
+    }
+
+    public static IntStream reverseRange(int from, int to) {
+        return IntStream.range(from, to)
+                .map(i -> to - i + from - 1);
     }
 
     public static Path getInputPath(String fileName) throws URISyntaxException {
