@@ -52,7 +52,6 @@ public class Puzzle7 {
                 .sorted()
                 .findFirst()
                 .orElse(0L));
-
     }
 
     private static String queueToFqn(Deque<String> queue) {
