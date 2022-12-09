@@ -10,22 +10,22 @@ import java.util.Set;
 public class Puzzle9 {
 
     public static void main(String[] args) {
-        List<Position> positions = new ArrayList<>();
+        List<Position> knots = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            positions.add(new Position(0, 0));
+            knots.add(new Position(0, 0));
 
         }
         Set<Position> visited = new HashSet<>();
-        visited.add(positions.get(positions.size() - 1));
+        visited.add(knots.get(knots.size() - 1));
 
         for (String line : Utils.getInput("2022/input9.txt")) {
             String[] split = line.split(" ");
             for (int i = 0; i < Integer.parseInt(split[1]); i++) {
-                positions.set(0, positions.get(0).moveAsHead(split[0]));
-                for (int j = 1; j < positions.size(); j++) {
-                    positions.set(j, positions.get(j - 1).moveTail(positions.get(j)));
+                knots.set(0, knots.get(0).moveAsHead(split[0]));
+                for (int j = 1; j < knots.size(); j++) {
+                    knots.set(j, knots.get(j - 1).moveTail(knots.get(j)));
                 }
-                visited.add(positions.get(positions.size() - 1));
+                visited.add(knots.get(knots.size() - 1));
             }
         }
 
