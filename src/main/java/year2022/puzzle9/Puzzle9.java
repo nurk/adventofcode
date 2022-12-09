@@ -2,38 +2,39 @@ package year2022.puzzle9;
 
 import util.Utils;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class Puzzle9 {
 
     public static void main(String[] args) {
-        List<Position> knots = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            knots.add(new Position(0, 0));
-
-        }
         Set<Position> visited = new HashSet<>();
+        List<Position> knots = Stream.generate(Position::new).limit(10).collect(Collectors.toList());
+
         visited.add(knots.get(knots.size() - 1));
 
-        for (String line : Utils.getInput("2022/input9.txt")) {
+        Utils.getInput("2022/input9.txt").forEach(line -> {
             String[] split = line.split(" ");
-            for (int i = 0; i < Integer.parseInt(split[1]); i++) {
+            IntStream.range(0, Integer.parseInt(split[1])).forEach(i -> {
                 knots.set(0, knots.get(0).moveAsHead(split[0]));
                 for (int j = 1; j < knots.size(); j++) {
                     knots.set(j, knots.get(j - 1).moveTail(knots.get(j)));
                 }
                 visited.add(knots.get(knots.size() - 1));
-            }
-        }
-
+            });
+        });
         System.out.println(visited.size());
     }
 
-
     record Position(int x, int y) {
+        public Position() {
+            this(0, 0);
+        }
+
         public boolean needsDiagonalMove(Position other) {
             return Math.abs(x - other.x) > 1 && y != other.y || Math.abs(y - other.y) > 1 && x != other.x;
         }
@@ -49,12 +50,12 @@ public class Puzzle9 {
         }
 
         public Position moveTail(Position tail) {
-            int x = tail.x;
-            int y = tail.y;
             if (this.needsDiagonalMove(tail)) {
                 return new Position(getXMove(tail), getYMove(tail));
             }
 
+            int x = tail.x;
+            int y = tail.y;
             if (Math.abs(this.x - tail.x) > 1) {
                 x = getXMove(tail);
             }
