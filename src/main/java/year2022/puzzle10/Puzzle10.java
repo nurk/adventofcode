@@ -13,12 +13,13 @@ public class Puzzle10 {
     private static int x = 1;
     private static int cycle = 1;
     private static int score = 0;
-    private static String sprite = "##" + Stream.generate(() -> ".").limit(37).collect(Collectors.joining());
+    private static String sprite;
     private static final List<List<String>> result = new ArrayList<>(Stream.generate(() -> new ArrayList<String>())
             .limit(6)
             .toList());
 
     public static void main(String[] args) {
+        resetSprite();
         for (String s : Utils.getInput("2022/input10.txt")) {
             if (StringUtils.equals(s, "noop")) {
                 doCycle();
