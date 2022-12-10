@@ -25,7 +25,7 @@ public class Puzzle10 {
             } else {
                 int d = Integer.parseInt(s.split(" ")[1]);
                 doCycle();
-                x = x + d;
+                x += d;
                 doCycle();
             }
         }
@@ -52,7 +52,7 @@ public class Puzzle10 {
 
     private static void resetSprite() {
         if (x == -1) {
-            sprite = "##" + Stream.generate(() -> ".").limit(38).collect(Collectors.joining());
+            sprite = "#" + Stream.generate(() -> ".").limit(39).collect(Collectors.joining());
         } else {
             sprite = Stream.generate(() -> ".")
                     .limit(x - 1)
