@@ -166,7 +166,6 @@ public class Puzzle11 {
             items.add(item);
         }
 
-
         public Long getInspectedItems() {
             return inspectedItems;
         }
