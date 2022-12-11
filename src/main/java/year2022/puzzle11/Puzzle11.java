@@ -48,7 +48,7 @@ public class Puzzle11 {
                 .reduce(BigInteger.ONE, BigInteger::multiply);
 
         IntStream.range(0, 10000)
-                .forEach(i -> monkeys.forEach(Monkey::doRoundInternetLogic));
+                .forEach(i -> monkeys.forEach(Monkey::doRoundBInternetLogic));
 
         System.out.println("PartB Internet: " + monkeys.stream()
                 .map(Monkey::getInspectedItems)
@@ -164,7 +164,7 @@ public class Puzzle11 {
             stack.clear();
         }
 
-        public void doRoundInternetLogic() {
+        public void doRoundBInternetLogic() {
             for (BigInteger item : items) {
                 inspectedItems++;
                 BigInteger currentWorryLevel;
