@@ -56,4 +56,11 @@ public class Utils {
             throw new RuntimeException(e);
         }
     }
+
+    public static int[] getSplitIndexes(List<String> input) {
+        return Stream.of(IntStream.of(-1),
+                        IntStream.range(0, input.size()).filter(i -> input.get(i).isBlank()),
+                        IntStream.of(input.size()))
+                .flatMapToInt(s -> s).toArray();
+    }
 }

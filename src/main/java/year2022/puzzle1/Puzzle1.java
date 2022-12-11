@@ -5,16 +5,12 @@ import util.Utils;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class Puzzle1 {
     public static void main(String[] args) {
         List<String> input = Utils.getInput("2022/input1.txt");
 
-        int[] splitIndexes = Stream.of(IntStream.of(-1),
-                        IntStream.range(0, input.size()).filter(i -> input.get(i).isBlank()),
-                        IntStream.of(input.size()))
-                .flatMapToInt(s -> s).toArray();
+        int[] splitIndexes = Utils.getSplitIndexes(input);
 
         List<Integer> sortedCalories = IntStream.range(0, splitIndexes.length - 1)
                 .mapToObj(i -> input.subList(splitIndexes[i] + 1, splitIndexes[i + 1]))
