@@ -15,6 +15,7 @@ import java.util.stream.IntStream;
 public class Puzzle11 {
 
     static final List<Monkey> monkeys = new ArrayList<>();
+    static BigInteger superModulo;
 
     public static void main(String[] args) {
         List<String> input = Utils.getInput("2022/input11.txt");
@@ -35,6 +36,28 @@ public class Puzzle11 {
                 .peek(System.out::println)
                 .reduce(1L, (integer, integer2) -> integer * integer2));
 
+        // solution from internet (searched after I had a solution myself
+        monkeys.clear();
+
+        IntStream.range(0, splitIndexes.length - 1)
+                .mapToObj(i -> input.subList(splitIndexes[i] + 1, splitIndexes[i + 1]))
+                .forEach(monkeyStrings -> monkeys.add(new Monkey(monkeyStrings)));
+
+        superModulo = monkeys.stream()
+                .map(m -> m.testValue)
+                .reduce(BigInteger.ONE, BigInteger::multiply);
+
+        IntStream.range(0, 10000)
+                .forEach(i -> monkeys.forEach(Monkey::doRoundInternetLogic));
+
+        System.out.println("PartB Internet: " + monkeys.stream()
+                .map(Monkey::getInspectedItems)
+                .sorted(Comparator.reverseOrder())
+                .limit(2)
+                .peek(System.out::println)
+                .reduce(1L, (integer, integer2) -> integer * integer2));
+
+        // my very inefficient solution but it worked
         monkeys.clear();
 
         IntStream.range(0, splitIndexes.length - 1)
@@ -139,6 +162,27 @@ public class Puzzle11 {
                 }
             }
             stack.clear();
+        }
+
+        public void doRoundInternetLogic() {
+            for (BigInteger item : items) {
+                inspectedItems++;
+                BigInteger currentWorryLevel;
+                if (useOldValueInOperation) {
+                    currentWorryLevel = operation.apply(item, item);
+                } else {
+                    currentWorryLevel = operation.apply(item, operationValue);
+                }
+
+                currentWorryLevel = currentWorryLevel.remainder(superModulo);
+
+                if (currentWorryLevel.remainder(testValue).equals(BigInteger.ZERO)) {
+                    monkeys.get(trueMonkey).addItem(currentWorryLevel);
+                } else {
+                    monkeys.get(falseMonkey).addItem(currentWorryLevel);
+                }
+            }
+            items.clear();
         }
 
         private BigInteger calculateCurrentWorryLevel(List<String> operations) {
