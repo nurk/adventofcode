@@ -57,6 +57,8 @@ public class Puzzle12 {
 
             int currentCost = current.getPathCost();
 
+            // don't remember why I put this if in 2021 / puzzle 15
+            // aah, there we had link costs that were not equal so a different path could have a lower cost
             if (currentCost <= costSoFar.get(current)) {
                 for (Node neighbour : getNeighbours(current)) {
 
