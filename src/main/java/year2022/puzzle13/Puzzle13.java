@@ -6,9 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
+// does not work, gave up and cheated on Puzzle13B
 public class Puzzle13 {
 
-    private static List<SignalPair> signalPairs = new ArrayList<>();
+    private static final List<SignalPair> signalPairs = new ArrayList<>();
     private static int pairIndex = 0;
 
     public static void main(String[] args) {
@@ -24,6 +25,7 @@ public class Puzzle13 {
         System.out.println(signalPairs.stream()
                 .filter(SignalPair::areInRightOrder)
                 .map(s -> s.index)
+                .peek(System.out::println)
                 .reduce(0, Integer::sum));
     }
 
@@ -81,38 +83,42 @@ public class Puzzle13 {
 
         public boolean inRightOrder(Signal other) {
             boolean rightOrder = true;
-            boolean onlyEquals = false;
+            boolean onlyEquals = true;
+
             for (int i = 0; i < Math.min(data.size(), other.data.size()); i++) {
                 if (data.get(i) instanceof Integer && other.data.get(i) instanceof Integer) {
-                    if (data.get(i) == other.data.get(i)) {
-                        onlyEquals = true;
+                    if(data.get(i) != other.data.get(i)){
+                        onlyEquals = false;
                     }
                     if (((Integer) data.get(i)) > ((Integer) other.data.get(i))) {
-                        rightOrder = false;
+                        return false;
                     }
                 } else if (data.get(i) instanceof Signal && other.data.get(i) instanceof Signal) {
+                    onlyEquals = false;
                     if (!((Signal) data.get(i)).inRightOrder((Signal) other.data.get(i))) {
-                        rightOrder = false;
+                        return false;
                     }
-                } else if (data.get(i) instanceof Integer) {
+                }
+                //mixed types
+                else if (data.get(i) instanceof Integer) {
+                    onlyEquals = false;
                     Signal newLeftSignal = new Signal();
                     newLeftSignal.addValue((Integer) data.get(i));
                     if (!newLeftSignal.inRightOrder((Signal) other.data.get(i))) {
-                        rightOrder = false;
+                        return false;
                     }
                 } else {
+                    onlyEquals = false;
                     Signal newRightSignal = new Signal();
                     newRightSignal.addValue((Integer) other.data.get(i));
                     if (!((Signal) data.get(i)).inRightOrder(newRightSignal)) {
-                        rightOrder = false;
+                        return false;
                     }
                 }
             }
 
-            if (onlyEquals || this.data.isEmpty() || other.data.isEmpty()) {
-                if (data.size() > other.data.size()) {
-                    rightOrder = false;
-                }
+            if (onlyEquals && (this.data.size() > other.data.size())) {
+                rightOrder = false;
             }
 
             return rightOrder;
