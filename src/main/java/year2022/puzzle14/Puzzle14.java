@@ -23,7 +23,7 @@ public class Puzzle14 {
     private static void partA() {
         initBoard();
         int droppedSand = 0;
-        while (dropSand().getValue0()) {
+        while (!dropSand().getValue0()) {
             droppedSand++;
         }
         printBoard();
@@ -65,9 +65,8 @@ public class Puzzle14 {
         }
         if (!didAction) {
             board[row][col] = "o";
-            return Triplet.with(true, row, col);
         }
-        return Triplet.with(false, row, col);
+        return Triplet.with(didAction, row, col);
     }
 
     private static void initBoard() {
