@@ -55,8 +55,6 @@ public class Puzzle13B {
             }
         }
         System.out.println(answerB);
-
-
     }
 
     static class Packet implements Comparable<Packet> {
