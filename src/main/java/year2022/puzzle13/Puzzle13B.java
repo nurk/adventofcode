@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-
 //https://github.com/abnew123/aoc2022/blob/main/src/aoc2022/Day13.java
 public class Puzzle13B {
 
