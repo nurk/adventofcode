@@ -11,12 +11,10 @@ import java.util.stream.IntStream;
 
 public class Puzzle15 {
 
-    private static List<Sensor> sensors;
-
     public static void main(String[] args) {
         //6425133 -> correct partA
         //10996191429555 -> correct partB
-        sensors = Utils.getInput("2022/input15.txt").stream()
+        List<Sensor> sensors = Utils.getInput("2022/input15.txt").stream()
                 .map(Sensor::new)
                 .toList();
 
@@ -31,36 +29,30 @@ public class Puzzle15 {
                 .max(Integer::compareTo)
                 .orElseThrow() + sensors.stream().map(s -> s.manhattanDistance).max(Integer::compare).orElseThrow();
 
-        System.out.println(IntStream.rangeClosed(minX, maxX).sequential()
+        System.out.println(IntStream.rangeClosed(minX, maxX)
                 .filter(x -> sensors.stream().anyMatch(s -> !s.canHaveBeacon(x, 2000000)))
                 .count());
 
         //Part B
         int maxCoordinateValue = 4000000;
         boolean found = false;
-        for (int y = 0; y <= maxCoordinateValue; y++) {
-            for (int x = 0; x <= maxCoordinateValue; x++) {
-                int finalX = x;
-                int finalY = y;
-
-                Pair<Boolean, Integer> covered = sensors.stream()
-                        .map(s -> s.isCoveredBySensorAndXMoveAmount(finalX, finalY))
+        var pos = new Object() {
+            int x, y;
+        };
+        for (pos.y = 0; pos.y <= maxCoordinateValue; pos.y++) {
+            for (pos.x = 0; pos.x <= maxCoordinateValue; pos.x++) {
+                pos.x = pos.x + sensors.stream()
+                        .map(s -> s.isCoveredBySensorAndXMoveAmount(pos.x, pos.y))
                         .filter(Pair::getValue0)
                         .max(Comparator.comparing(Pair::getValue1))
-                        .orElse(null);
-                if (covered != null && covered.getValue1() != 0) {
-                    //current position is covered by a sensor
-                    //move the x by the given value to skip a lot of checks
-                    //subtract 1 because loop will add 1 back
-                    x = x + covered.getValue1() - 1;
-                    continue;
-                }
+                        .map(pair -> pair.getValue1() - 1) // subtract 1 because the loop will add 1
+                        .orElse(0);
 
                 if (sensors.stream()
-                        .noneMatch(s -> s.isCoveredBySensorAndXMoveAmount(finalX, finalY).getValue0())) {
-                    System.out.println(BigInteger.valueOf(x)
+                        .noneMatch(s -> s.isCoveredBySensorAndXMoveAmount(pos.x, pos.y).getValue0())) {
+                    System.out.println(BigInteger.valueOf(pos.x)
                             .multiply(BigInteger.valueOf(4000000))
-                            .add(BigInteger.valueOf(y)));
+                            .add(BigInteger.valueOf(pos.y)));
                     found = true;
                     break;
                 }
@@ -83,27 +75,30 @@ public class Puzzle15 {
             beaconX = Integer.parseInt(StringUtils.substringAfter(beaconPos[0], "="));
             beaconY = Integer.parseInt(StringUtils.substringAfter(beaconPos[1], "="));
 
-            manhattanDistance = Math.abs(sensorX - beaconX) + Math.abs(sensorY - beaconY);
+            manhattanDistance = calculateManhattanDistanceTo(beaconX, beaconY);
+        }
+
+        private int calculateManhattanDistanceTo(int x, int y) {
+            return Math.abs(sensorX - x) + Math.abs(sensorY - y);
         }
 
         public boolean canHaveBeacon(int x, int y) {
             if (beaconX == x && beaconY == y) {
                 return true;
             }
-            return Math.abs(sensorX - x) + Math.abs(sensorY - y) > manhattanDistance;
+            return calculateManhattanDistanceTo(x, y) > manhattanDistance;
         }
 
         public Pair<Boolean, Integer> isCoveredBySensorAndXMoveAmount(int x, int y) {
-            int thisManhattanDistance = Math.abs(sensorX - x) + Math.abs(sensorY - y);
-            if (thisManhattanDistance > manhattanDistance) {
-                return Pair.with(false, 0);
+            if (calculateManhattanDistanceTo(x, y) > manhattanDistance) {
+                return Pair.with(false, 1);
             }
 
-            int moveXAmount = 0;
+            int moveXAmount = 1;
             if (x < sensorX) {
                 moveXAmount = (sensorX - x) * 2 + 1;
             } else if (x > sensorX) {
-                moveXAmount = manhattanDistance - thisManhattanDistance + 1;
+                moveXAmount = manhattanDistance - calculateManhattanDistanceTo(x, y) + 1;
             } else if (y == sensorY) {
                 moveXAmount = manhattanDistance + 1;
             }
