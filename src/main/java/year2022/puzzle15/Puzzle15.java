@@ -20,12 +20,12 @@ public class Puzzle15 {
         int minX = sensors.stream()
                 .map(s -> Math.min(s.sensorX, s.beaconX))
                 .min(Integer::compareTo)
-                .orElseThrow() - 5000000;
+                .orElseThrow() - sensors.stream().map(s -> s.distance).max(Integer::compare).orElseThrow();
 
         int maxX = sensors.stream()
                 .map(s -> Math.max(s.sensorX, s.beaconX))
                 .max(Integer::compareTo)
-                .orElseThrow() + 5000000;
+                .orElseThrow() + sensors.stream().map(s -> s.distance).max(Integer::compare).orElseThrow();
 
         System.out.println(IntStream.rangeClosed(minX, maxX).sequential()
                 .filter(x -> sensors.stream()
