@@ -100,7 +100,7 @@ public class Puzzle15 {
             } else if (x > sensorX) {
                 moveXAmount = manhattanDistance - calculateManhattanDistanceTo(x, y) + 1;
             } else if (y == sensorY) {
-                moveXAmount = manhattanDistance + 1;
+                moveXAmount = manhattanDistance / 2 + 1;
             }
 
             return Pair.with(true, moveXAmount);
