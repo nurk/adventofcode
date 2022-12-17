@@ -2,18 +2,24 @@ package year2022.puzzle17;
 
 import util.Utils;
 
+import java.text.NumberFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Puzzle17 {
     static List<Point> occupied = new ArrayList<>();
-    static List<String> gusts = new CircularList<>();
+    static CircularList<String> gusts = new CircularList<>();
     static int gustIndex = 0;
-    static int shapeIndex = 0;
+    static long shapeIndex = 0;
+    static long lastCullingRow = 0;
+    static NumberFormat formatter = NumberFormat.getInstance(Locale.forLanguageTag("nl-BE"));
 
     public static void main(String[] args) {
-        List<Shape> shapes = new CircularList<>(List.of(
+        System.out.println(formatter.format(1000000000000L));
+        System.out.println(formatter.format(Long.MAX_VALUE));
+        // partA 3149
+        CircularList<Shape> shapes = new CircularList<>(List.of(
                 new Shape(List.of(new Point(2, 0), new Point(3, 0), new Point(4, 0), new Point(5, 0))),
                 new Shape(List.of(new Point(3, 0), new Point(2, 1), new Point(3, 1), new Point(4, 1), new Point(3, 2))),
                 new Shape(List.of(new Point(2, 0), new Point(3, 0), new Point(4, 0), new Point(4, 1), new Point(4, 2))),
@@ -27,13 +33,15 @@ public class Puzzle17 {
         IntStream.range(0, 7)
                 .forEach(i -> occupied.add(new Point(i, 0)));
 
-        while (shapeIndex < 2022) {
-            int maxY = occupied.stream().max(Comparator.comparing(o -> o.y)).orElseThrow().y;
-            Shape shape = shapes.get(shapeIndex).clone(maxY + 4);
+        // 1.000.000.000.000
+        while (shapeIndex < 1000000000000L) {
+            //while (shapeIndex < 2022L) {
+            long maxY = occupied.stream().max(Comparator.comparingLong(o -> o.y)).orElseThrow().y;
+            Shape shape = shapes.getModulod(shapeIndex).clone(maxY + 4);
             shapeIndex++;
             boolean atEnd = false;
             while (!atEnd) {
-                if (gusts.get(gustIndex).equals("<")) {
+                if (gusts.getModulod(gustIndex).equals("<")) {
                     if (shape.canMoveLeft()) {
                         shape.moveLeft();
                     }
@@ -50,15 +58,37 @@ public class Puzzle17 {
                     atEnd = true;
                 }
             }
+            doCulling();
+            if (shapeIndex % 100000L == 0) {
+                System.out.println("culled row " + formatter.format(lastCullingRow) + " shapeIndex: " + formatter.format(
+                        shapeIndex));
+            }
         }
-
         System.out.println(occupied.stream().max(Comparator.comparing(o -> o.y)).orElseThrow().y);
     }
 
-    static class Point {
-        int x, y;
+    private static void doCulling() {
+        long maxY = occupied.stream().max(Comparator.comparing(o -> o.y)).orElseThrow().y;
+        for (long i = maxY; i > lastCullingRow; i--) {
+            if ((occupied.contains(new Point(0, i)) || occupied.contains(new Point(0, i - 1)))
+                    && (occupied.contains(new Point(1, i)) || occupied.contains(new Point(1, i - 1)))
+                    && (occupied.contains(new Point(2, i)) || occupied.contains(new Point(2, i - 1)))
+                    && (occupied.contains(new Point(3, i)) || occupied.contains(new Point(3, i - 1)))
+                    && (occupied.contains(new Point(4, i)) || occupied.contains(new Point(4, i - 1)))
+                    && (occupied.contains(new Point(5, i)) || occupied.contains(new Point(5, i - 1)))
+                    && (occupied.contains(new Point(6, i)) || occupied.contains(new Point(6, i - 1)))) {
+                lastCullingRow = i - 1;
+                occupied.removeIf(p -> p.y < lastCullingRow);
+                break;
+            }
 
-        public Point(int x, int y) {
+        }
+    }
+
+    static class Point {
+        long x, y;
+
+        public Point(long x, long y) {
             this.x = x;
             this.y = y;
         }
@@ -99,13 +129,6 @@ public class Puzzle17 {
             }
             return y == point.y;
         }
-
-        @Override
-        public int hashCode() {
-            int result = x;
-            result = 31 * result + y;
-            return result;
-        }
     }
 
     static class Shape {
@@ -115,13 +138,13 @@ public class Puzzle17 {
             this.points = points;
         }
 
-        public Shape clone(int yIncrement) {
+        public Shape clone(long yIncrement) {
             return new Shape(points.stream().map(p -> new Point(p.x, p.y + yIncrement)).toList());
         }
 
         public boolean canMoveLeft() {
             Point minX = points.stream()
-                    .min(Comparator.comparingInt(o -> o.x))
+                    .min(Comparator.comparingLong(o -> o.x))
                     .orElseThrow();
 
             if (minX.x - 1 < 0) {
@@ -146,7 +169,7 @@ public class Puzzle17 {
 
         public boolean canMoveRight() {
             Point maxX = points.stream()
-                    .max(Comparator.comparingInt(o -> o.x))
+                    .max(Comparator.comparingLong(o -> o.x))
                     .orElseThrow();
 
             if (maxX.x + 1 > 6) {
@@ -171,7 +194,7 @@ public class Puzzle17 {
         }
     }
 
-    static void printOccupied() {
+/*    static void printOccupied() {
         System.out.println(Utils.reverseRange(0,
                         occupied.stream().max(Comparator.comparing(o -> o.y)).orElseThrow().y + 1)
                 .boxed()
@@ -181,14 +204,9 @@ public class Puzzle17 {
                         .collect(Collectors.joining())
                 )
                 .collect(Collectors.joining("\n")));
-    }
+    }*/
 
     private static class CircularList<T> extends ArrayList<T> {
-
-        public CircularList(int initialCapacity) {
-            super(initialCapacity);
-        }
-
         public CircularList() {
         }
 
@@ -196,9 +214,8 @@ public class Puzzle17 {
             super(c);
         }
 
-        @Override
-        public T get(int index) {
-            return super.get(index % size());
+        public T getModulod(long index) {
+            return super.get((int) (index % size()));
         }
 
         @Override
