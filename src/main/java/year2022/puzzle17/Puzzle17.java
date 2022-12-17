@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 
 public class Puzzle17 {
     static SortedSet<Point> occupied = new TreeSet<>();
-    static CircularList<String> gusts = new CircularList<>();
+    static CircularList<String> gusts;
     static CircularList<Shape> shapes;
     static int gustIndex = 0;
     static long shapeIndex = 0;
@@ -16,8 +16,6 @@ public class Puzzle17 {
     static NumberFormat formatter = NumberFormat.getInstance(Locale.forLanguageTag("nl-BE"));
 
     public static void main(String[] args) {
-        System.out.println(formatter.format(1000000000000L));
-        System.out.println(formatter.format(Long.MAX_VALUE));
         // partA 3149
         // partB 1554593222610 too high <-- weird experiment with modulos
         shapes = new CircularList<>(List.of(
@@ -63,32 +61,15 @@ public class Puzzle17 {
             }
 
             if (shapeIndex == 2022L) {
-                System.out.println("PartA: " + occupied.stream().max(Comparator.comparing(o -> o.y)).orElseThrow().y);
+                System.out.println("PartA: " + occupied.last().y);
             }
         }
-        System.out.println("PartB: " + occupied.stream().max(Comparator.comparing(o -> o.y)).orElseThrow().y);
+        System.out.println("PartB: " + occupied.last().y);
     }
 
     private static void doCulling() {
-        long maxY = occupied.stream().max(Comparator.comparing(o -> o.y)).orElseThrow().y;
+        long maxY = occupied.last().y;
         for (long i = maxY; i > lastCullingRow; i--) {
-            if ((shapeIndex % shapes.size() == 0
-                    && gustIndex % gusts.size() == 0
-                    && occupied.contains(new Point(0, i)))
-                    && (occupied.contains(new Point(1, i)))
-                    && (occupied.contains(new Point(2, i)))
-                    && (occupied.contains(new Point(3, i)))
-                    && (occupied.contains(new Point(4, i)))
-                    && (occupied.contains(new Point(5, i)))
-                    && (occupied.contains(new Point(6, i)))) {
-                // I do not seem to be hitting this.  Probably need to detect cycles
-                System.out.println("SPECIAL CULLLING ROW");
-                System.out.println("shapeIndex: " + shapeIndex);
-                System.out.println("culling row: " + i);
-                System.out.println("height at culling row " + occupied.stream()
-                        .max(Comparator.comparing(o -> o.y))
-                        .orElseThrow().y);
-            }
             if ((occupied.contains(new Point(0, i)) || occupied.contains(new Point(0, i - 1)))
                     && (occupied.contains(new Point(1, i)) || occupied.contains(new Point(1, i - 1)))
                     && (occupied.contains(new Point(2, i)) || occupied.contains(new Point(2, i - 1)))
@@ -211,20 +192,12 @@ public class Puzzle17 {
     }
 
     static class CircularList<T> extends ArrayList<T> {
-        public CircularList() {
-        }
-
         public CircularList(Collection<? extends T> c) {
             super(c);
         }
 
         public T getModulo(long index) {
             return super.get((int) (index % size()));
-        }
-
-        @Override
-        public T set(int index, T element) {
-            return super.set(index % size(), element);
         }
     }
 }
