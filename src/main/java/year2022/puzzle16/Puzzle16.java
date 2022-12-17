@@ -26,6 +26,7 @@ public class Puzzle16 {
         // 2101
         // 2159 too low
         // 2160 not correct
+        // 2172 not correct
         while (iterations < 10000000000L) {
             iterations++;
             valves.forEach(v -> v.isOpen = false);
