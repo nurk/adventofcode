@@ -31,6 +31,7 @@ public class Puzzle17 {
         IntStream.range(0, 7)
                 .forEach(i -> occupied.add(new Point(i, 0)));
 
+        //1.000.000.000.000L
         while (shapeIndex < 1000000000000L) {
             long maxY = occupied.last().y;
             Shape shape = shapes.getModulo(shapeIndex).clone(maxY + 4);
