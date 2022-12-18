@@ -44,7 +44,6 @@ public class Puzzle18 {
                 .max(Integer::compareTo)
                 .orElseThrow() + 1;
 
-
         //make a list of all the free cubes in the 3D space
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
