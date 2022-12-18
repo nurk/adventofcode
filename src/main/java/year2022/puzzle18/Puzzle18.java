@@ -2,63 +2,132 @@ package year2022.puzzle18;
 
 import util.Utils;
 
-import java.util.List;
-import java.util.stream.Stream;
+import java.util.*;
 
 public class Puzzle18 {
     static List<Cube> cubes;
+    static List<Cube> allFeeCubes = new ArrayList<>();
+    static List<Cube> encapsulatedCubes = new ArrayList<>();
 
     public static void main(String[] args) {
         //Part A: 4192
-        //Part B: 3988 <-- too high.  Possibly there are encapsulate air pockets bigger than 1 block
+        //Part B: 2520
         cubes = Utils.getInput("2022/input18.txt", Cube::new);
-        Integer exposedSides = cubes.stream()
-                .map(Cube::getExposedSides)
-                .reduce(0, Integer::sum);
-        System.out.println(exposedSides);
+        System.out.println("PartA: " + cubes.stream()
+                .map(Cube::getExposedSidesA)
+                .reduce(0, Integer::sum));
 
+
+        // make a 3D space bigger that the cubes
         int minX = cubes.stream()
                 .map(c -> c.x)
                 .min(Integer::compareTo)
-                .orElseThrow();
+                .orElseThrow() - 1;
         int maxX = cubes.stream()
                 .map(c -> c.x)
                 .max(Integer::compareTo)
-                .orElseThrow();
+                .orElseThrow() + 1;
         int minY = cubes.stream()
                 .map(c -> c.y)
                 .min(Integer::compareTo)
-                .orElseThrow();
+                .orElseThrow() - 1;
         int maxY = cubes.stream()
                 .map(c -> c.y)
                 .max(Integer::compareTo)
-                .orElseThrow();
+                .orElseThrow() + 1;
         int minZ = cubes.stream()
                 .map(c -> c.z)
                 .min(Integer::compareTo)
-                .orElseThrow();
+                .orElseThrow() - 1;
         int maxZ = cubes.stream()
                 .map(c -> c.z)
                 .max(Integer::compareTo)
-                .orElseThrow();
+                .orElseThrow() + 1;
 
-        System.out.println();
 
-        int encapsulated = 0;
+        //make a list of all the free cubes in the 3D space
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 for (int z = minZ; z <= maxZ; z++) {
-                    if (new Cube(x, y, z).isEncapsulated()) {
-                        encapsulated++;
+                    Cube c = new Cube(x, y, z);
+                    if (!cubes.contains(c)) {
+                        allFeeCubes.add(c);
                     }
                 }
             }
         }
-        System.out.println(exposedSides - encapsulated * 6);
+
+        //add to each free cube the adjacent cubes that are also free
+        for (Cube c : allFeeCubes) {
+            if (allFeeCubes.contains(new Cube(c.x - 1, c.y, c.z))) {
+                c.canMoveTo.add(findCube(c.x - 1, c.y, c.z));
+            }
+            if (allFeeCubes.contains(new Cube(c.x + 1, c.y, c.z))) {
+                c.canMoveTo.add(findCube(c.x + 1, c.y, c.z));
+            }
+            if (allFeeCubes.contains(new Cube(c.x, c.y - 1, c.z))) {
+                c.canMoveTo.add(findCube(c.x, c.y - 1, c.z));
+            }
+            if (allFeeCubes.contains(new Cube(c.x, c.y + 1, c.z))) {
+                c.canMoveTo.add(findCube(c.x, c.y + 1, c.z));
+            }
+            if (allFeeCubes.contains(new Cube(c.x, c.y, c.z - 1))) {
+                c.canMoveTo.add(findCube(c.x, c.y, c.z - 1));
+            }
+            if (allFeeCubes.contains(new Cube(c.x, c.y, c.z + 1))) {
+                c.canMoveTo.add(findCube(c.x, c.y, c.z + 1));
+            }
+        }
+
+        for (Cube c : allFeeCubes) {
+            //if there is no path from a free cube to some origin outside, it is encapsulated
+            if (shortestPath(c, findCube(minX, minY, minZ)) == Integer.MAX_VALUE) {
+                encapsulatedCubes.add(c);
+            }
+        }
+
+        System.out.println("PartB: " + cubes.stream()
+                .map(Cube::getExposedSidesB)
+                .reduce(0, Integer::sum));
     }
 
-    static class Cube {
+    public static long shortestPath(Cube start, Cube end) {
+        allFeeCubes.forEach(c -> c.pathCost = 0);
+        PriorityQueue<Cube> pq = new PriorityQueue<>(allFeeCubes.size());
+        pq.add(start);
+
+        Map<Cube, Integer> costSoFar = new HashMap<>();
+
+        costSoFar.put(start, 0);
+
+        while (!pq.isEmpty()) {
+            Cube current = pq.remove();
+
+            if (current.equals(end)) {
+                break;
+            }
+
+            int currentCost = current.pathCost;
+
+            for (Cube neighbour : current.canMoveTo) {
+
+                int newCost = currentCost + 1;
+
+                if (!costSoFar.containsKey(neighbour) || newCost < costSoFar.get(neighbour)) {
+                    neighbour.pathCost = newCost;
+                    costSoFar.put(neighbour, newCost);
+                    pq.add(neighbour);
+                }
+            }
+        }
+
+        return costSoFar.getOrDefault(end, Integer.MAX_VALUE);
+    }
+
+    static class Cube implements Comparable<Cube> {
         int x, y, z;
+        List<Cube> canMoveTo = new ArrayList<>();
+        int pathCost = 0;
 
         public Cube(String s) {
             String[] split = s.split(",");
@@ -73,43 +142,57 @@ public class Puzzle18 {
             this.z = z;
         }
 
-        // only works when encapsulated air is a 1 by 1 by 1 cube
-        // does not work with maze like path that might not reach the outside
-        public boolean isEncapsulated() {
-            boolean b = !cubes.contains(this)
-                    && cubes.contains(new Cube(x - 1, y, z))
-                    && cubes.contains(new Cube(x + 1, y, z))
-                    && cubes.contains(new Cube(x, y - 1, z))
-                    && cubes.contains(new Cube(x, y + 1, z))
-                    && cubes.contains(new Cube(x, y, z - 1))
-                    && cubes.contains(new Cube(x, y, z + 1));
-            if (b) {
-                System.out.println(this + " is encapsulated");
-            }
-            return b;
-        }
-
-        public int getExposedSides() {
+        public int getExposedSidesA() {
             int exposedSides = 6;
-            for (Cube cube : cubes) {
-                if (cube.equals(this)) {
-                    continue;
-                }
-                if (cube.touches(this)) {
-                    //System.out.println(this + " touches " + cube);
-                    exposedSides--;
-                }
-                if (exposedSides == 0) {
-                    break;
-                }
+
+            if (cubes.contains(new Cube(x - 1, y, z))) {
+                exposedSides--;
+            }
+            if (cubes.contains(new Cube(x + 1, y, z))) {
+                exposedSides--;
+            }
+            if (cubes.contains(new Cube(x, y - 1, z))) {
+                exposedSides--;
+            }
+            if (cubes.contains(new Cube(x, y + 1, z))) {
+                exposedSides--;
+            }
+            if (cubes.contains(new Cube(x, y, z - 1))) {
+                exposedSides--;
+            }
+            if (cubes.contains(new Cube(x, y, z + 1))) {
+                exposedSides--;
             }
             return exposedSides;
         }
 
-        public boolean touches(Cube other) {
-            return Stream.of(Math.abs(x - other.x), Math.abs(y - other.y), Math.abs(z - other.z))
-                    .sorted(Integer::compareTo)
-                    .toList().equals(List.of(0, 0, 1));
+        public int getExposedSidesB() {
+            int exposedSides = 6;
+
+            if (cubes.contains(new Cube(x - 1, y, z)) || encapsulatedCubes.contains(new Cube(x - 1, y, z))) {
+                exposedSides--;
+            }
+            if (cubes.contains(new Cube(x + 1, y, z)) || encapsulatedCubes.contains(new Cube(x + 1, y, z))) {
+                exposedSides--;
+            }
+            if (cubes.contains(new Cube(x, y - 1, z)) || encapsulatedCubes.contains(new Cube(x, y - 1, z))) {
+                exposedSides--;
+            }
+            if (cubes.contains(new Cube(x, y + 1, z)) || encapsulatedCubes.contains(new Cube(x, y + 1, z))) {
+                exposedSides--;
+            }
+            if (cubes.contains(new Cube(x, y, z - 1)) || encapsulatedCubes.contains(new Cube(x, y, z - 1))) {
+                exposedSides--;
+            }
+            if (cubes.contains(new Cube(x, y, z + 1)) || encapsulatedCubes.contains(new Cube(x, y, z + 1))) {
+                exposedSides--;
+            }
+            return exposedSides;
+        }
+
+        @Override
+        public int compareTo(Cube o) {
+            return Integer.compare(this.pathCost, o.pathCost);
         }
 
         @Override
@@ -148,5 +231,12 @@ public class Puzzle18 {
                     ", z=" + z +
                     '}';
         }
+    }
+
+    static Cube findCube(int x, int y, int z) {
+        return allFeeCubes.stream()
+                .filter(c -> c.x == x && c.y == y && c.z == z)
+                .findFirst()
+                .orElseThrow();
     }
 }
