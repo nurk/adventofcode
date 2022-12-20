@@ -1,8 +1,8 @@
 package year2022.puzzle20;
 
+import org.apache.commons.lang3.time.StopWatch;
 import util.Utils;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -23,16 +23,22 @@ public class Puzzle20 {
 
     private static long partA() {
         initData(1L);
+        StopWatch s = StopWatch.createStarted();
         doMix();
+        s.stop();
+        System.out.println(s.formatTime());
         return getResult();
     }
 
     private static long partB() {
         initData(811589153L);
 
+        StopWatch s = StopWatch.createStarted();
         for (int i = 0; i < 10; i++) {
             doMix();
         }
+        s.stop();
+        System.out.println(s.formatTime());
 
         return getResult();
     }
@@ -46,7 +52,6 @@ public class Puzzle20 {
                 .toList();
     }
 
-
     private static void doMix() {
         numbers.stream()
                 .sorted(Comparator.comparingLong(o -> o.originalIndex))
@@ -54,7 +59,19 @@ public class Puzzle20 {
                     if (n.moveAmount != 0) {
                         long fromIndex = n.index;
                         long toIndex = getModulo(n.index + n.moveAmount);
-                        numbers.forEach(nn -> nn.move(fromIndex, toIndex, n.moveAmount));
+
+                        //wrapped around via the left side
+                        if (n.moveAmount < 0 && fromIndex < toIndex) {
+                            toIndex = getModulo(toIndex - 1);
+                        }
+
+                        //wrapped around via the right side
+                        if (n.moveAmount > 0 && toIndex < fromIndex) {
+                            toIndex = getModulo(toIndex + 1);
+                        }
+
+                        long finalToIndex = toIndex;
+                        numbers.forEach(nn -> nn.move(fromIndex, finalToIndex));
                     }
                 });
     }
@@ -68,7 +85,7 @@ public class Puzzle20 {
 
         return Stream.of(1000, 2000, 3000)
                 .map(i -> numbers.stream()
-                        .filter(n -> n.index == (zeroIndex + i) % numbers.size())
+                        .filter(n -> n.index == getModulo(zeroIndex + i))
                         .findFirst()
                         .orElseThrow()
                         .number)
@@ -88,21 +105,10 @@ public class Puzzle20 {
             this.moveAmount = getMoveAmount(number);
         }
 
-        void move(long fromIndex, long toIndex, long moveAmount) {
-            if (moveAmount < 0 && fromIndex < toIndex) {
-                toIndex = getModulo(toIndex - 1);
-            }
-
-            if (moveAmount > 0 && toIndex < fromIndex) {
-                toIndex = getModulo(toIndex + 1);
-            }
-
-
+        void move(long fromIndex, long toIndex) {
             if (index == fromIndex) {
                 index = toIndex;
-                return;
-            }
-            if (fromIndex < toIndex) {
+            } else if (fromIndex < toIndex) {
                 if (index >= fromIndex && index <= toIndex) {
                     index = getModulo(index - 1);
                 }
@@ -129,6 +135,6 @@ public class Puzzle20 {
     }
 
     static long getModulo(long n) {
-        return BigInteger.valueOf(n).mod(BigInteger.valueOf(numbers.size())).longValue();
+        return Math.floorMod(n, numberOfCoordinates);
     }
 }
