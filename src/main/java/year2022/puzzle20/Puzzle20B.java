@@ -3,6 +3,7 @@ package year2022.puzzle20;
 import org.apache.commons.lang3.time.StopWatch;
 import util.Utils;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -23,7 +24,7 @@ public class Puzzle20B {
                 .sorted(Comparator.comparingLong(o -> o.index))
                 .forEach(System.out::println);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1; i++) {
             System.out.println(i);
             StopWatch s = StopWatch.createStarted();
             numbers.stream()
@@ -32,8 +33,9 @@ public class Puzzle20B {
                         long fromIndex = n.index;
                         long toIndex = getToIndex(n.number, fromIndex);
 
-                        numbers.forEach(nn -> nn.move(fromIndex, toIndex));
+                        numbers.forEach(nn -> nn.move(fromIndex, toIndex, n.number < 0));
                     });
+            System.out.println();
             numbers.stream()
                     .sorted(Comparator.comparingLong(o -> o.index))
                     .forEach(System.out::println);
@@ -68,12 +70,17 @@ public class Puzzle20B {
             this.originalIndex = index;
         }
 
-        public void move(long fromIndex, long toIndex) {
-            // System.out.println("Moving " + this + " from " + fromIndex + " to " + toIndex);
-
+        public void move(long fromIndex, long toIndex, boolean moveLeft) {
+            //System.out.println("Moving from " + this);
+            System.out.println("Moving " + number + " fromIndex " + fromIndex + " to index " + toIndex + " moveLeft " + moveLeft);
+            if (moveLeft) {
+                toIndex = getModulo(toIndex - 1);
+            }
+            if(!moveLeft && toIndex<fromIndex){
+                toIndex = getModulo(toIndex + 1);
+            }
             if (index == fromIndex) {
                 index = toIndex;
-                //System.out.println("Moved to " + this);
                 return;
             }
             if (fromIndex < toIndex) {
@@ -85,7 +92,7 @@ public class Puzzle20B {
                     index = getModulo(index + 1);
                 }
             }
-            //System.out.println("Moved to " + this);
+            System.out.println("Moved to " + this);
         }
 
         @Override
@@ -99,29 +106,10 @@ public class Puzzle20B {
 
     static long getToIndex(long number, long fromIndex) {
         long toIndex = fromIndex + number;
-        if (toIndex >= numbers.size() || toIndex < 0) {
-            if (toIndex > 0) {
-                return getToIndex(0, toIndex / numbers.size() + toIndex % numbers.size());
-            } else {
-                int rounds = 0;
-                while (toIndex <= 0) {
-                    rounds++;
-                    toIndex = toIndex + numbers.size();
-                }
-                return getToIndex(0, toIndex - rounds);
-
-/*                long rounds = toIndex / numbers.size() + 1;
-                toIndex = toIndex + rounds * numbers.size();
-                return getToIndex(0, toIndex - rounds);*/
-            }
-        }
-        return toIndex;
+        return getModulo(toIndex);
     }
 
     static long getModulo(long n) {
-        while (n < 0) {
-            n = numbers.size() + n - 1;
-        }
-        return n % numbers.size();
+        return BigInteger.valueOf(n).mod(BigInteger.valueOf(numbers.size())).longValue();
     }
 }
