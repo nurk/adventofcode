@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 public class Puzzle20 {
     static List<Coordinate> numbers = new ArrayList<>();
+    static int numberOfCoordinates = 0;
 
     public static void main(String[] args) {
         //Part A: 3466
@@ -38,6 +39,7 @@ public class Puzzle20 {
 
     private static void initData(long multiplier) {
         AtomicInteger index = new AtomicInteger(0);
+        numberOfCoordinates = Utils.getInput("2022/input20.txt").size();
         numbers = Utils.getInput("2022/input20.txt", Integer::parseInt)
                 .stream()
                 .map(i -> new Coordinate(i * multiplier, index.getAndIncrement()))
@@ -49,12 +51,10 @@ public class Puzzle20 {
         numbers.stream()
                 .sorted(Comparator.comparingLong(o -> o.originalIndex))
                 .forEach(n -> {
-                    long moveAmount = getMoveAmount(n.number);
-                    long fromIndex = n.index;
-                    long toIndex = getModulo(n.index + moveAmount);
-
-                    if (moveAmount != 0) {
-                        numbers.forEach(nn -> nn.move(fromIndex, toIndex, moveAmount));
+                    if (n.moveAmount != 0) {
+                        long fromIndex = n.index;
+                        long toIndex = getModulo(n.index + n.moveAmount);
+                        numbers.forEach(nn -> nn.move(fromIndex, toIndex, n.moveAmount));
                     }
                 });
     }
@@ -76,14 +76,16 @@ public class Puzzle20 {
     }
 
     static class Coordinate {
-        long number;
+        final long number;
         long index;
         final long originalIndex;
+        final long moveAmount;
 
         Coordinate(long number, long index) {
             this.number = number;
             this.index = index;
             this.originalIndex = index;
+            this.moveAmount = getMoveAmount(number);
         }
 
         void move(long fromIndex, long toIndex, long moveAmount) {
@@ -117,12 +119,13 @@ public class Puzzle20 {
                     "number=" + number +
                     ", index=" + index +
                     ", originalIndex=" + originalIndex +
+                    ", moveAmount=" + moveAmount +
                     '}';
         }
     }
 
     static long getMoveAmount(long n) {
-        return n % (numbers.size() - 1);
+        return n % (numberOfCoordinates - 1);
     }
 
     static long getModulo(long n) {
