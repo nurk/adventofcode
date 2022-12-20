@@ -89,7 +89,7 @@ public class Puzzle20 {
         }
 
         void move(long fromIndex, long toIndex, long moveAmount) {
-            if (moveAmount < 0 && fromIndex + moveAmount <= 0) {
+            if (moveAmount < 0 && fromIndex < toIndex) {
                 toIndex = getModulo(toIndex - 1);
             }
 
