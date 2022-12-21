@@ -12,8 +12,9 @@ public class Puzzle21 {
     static List<Monkey> monkeys;
 
     public static void main(String[] args) {
+        //Part A: 169525884255464
         monkeys = Utils.getInput("2022/input21.txt", Monkey::new);
-        monkeys.forEach(Monkey::replaceWithMonkeys);
+        monkeys.forEach(Monkey::replaceOperandsWithMonkeys);
 
         Monkey root = monkeys.stream()
                 .filter(m -> m.name.equals("root"))
@@ -22,85 +23,82 @@ public class Puzzle21 {
 
         System.out.println("Part A: " + root.calculateValue());
 
-        String equation = root.rightMonkey.calculateValue() + " = " +root.leftMonkey.asString();
+        String equation = root.rightMonkey.calculateValue() + " = " + root.leftMonkey.asString();
         System.out.println(equation);
         // https://www.mathpapa.com/equation-solver/
         System.out.println("Part B: " + "3247317268284");
     }
 
     static class Monkey {
-        String name;
-        long number = 0;
-        String left;
-        String right;
+        final String name;
+        Long number;
+        String leftOperand;
+        String rightOperand;
         Monkey leftMonkey;
         Monkey rightMonkey;
-        boolean hasNumber = false;
         Operation operation;
 
         Monkey(String line) {
             name = StringUtils.substringBefore(line, ":");
-            String after = StringUtils.substringAfter(line, ": ");
-            if (StringUtils.isNumeric(after)) {
-                number = Integer.parseInt(after);
-                hasNumber = true;
+            String data = StringUtils.substringAfter(line, ": ");
+            if (StringUtils.isNumeric(data)) {
+                number = Long.parseLong(data);
             } else {
-                String[] s = after.split(" ");
-                left = s[0];
-                operation = Operation.fromName(s[1]);
-                right = s[2];
+                String[] split = data.split(" ");
+                leftOperand = split[0];
+                operation = Operation.fromSymbol(split[1]);
+                rightOperand = split[2];
             }
         }
 
-        void replaceWithMonkeys() {
-            if (!hasNumber) {
+        void replaceOperandsWithMonkeys() {
+            if (number == null) {
                 leftMonkey = monkeys.stream()
-                        .filter(m -> m.name.equals(left))
+                        .filter(m -> m.name.equals(leftOperand))
                         .findFirst()
                         .orElseThrow();
                 rightMonkey = monkeys.stream()
-                        .filter(m -> m.name.equals(right))
+                        .filter(m -> m.name.equals(rightOperand))
                         .findFirst()
                         .orElseThrow();
             }
         }
 
         String asString() {
-            if(this.name.equals("humn")){
+            if (this.name.equals("humn")) {
                 return "x";
-            } else if (this.hasNumber){
+            } else if (number != null) {
                 return String.valueOf(number);
             } else {
-                return "(" + leftMonkey.asString() + " " + operation.name + " " + rightMonkey.asString() + ")";
+                return "(" + leftMonkey.asString() + " " + operation.symbol + " " + rightMonkey.asString() + ")";
             }
         }
 
-        public long calculateValue() {
-            if (this.hasNumber) {
+        long calculateValue() {
+            if (number != null) {
                 return number;
             }
-            return operation.oper.apply(leftMonkey.calculateValue(), rightMonkey.calculateValue());
+            return operation.calculator.apply(leftMonkey.calculateValue(), rightMonkey.calculateValue());
         }
     }
 
     enum Operation {
-
         ADD("+", Long::sum),
         SUBTRACT("-", (a, b) -> a - b),
         MULTIPLY("*", (a, b) -> a * b),
         DIVIDE("/", (a, b) -> a / b);
 
-        final String name;
-        final BiFunction<Long, Long, Long> oper;
+        final String symbol;
+        final BiFunction<Long, Long, Long> calculator;
 
-        Operation(String name, BiFunction<Long, Long, Long> oper) {
-            this.name = name;
-            this.oper = oper;
+        Operation(String symbol, BiFunction<Long, Long, Long> calculator) {
+            this.symbol = symbol;
+            this.calculator = calculator;
         }
 
-        static Operation fromName(String n) {
+        static Operation fromSymbol(String s) {
             return Arrays.stream(Operation.values())
-                    .filter(o -> n.equals(o.name))
+                    .filter(o -> s.equals(o.symbol))
                     .findFirst()
                     .orElseThrow();
         }
