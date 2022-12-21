@@ -3,59 +3,53 @@ package year2022.puzzle16;
 import org.apache.commons.lang3.StringUtils;
 import util.Utils;
 
-import java.text.NumberFormat;
 import java.util.*;
 
+//https://github.com/ash42/adventofcode/blob/main/adventofcode2022/src/nl/michielgraat/adventofcode2022/day16/Day16.java
 public class Puzzle16 {
     static List<Valve> valves;
+    static Map<State, Integer> cache = new HashMap<>();
 
     public static void main(String[] args) {
         valves = Utils.getInput("2022/input16.txt", Valve::new);
 
-        Random random = new Random();
-        NumberFormat formatter = NumberFormat.getInstance(Locale.forLanguageTag("nl-BE"));
+        System.out.println("Part A: " + calcPressure(getValve("AA"), 30, new TreeSet<>(), valves, 0));
+        System.out.println();
+        cache.clear();
+        System.out.println("Part B: " + calcPressure(getValve("AA"), 26, new TreeSet<>(), valves, 1));
+        System.out.println();
+    }
 
-        int maxReleased = 0;
-        long iterations = 0;
-        // 1938 too low
-        // 1952 too low
-        // 1954
-        // 2032
-        // 2038
-        // 2091
-        // 2101
-        // 2159 too low
-        // 2160 not correct
-        // 2172 not correct
-        while (iterations < 10000000000L) {
-            iterations++;
-            valves.forEach(v -> v.isOpen = false);
-
-            int minute = 0;
-            int pressureRelease = 0;
-            Valve currentValve = getValve("AA");
-            List<Valve> visitedValved = new ArrayList<>();
-            while (minute <= 30) {
-                visitedValved.add(currentValve);
-                if (currentValve.canBeOpened() && random.nextBoolean()) {
-                    currentValve.open();
-                    pressureRelease = pressureRelease +
-                            (30 - (minute + 1)) * currentValve.flowRate;
-                } else {
-                    String newValve = currentValve.leadsTo.get(random.nextInt(currentValve.leadsTo.size()));
-                    currentValve = getValve(newValve);
-                }
-                minute++;
-            }
-            if (pressureRelease > maxReleased) {
-                maxReleased = pressureRelease;
-                System.out.println(maxReleased);
-                System.out.println(formatter.format(iterations));
-                visitedValved.forEach(System.out::println);
-            }
+    static int calcPressure(final Valve current,
+                            final int minute,
+                            final SortedSet<Valve> opened,
+                            final List<Valve> valves,
+                            final int nrOfOtherPlayers) {
+        if (minute == 0) {
+            final Valve aa = valves.stream().filter(v -> v.name.equals("AA")).findFirst()
+                    .orElseThrow(NoSuchElementException::new);
+            return nrOfOtherPlayers > 0 ? calcPressure(aa, 26, opened, valves, nrOfOtherPlayers - 1) : 0;
         }
-        System.out.println(maxReleased);
-        System.out.println(formatter.format(iterations));
+        final State state = new State(current, minute, new ArrayList<>(opened), nrOfOtherPlayers);
+        if (cache.containsKey(state)) {
+            return cache.get(state);
+        }
+
+        int max = 0;
+        if (current.flowRate > 0 && !opened.contains(current)) {
+            opened.add(current);
+            max = (minute - 1) * current.flowRate
+                    + calcPressure(current, minute - 1, opened, valves, nrOfOtherPlayers);
+            opened.remove(current);
+        }
+
+        for (final String n : current.leadsTo) {
+            final Valve neighbour = getValve(n);
+            max = Math.max(max, calcPressure(neighbour, minute - 1, opened, valves, nrOfOtherPlayers));
+        }
+        cache.put(state, max);
+
+        return max;
     }
 
     static Valve getValve(String n) {
@@ -65,11 +59,10 @@ public class Puzzle16 {
                 .orElseThrow();
     }
 
-    static class Valve {
+    static class Valve implements Comparable<Valve> {
         private final Integer flowRate;
         private final String name;
         private final List<String> leadsTo;
-        private boolean isOpen;
 
         public Valve(String s) {
             name = StringUtils.substringBetween(s, "Valve ", " has flow rate");
@@ -79,16 +72,12 @@ public class Puzzle16 {
             } else {
                 leadsTo = Arrays.stream(StringUtils.substringAfter(s, "to valve ").split(", ")).toList();
             }
-            isOpen = false;
         }
 
         @Override
         public String toString() {
             return "Valve{" +
-                    "flowRate=" + flowRate +
-                    "isOpen=" + isOpen +
-                    ", name='" + name + '\'' +
-                    ", leadsTo=" + String.join(",", leadsTo) +
+                    "name='" + name + '\'' +
                     '}';
         }
 
@@ -111,12 +100,12 @@ public class Puzzle16 {
             return name.hashCode();
         }
 
-        public boolean canBeOpened() {
-            return !isOpen && flowRate > 0;
+        @Override
+        public int compareTo(Valve o) {
+            return Integer.compare(this.flowRate, o.flowRate);
         }
+    }
 
-        public void open() {
-            this.isOpen = true;
-        }
+    record State(Valve valve, int minute, List<Valve> openValves, int nrOfOtherPlayers) {
     }
 }
