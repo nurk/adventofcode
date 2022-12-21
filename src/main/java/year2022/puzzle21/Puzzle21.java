@@ -26,7 +26,7 @@ public class Puzzle21 {
         String equation = root.rightMonkey.calculateValue() + " = " + root.leftMonkey.asString();
         System.out.println(equation);
         // https://www.mathpapa.com/equation-solver/
-        System.out.println("Part B: " + "3247317268284");
+        System.out.println("Part B: 3247317268284");
     }
 
     static class Monkey {
