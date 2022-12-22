@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("DuplicatedCode")
 public class Puzzle22B {
 
     static String[][] board;
@@ -304,7 +305,7 @@ public class Puzzle22B {
             case DOWN -> switch (newDirection) {
                 case DOWN -> newQuadrant.row * squareSize;
                 case RIGHT -> newQuadrant.row * squareSize + squareSize - 1 - currentCol % squareSize;
-                case LEFT -> newQuadrant.row * squareSize + currentCol % squareSize;//////////
+                case LEFT -> newQuadrant.row * squareSize + currentCol % squareSize;
                 case UP -> newQuadrant.row * squareSize + squareSize - 1;
             };
             case UP -> switch (newDirection) {
@@ -346,18 +347,18 @@ public class Puzzle22B {
     }
 
     private static void initMoves() {
-        String currentMove = "";
+        StringBuilder currentMove = new StringBuilder();
         for (String s : Utils.getInput("2022/input22moves.txt", s1 -> Arrays.stream(s1.split("")).toList())
                 .get(0)) {
             if (StringUtils.isNumeric(s)) {
-                currentMove = currentMove + s;
+                currentMove.append(s);
             } else {
-                moves.add(currentMove);
+                moves.add(currentMove.toString());
                 moves.add(s);
-                currentMove = "";
+                currentMove = new StringBuilder();
             }
         }
-        moves.add(currentMove);
+        moves.add(currentMove.toString());
     }
 
     private static void initBoard() {
