@@ -56,6 +56,7 @@ public class Puzzle22B {
                     //we can wrap around which we should not do, we should move quadrant instead
                     if ((dir == Direction.LEFT && currentCol == 0) || (dir == Direction.RIGHT && currentCol == board[0].length - 1) || (dir == Direction.DOWN && currentRow == board.length - 1) || (dir == Direction.UP && currentRow == 0) || " ".equals(
                             board[newRow][newCol])) {
+                        System.out.println("Quadrant switch");
                         Quadrant quadrant = new Quadrant(currentRow / squareSize, currentCol / squareSize);
                         Quadrant newQuadrant = quadrant.moveToQuadrant(dir);
                         tempNewDirection = directions.indexOf(quadrant.newQuadrantDirection(dir));
@@ -64,7 +65,7 @@ public class Puzzle22B {
                         newCol = quadrant.newQuadrantColumn(dir, quadrant.newQuadrantDirection(dir), newQuadrant);
                     }
 
-                    if (!board[newRow][newCol].equals("#")) {
+                    if (board[newRow][newCol].equals(".")) {
                         currentRow = newRow;
                         currentCol = newCol;
                         currentDirection = tempNewDirection;
