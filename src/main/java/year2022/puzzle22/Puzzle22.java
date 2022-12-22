@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 public class Puzzle22 {
 
-    //row, cols
     static String[][] board;
     static List<String> moves = new ArrayList<>();
     static List<Direction> directions = List.of(Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP);
@@ -83,18 +82,18 @@ public class Puzzle22 {
     }
 
     private static void initMoves() {
-        String currentMove = "";
+        StringBuilder currentMove = new StringBuilder();
         for (String s : Utils.getInput("2022/input22moves.txt", s1 -> Arrays.stream(s1.split("")).toList())
                 .get(0)) {
             if (StringUtils.isNumeric(s)) {
-                currentMove = currentMove + s;
+                currentMove.append(s);
             } else {
-                moves.add(currentMove);
+                moves.add(currentMove.toString());
                 moves.add(s);
-                currentMove = "";
+                currentMove = new StringBuilder();
             }
         }
-        moves.add(currentMove);
+        moves.add(currentMove.toString());
     }
 
     private static void initBoard() {
