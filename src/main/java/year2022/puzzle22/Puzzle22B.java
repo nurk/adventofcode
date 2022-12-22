@@ -16,6 +16,9 @@ public class Puzzle22B {
     // to high 107527
     // to low  20572
     // not correct 56082
+    // not correct 97207
+    // 22512 to low
+    // 134041 wrong
     static String[][] board;
     static List<String> moves = new ArrayList<>();
     static List<Direction> directions = List.of(Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP);
@@ -40,7 +43,7 @@ public class Puzzle22B {
         for (String move : moves) {
             if (StringUtils.isNumeric(move)) {
                 for (int i = 0; i < Integer.parseInt(move); i++) {
-                    board[currentRow][currentCol] = directions.get(currentDirection).symbol;
+                    //board[currentRow][currentCol] = directions.get(currentDirection).symbol;
                     //printBoard();
                     System.out.println("row " + currentRow + " col " + currentCol + " quadrant column " + currentCol / squareSize + " quadrant row " + currentRow / squareSize + " direction " + directions.get(
                             currentDirection));
@@ -51,7 +54,8 @@ public class Puzzle22B {
                     int tempNewDirection = currentDirection;
 
                     //vertically we can wrap around which we should not do
-                    if (" ".equals(board[newRow][newCol]) || (dir == Direction.DOWN && currentRow == board.length - 1) || (dir == Direction.UP && currentRow == 0)) {
+                    if ((dir == Direction.LEFT && currentCol == 0) || (dir == Direction.RIGHT && currentCol == board[0].length - 1) || (dir == Direction.DOWN && currentRow == board.length - 1) || (dir == Direction.UP && currentRow == 0) || " ".equals(
+                            board[newRow][newCol])) {
                         Quadrant quadrant = new Quadrant(currentRow / squareSize, currentCol / squareSize);
                         Quadrant newQuadrant = quadrant.moveToQuadrant(dir);
                         tempNewDirection = directions.indexOf(quadrant.newQuadrantDirection(dir));
@@ -65,7 +69,7 @@ public class Puzzle22B {
                         currentCol = newCol;
                         currentDirection = tempNewDirection;
                     } else {
-                        System.out.println("brerak " + board[newRow][newCol]);
+                        System.out.println("break " + board[newRow][newCol]);
                         break;
                     }
                 }
@@ -111,134 +115,238 @@ public class Puzzle22B {
         }
 
         public Quadrant moveToQuadrant(Direction direction) {
-            if (row == 0 && col == 2) {
-                return switch (direction) {
-                    case DOWN -> new Quadrant(1, 2);
-                    case RIGHT -> new Quadrant(2, 3);
-                    case LEFT -> new Quadrant(1, 1);
-                    case UP -> new Quadrant(1, 0);
-                };
+            if (squareSize == 4) {
+                if (row == 0 && col == 2) {
+                    return switch (direction) {
+                        case DOWN -> new Quadrant(1, 2);
+                        case RIGHT -> new Quadrant(2, 3);
+                        case LEFT -> new Quadrant(1, 1);
+                        case UP -> new Quadrant(1, 0);
+                    };
+                }
+                if (row == 1 && col == 2) {
+                    return switch (direction) {
+                        case DOWN -> new Quadrant(2, 2);
+                        case RIGHT -> new Quadrant(2, 3);
+                        case LEFT -> new Quadrant(1, 1);
+                        case UP -> new Quadrant(0, 2);
+                    };
+                }
+                if (row == 2 && col == 2) {
+                    return switch (direction) {
+                        case DOWN -> new Quadrant(1, 0);
+                        case RIGHT -> new Quadrant(2, 3);
+                        case LEFT -> new Quadrant(1, 1);
+                        case UP -> new Quadrant(1, 2);
+                    };
+                }
+                if (row == 1 && col == 0) {
+                    return switch (direction) {
+                        case DOWN -> new Quadrant(2, 2);
+                        case RIGHT -> new Quadrant(1, 1);
+                        case LEFT -> new Quadrant(2, 3);
+                        case UP -> new Quadrant(0, 2);
+                    };
+                }
+                if (row == 2 && col == 3) {
+                    return switch (direction) {
+                        case DOWN -> new Quadrant(1, 0);
+                        case RIGHT -> new Quadrant(0, 2);
+                        case LEFT -> new Quadrant(2, 2);
+                        case UP -> new Quadrant(1, 2);
+                    };
+                }
+                if (row == 1 && col == 1) {
+                    return switch (direction) {
+                        case DOWN -> new Quadrant(2, 2);
+                        case RIGHT -> new Quadrant(1, 2);
+                        case LEFT -> new Quadrant(1, 0);
+                        case UP -> new Quadrant(0, 2);
+                    };
+                }
+                throw new IllegalArgumentException();
+            } else {
+                if (row == 0 && col == 1) {
+                    return switch (direction) {
+                        case DOWN -> new Quadrant(1, 1);
+                        case RIGHT -> new Quadrant(0, 2);
+                        case LEFT -> new Quadrant(2, 0);
+                        case UP -> new Quadrant(3, 0);
+                    };
+                }
+                if (row == 1 && col == 1) {
+                    return switch (direction) {
+                        case DOWN -> new Quadrant(2, 1);
+                        case RIGHT -> new Quadrant(0, 2);
+                        case LEFT -> new Quadrant(2, 0);
+                        case UP -> new Quadrant(0, 1);
+                    };
+                }
+                if (row == 2 && col == 1) {
+                    return switch (direction) {
+                        case DOWN -> new Quadrant(3, 0);
+                        case RIGHT -> new Quadrant(0, 2);
+                        case LEFT -> new Quadrant(2, 0);
+                        case UP -> new Quadrant(1, 1);
+                    };
+                }
+                if (row == 3 && col == 0) {
+                    return switch (direction) {
+                        case DOWN -> new Quadrant(0, 2);
+                        case RIGHT -> new Quadrant(2, 1);
+                        case LEFT -> new Quadrant(0, 1);
+                        case UP -> new Quadrant(2, 0);
+                    };
+                }
+                if (row == 0 && col == 2) {
+                    return switch (direction) {
+                        case DOWN -> new Quadrant(1, 1);
+                        case RIGHT -> new Quadrant(2, 1);
+                        case LEFT -> new Quadrant(0, 1);
+                        case UP -> new Quadrant(3, 0);
+                    };
+                }
+                if (row == 2 && col == 0) {
+                    return switch (direction) {
+                        case DOWN -> new Quadrant(3, 0);
+                        case RIGHT -> new Quadrant(2, 1);
+                        case LEFT -> new Quadrant(0, 1);
+                        case UP -> new Quadrant(1, 1);
+                    };
+                }
+                throw new IllegalArgumentException();
             }
-            if (row == 1 && col == 2) {
-                return switch (direction) {
-                    case DOWN -> new Quadrant(2, 2);
-                    case RIGHT -> new Quadrant(2, 3);
-                    case LEFT -> new Quadrant(1, 1);
-                    case UP -> new Quadrant(0, 2);
-                };
-            }
-            if (row == 2 && col == 2) {
-                return switch (direction) {
-                    case DOWN -> new Quadrant(1, 0);
-                    case RIGHT -> new Quadrant(2, 3);
-                    case LEFT -> new Quadrant(1, 1);
-                    case UP -> new Quadrant(1, 2);
-                };
-            }
-            if (row == 1 && col == 0) {
-                return switch (direction) {
-                    case DOWN -> new Quadrant(2, 2);
-                    case RIGHT -> new Quadrant(1, 1);
-                    case LEFT -> new Quadrant(2, 3);
-                    case UP -> new Quadrant(0, 2);
-                };
-            }
-            if (row == 2 && col == 3) {
-                return switch (direction) {
-                    case DOWN -> new Quadrant(1, 0);
-                    case RIGHT -> new Quadrant(0, 2);
-                    case LEFT -> new Quadrant(2, 2);
-                    case UP -> new Quadrant(1, 2);
-                };
-            }
-            if (row == 1 && col == 1) {
-                return switch (direction) {
-                    case DOWN -> new Quadrant(2, 2);
-                    case RIGHT -> new Quadrant(1, 2);
-                    case LEFT -> new Quadrant(1, 0);
-                    case UP -> new Quadrant(0, 2);
-                };
-            }
-            throw new IllegalArgumentException();
         }
 
         public Direction newQuadrantDirection(Direction direction) {
-            if (row == 0 && col == 2) {
-                return switch (direction) {
-                    case DOWN -> Direction.DOWN;
-                    case RIGHT -> Direction.LEFT;
-                    case LEFT -> Direction.DOWN;
-                    case UP -> Direction.DOWN;
-                };
+            if (squareSize == 4) {
+                if (row == 0 && col == 2) {
+                    return switch (direction) {
+                        case DOWN -> Direction.DOWN;
+                        case RIGHT -> Direction.LEFT;
+                        case LEFT -> Direction.DOWN;
+                        case UP -> Direction.DOWN;
+                    };
+                }
+                if (row == 1 && col == 2) {
+                    return switch (direction) {
+                        case DOWN -> Direction.DOWN;
+                        case RIGHT -> Direction.DOWN;
+                        case LEFT -> Direction.LEFT;
+                        case UP -> Direction.UP;
+                    };
+                }
+                if (row == 2 && col == 2) {
+                    return switch (direction) {
+                        case DOWN -> Direction.UP;
+                        case RIGHT -> Direction.RIGHT;
+                        case LEFT -> Direction.UP;
+                        case UP -> Direction.UP;
+                    };
+                }
+                if (row == 1 && col == 0) {
+                    return switch (direction) {
+                        case DOWN -> Direction.UP;
+                        case RIGHT -> Direction.RIGHT;
+                        case LEFT -> Direction.UP;
+                        case UP -> Direction.DOWN;
+                    };
+                }
+                if (row == 2 && col == 3) {
+                    return switch (direction) {
+                        case DOWN -> Direction.RIGHT;
+                        case RIGHT -> Direction.LEFT;
+                        case LEFT -> Direction.LEFT;
+                        case UP -> Direction.LEFT;
+                    };
+                }
+                if (row == 1 && col == 1) {
+                    return switch (direction) {
+                        case DOWN -> Direction.RIGHT;
+                        case RIGHT -> Direction.RIGHT;
+                        case LEFT -> Direction.LEFT;
+                        case UP -> Direction.RIGHT;
+                    };
+                }
+                throw new IllegalArgumentException();
+            } else {
+                if (row == 0 && col == 1) {
+                    return switch (direction) {
+                        case DOWN -> Direction.DOWN;
+                        case RIGHT -> Direction.RIGHT;
+                        case LEFT -> Direction.RIGHT;
+                        case UP -> Direction.RIGHT;
+                    };
+                }
+                if (row == 1 && col == 1) {
+                    return switch (direction) {
+                        case DOWN -> Direction.DOWN;
+                        case RIGHT -> Direction.UP;
+                        case LEFT -> Direction.DOWN;
+                        case UP -> Direction.UP;
+                    };
+                }
+                if (row == 2 && col == 1) {
+                    return switch (direction) {
+                        case DOWN -> Direction.LEFT;
+                        case RIGHT -> Direction.LEFT;
+                        case LEFT -> Direction.LEFT;
+                        case UP -> Direction.UP;
+                    };
+                }
+                if (row == 3 && col == 0) {
+                    return switch (direction) {
+                        case DOWN -> Direction.DOWN;
+                        case RIGHT -> Direction.UP;
+                        case LEFT -> Direction.DOWN;
+                        case UP -> Direction.UP;
+                    };
+                }
+                if (row == 0 && col == 2) {
+                    return switch (direction) {
+                        case DOWN -> Direction.LEFT;
+                        case RIGHT -> Direction.LEFT;
+                        case LEFT -> Direction.LEFT;
+                        case UP -> Direction.UP;
+                    };
+                }
+                if (row == 2 && col == 0) {
+                    return switch (direction) {
+                        case DOWN -> Direction.DOWN;
+                        case RIGHT -> Direction.RIGHT;
+                        case LEFT -> Direction.RIGHT;
+                        case UP -> Direction.RIGHT;
+                    };
+                }
+                throw new IllegalArgumentException();
             }
-            if (row == 1 && col == 2) {
-                return switch (direction) {
-                    case DOWN -> Direction.DOWN;
-                    case RIGHT -> Direction.DOWN;
-                    case LEFT -> Direction.LEFT;
-                    case UP -> Direction.UP;
-                };
-            }
-            if (row == 2 && col == 2) {
-                return switch (direction) {
-                    case DOWN -> Direction.UP;
-                    case RIGHT -> Direction.RIGHT;
-                    case LEFT -> Direction.UP;
-                    case UP -> Direction.UP;
-                };
-            }
-            if (row == 1 && col == 0) {
-                return switch (direction) {
-                    case DOWN -> Direction.UP;
-                    case RIGHT -> Direction.RIGHT;
-                    case LEFT -> Direction.UP;
-                    case UP -> Direction.DOWN;
-                };
-            }
-            if (row == 2 && col == 3) {
-                return switch (direction) {
-                    case DOWN -> Direction.RIGHT;
-                    case RIGHT -> Direction.LEFT;
-                    case LEFT -> Direction.LEFT;
-                    case UP -> Direction.LEFT;
-                };
-            }
-            if (row == 1 && col == 1) {
-                return switch (direction) {
-                    case DOWN -> Direction.RIGHT;
-                    case RIGHT -> Direction.RIGHT;
-                    case LEFT -> Direction.LEFT;
-                    case UP -> Direction.RIGHT;
-                };
-            }
-            throw new IllegalArgumentException();
         }
 
         public int newQuadrantRow(Direction oldDirection, Direction newDirection, Quadrant newQuadrant) {
             return switch (oldDirection) {
                 case RIGHT -> switch (newDirection) {
                     case DOWN -> newQuadrant.row * squareSize;
-                    case RIGHT -> currentRow;
+                    case RIGHT -> newQuadrant.row * squareSize + currentRow % squareSize;
                     case LEFT -> newQuadrant.row * squareSize + squareSize - 1 - currentRow % squareSize;
-                    case UP -> throw new IllegalArgumentException();
+                    case UP -> newQuadrant.row * squareSize + squareSize - 1;
                 };
                 case LEFT -> switch (newDirection) {
                     case DOWN -> newQuadrant.row * squareSize;
-                    case RIGHT -> throw new IllegalArgumentException();
-                    case LEFT -> currentRow;
+                    case RIGHT -> newQuadrant.row * squareSize + squareSize - 1 - currentRow % squareSize;
+                    case LEFT -> newQuadrant.row * squareSize + currentRow % squareSize;
                     case UP -> newQuadrant.row * squareSize + squareSize - 1;
                 };
                 case DOWN -> switch (newDirection) {
-                    case DOWN -> currentRow + 1;
+                    case DOWN -> newQuadrant.row * squareSize;
                     case RIGHT -> newQuadrant.row * squareSize + squareSize - 1 - currentCol % squareSize;
-                    case LEFT -> throw new IllegalArgumentException();
+                    case LEFT -> newQuadrant.row * squareSize - currentCol % squareSize;
                     case UP -> newQuadrant.row * squareSize + squareSize - 1;
                 };
                 case UP -> switch (newDirection) {
                     case DOWN -> newQuadrant.row * squareSize;
                     case RIGHT -> newQuadrant.row * squareSize + currentCol % squareSize;
                     case LEFT -> newQuadrant.row * squareSize + squareSize - 1 - currentCol % squareSize;
-                    case UP -> currentRow - 1;
+                    case UP -> newQuadrant.row * squareSize + squareSize - 1;
                 };
             };
         }
@@ -249,51 +357,27 @@ public class Puzzle22B {
                     case DOWN -> newQuadrant.col * squareSize + squareSize - 1 - currentRow % squareSize;
                     case RIGHT -> newQuadrant.col * squareSize;
                     case LEFT -> newQuadrant.col * squareSize + squareSize - 1;
-                    case UP -> throw new IllegalArgumentException();
-                };
-                case LEFT -> switch (newDirection) {
-                    case DOWN -> newQuadrant.col * squareSize + squareSize - 1;
-                    case RIGHT -> throw new IllegalArgumentException();
-                    case LEFT -> currentCol - 1;
                     case UP -> newQuadrant.col * squareSize + currentRow % squareSize;
                 };
-                case DOWN -> switch (newDirection) {
-                    case DOWN -> currentCol;
+                case LEFT -> switch (newDirection) {
+                    case DOWN -> newQuadrant.col * squareSize + currentRow % squareSize;
                     case RIGHT -> newQuadrant.col * squareSize;
-                    case LEFT -> throw new IllegalArgumentException();
+                    case LEFT -> newQuadrant.col * squareSize + squareSize - 1;
+                    case UP -> newQuadrant.col * squareSize + squareSize - 1 - currentRow % squareSize;
+                };
+                case DOWN -> switch (newDirection) {
+                    case DOWN -> newQuadrant.col * squareSize + currentCol % squareSize;
+                    case RIGHT -> newQuadrant.col * squareSize;
+                    case LEFT -> newQuadrant.col * squareSize + squareSize - 1;
                     case UP -> newQuadrant.col * squareSize + squareSize - 1 - currentCol % squareSize;
                 };
                 case UP -> switch (newDirection) {
                     case DOWN -> newQuadrant.col * squareSize + squareSize - 1 - currentCol % squareSize;
                     case RIGHT -> newQuadrant.col * squareSize;
                     case LEFT -> newQuadrant.col * squareSize + squareSize - 1;
-                    case UP -> currentCol;
+                    case UP -> newQuadrant.col * squareSize + currentCol % squareSize;
                 };
             };
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-
-            Quadrant quadrant = (Quadrant) o;
-
-            if (row != quadrant.row) {
-                return false;
-            }
-            return col == quadrant.col;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = row;
-            result = 31 * result + col;
-            return result;
         }
     }
 
@@ -326,69 +410,9 @@ public class Puzzle22B {
                 board[i][j] = String.valueOf(line.charAt(j));
             }
         }
-        //printBoard();
-        if (!fileName.contains("test")) {
-            //rearrange board
-            String[][] newBoard = new String[150][200];
-            Arrays.stream(newBoard).forEach(a -> Arrays.fill(a, " "));
-            for (int j = 50; j < 100; j++) {
-                for (int i = 0; i < 150; i++) {
-                    newBoard[i][j + 50] = board[i][j];
-                }
-            }
-
-            //3,1 -> 1,0
-            String[][] temp = new String[50][50];
-            for (int i = 150; i < 200; i++) {
-                for (int j = 0; j < 50; j++) {
-                    temp[i - 150][j] = board[i][j];
-
-                }
-            }
-            temp = rotate(temp);
-            for (int i = 0; i < 50; i++) {
-                for (int j = 0; j < 50; j++) {
-                    newBoard[i + 50][j] = temp[i][j];
-
-                }
-            }
-
-            //0,2-> 2,3
-            temp = new String[50][50];
-            for (int i = 0; i < 50; i++) {
-                for (int j = 100; j < 150; j++) {
-                    temp[i][j - 100] = board[i][j];
-
-                }
-            }
-            temp = rotate(temp);
-            temp = rotate(temp);
-
-            for (int i = 0; i < 50; i++) {
-                for (int j = 0; j < 50; j++) {
-                    newBoard[i + 100][j + 150] = temp[i][j];
-
-                }
-            }
-
-            //2,0-> 1,1
-            temp = new String[50][50];
-            for (int i = 100; i < 150; i++) {
-                for (int j = 0; j < 50; j++) {
-                    temp[i - 100][j] = board[i][j];
-
-                }
-            }
-            temp = rotate(temp);
-            for (int i = 0; i < 50; i++) {
-                for (int j = 0; j < 50; j++) {
-                    newBoard[i + 50][j + 50] = temp[i][j];
-
-                }
-            }
-            board = newBoard;
+        if (fileName.contains("test")) {
+            squareSize = 4;
         }
-        printBoard();
     }
 
     private static void printBoard() {
@@ -397,16 +421,5 @@ public class Puzzle22B {
                         .map(String::valueOf)
                         .collect(Collectors.joining("")))
                 .collect(Collectors.joining("\n")));
-    }
-
-    private static String[][] rotate(String[][] matrix) {
-        for (int i = 0; i < matrix.length; ++i) {
-            for (int j = 0; j < i; ++j) {
-                String temp = matrix[i][j];
-                matrix[i][j] = matrix[j][i];
-                matrix[j][i] = temp;
-            }
-        }
-        return matrix;
     }
 }
