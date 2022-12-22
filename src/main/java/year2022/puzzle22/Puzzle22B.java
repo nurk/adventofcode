@@ -11,23 +11,15 @@ import java.util.stream.Collectors;
 
 public class Puzzle22B {
 
-    //row, cols
-    // to high 143415
-    // to high 107527
-    // to low  20572
-    // not correct 56082
-    // not correct 97207
-    // 22512 to low
-    // 134041 wrong
     static String[][] board;
-    static List<String> moves = new ArrayList<>();
-    static List<Direction> directions = List.of(Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP);
-    static int currentDirection = 0;
+    final static List<String> moves = new ArrayList<>();
+    final static List<Direction> directions = List.of(Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP);
+    static int currentDirectionIndex = 0;
     static int currentRow = 0;
     static int currentCol = 0;
     static int squareSize = 50;
 
-
+    // Part B: 55267
     public static void main(String[] args) {
         initBoard();
         initMoves();
@@ -37,62 +29,63 @@ public class Puzzle22B {
                 currentCol = j;
                 break;
             }
-
         }
 
         for (String move : moves) {
             if (StringUtils.isNumeric(move)) {
-                for (int i = 0; i < Integer.parseInt(move); i++) {
-                    //board[currentRow][currentCol] = directions.get(currentDirection).symbol;
-                    //printBoard();
-                    System.out.println("row " + currentRow + " col " + currentCol + " quadrant column " + currentCol / squareSize + " quadrant row " + currentRow / squareSize + " direction " + directions.get(
-                            currentDirection));
-                    Direction dir = directions.get(currentDirection);
-
-                    int newRow = dir.row.apply(currentRow);
-                    int newCol = dir.column.apply(currentCol);
-                    int tempNewDirection = currentDirection;
-
-                    //we can wrap around which we should not do, we should move quadrant instead
-                    if ((dir == Direction.LEFT && currentCol == 0) || (dir == Direction.RIGHT && currentCol == board[0].length - 1) || (dir == Direction.DOWN && currentRow == board.length - 1) || (dir == Direction.UP && currentRow == 0) || " ".equals(
-                            board[newRow][newCol])) {
-                        System.out.println("Quadrant switch");
-                        Quadrant quadrant = new Quadrant(currentRow / squareSize, currentCol / squareSize);
-                        Quadrant newQuadrant = quadrant.moveToQuadrant(dir);
-                        tempNewDirection = directions.indexOf(quadrant.newQuadrantDirection(dir));
-
-                        newRow = quadrant.newQuadrantRow(dir, quadrant.newQuadrantDirection(dir), newQuadrant);
-                        newCol = quadrant.newQuadrantColumn(dir, quadrant.newQuadrantDirection(dir), newQuadrant);
-                    }
-
-                    if (board[newRow][newCol].equals(".")) {
-                        currentRow = newRow;
-                        currentCol = newCol;
-                        currentDirection = tempNewDirection;
-                    } else {
-                        System.out.println("break " + board[newRow][newCol]);
-                        break;
-                    }
-                }
+                moveMe(move);
             } else {
-                if ("L".equals(move)) {
-                    currentDirection = Math.floorMod(currentDirection - 1, directions.size());
-                } else {
-                    currentDirection = Math.floorMod(currentDirection + 1, directions.size());
-                }
+                changeDirection(move);
             }
         }
         System.out.println(currentRow + 1);
         System.out.println(currentCol + 1);
-        System.out.println(directions.get(currentDirection));
-        System.out.println((currentRow + 1) * 1000 + (currentCol + 1) * 4 + directions.get(currentDirection).value);
+        System.out.println(directions.get(currentDirectionIndex));
+        System.out.println((currentRow + 1) * 1000 + (currentCol + 1) * 4 + directions.get(currentDirectionIndex).value);
+    }
+
+    private static void changeDirection(String move) {
+        if ("L".equals(move)) {
+            currentDirectionIndex = Math.floorMod(currentDirectionIndex - 1, directions.size());
+        } else {
+            currentDirectionIndex = Math.floorMod(currentDirectionIndex + 1, directions.size());
+        }
+    }
+
+    private static void moveMe(String move) {
+        for (int i = 0; i < Integer.parseInt(move); i++) {
+            Direction currentDirection = directions.get(currentDirectionIndex);
+
+            int newRow = currentDirection.row.apply(currentRow);
+            int newCol = currentDirection.column.apply(currentCol);
+            int tempNewDirectionIndex = currentDirectionIndex;
+
+            //we can wrap around which we should not do, we should move quadrant instead
+            if (newRow < 0 || newCol < 0 || newRow >= board.length || newCol >= board[0].length || " ".equals(board[newRow][newCol])) {
+                Quadrant currentQuadrant = new Quadrant(currentRow / squareSize, currentCol / squareSize);
+                Quadrant newQuadrant = currentQuadrant.moveToQuadrant(currentDirection);
+                Direction directionInNewQuadrant = currentQuadrant.newQuadrantDirection(currentDirection);
+                tempNewDirectionIndex = directions.indexOf(directionInNewQuadrant);
+
+                newRow = newQuadrantRow(currentDirection, directionInNewQuadrant, newQuadrant);
+                newCol = newQuadrantColumn(currentDirection, directionInNewQuadrant, newQuadrant);
+            }
+
+            if (board[newRow][newCol].equals(".")) {
+                currentRow = newRow;
+                currentCol = newCol;
+                currentDirectionIndex = tempNewDirectionIndex;
+            } else {
+                break;
+            }
+        }
     }
 
     enum Direction {
-        RIGHT(0, ">", i -> i, i -> Math.floorMod(i + 1, board[0].length)),
-        DOWN(1, "v", i -> Math.floorMod(i + 1, board.length), i -> i),
-        LEFT(2, "<", i -> i, i -> Math.floorMod(i - 1, board[0].length)),
-        UP(3, "^", i -> Math.floorMod(i - 1, board.length), i -> i);
+        RIGHT(0, ">", i -> i, i -> i + 1),
+        DOWN(1, "v", i -> i + 1, i -> i),
+        LEFT(2, "<", i -> i, i -> i - 1),
+        UP(3, "^", i -> i - 1, i -> i);
 
         final int value;
         final String symbol;
@@ -322,64 +315,64 @@ public class Puzzle22B {
                 throw new IllegalArgumentException();
             }
         }
+    }
 
-        public int newQuadrantRow(Direction oldDirection, Direction newDirection, Quadrant newQuadrant) {
-            return switch (oldDirection) {
-                case RIGHT -> switch (newDirection) {
-                    case DOWN -> newQuadrant.row * squareSize;
-                    case RIGHT -> newQuadrant.row * squareSize + currentRow % squareSize;
-                    case LEFT -> newQuadrant.row * squareSize + squareSize - 1 - currentRow % squareSize;
-                    case UP -> newQuadrant.row * squareSize + squareSize - 1;
-                };
-                case LEFT -> switch (newDirection) {
-                    case DOWN -> newQuadrant.row * squareSize;
-                    case RIGHT -> newQuadrant.row * squareSize + squareSize - 1 - currentRow % squareSize;
-                    case LEFT -> newQuadrant.row * squareSize + currentRow % squareSize;
-                    case UP -> newQuadrant.row * squareSize + squareSize - 1;
-                };
-                case DOWN -> switch (newDirection) {
-                    case DOWN -> newQuadrant.row * squareSize;
-                    case RIGHT -> newQuadrant.row * squareSize + squareSize - 1 - currentCol % squareSize;
-                    case LEFT -> newQuadrant.row * squareSize - currentCol % squareSize;
-                    case UP -> newQuadrant.row * squareSize + squareSize - 1;
-                };
-                case UP -> switch (newDirection) {
-                    case DOWN -> newQuadrant.row * squareSize;
-                    case RIGHT -> newQuadrant.row * squareSize + currentCol % squareSize;
-                    case LEFT -> newQuadrant.row * squareSize + squareSize - 1 - currentCol % squareSize;
-                    case UP -> newQuadrant.row * squareSize + squareSize - 1;
-                };
+    private static int newQuadrantRow(Direction oldDirection, Direction newDirection, Quadrant newQuadrant) {
+        return switch (oldDirection) {
+            case RIGHT -> switch (newDirection) {
+                case DOWN -> newQuadrant.row * squareSize;
+                case RIGHT -> newQuadrant.row * squareSize + currentRow % squareSize;
+                case LEFT -> newQuadrant.row * squareSize + squareSize - 1 - currentRow % squareSize;
+                case UP -> newQuadrant.row * squareSize + squareSize - 1;
             };
-        }
+            case LEFT -> switch (newDirection) {
+                case DOWN -> newQuadrant.row * squareSize;
+                case RIGHT -> newQuadrant.row * squareSize + squareSize - 1 - currentRow % squareSize;
+                case LEFT -> newQuadrant.row * squareSize + currentRow % squareSize;
+                case UP -> newQuadrant.row * squareSize + squareSize - 1;
+            };
+            case DOWN -> switch (newDirection) {
+                case DOWN -> newQuadrant.row * squareSize;
+                case RIGHT -> newQuadrant.row * squareSize + squareSize - 1 - currentCol % squareSize;
+                case LEFT -> newQuadrant.row * squareSize + currentCol % squareSize;//////////
+                case UP -> newQuadrant.row * squareSize + squareSize - 1;
+            };
+            case UP -> switch (newDirection) {
+                case DOWN -> newQuadrant.row * squareSize;
+                case RIGHT -> newQuadrant.row * squareSize + currentCol % squareSize;
+                case LEFT -> newQuadrant.row * squareSize + squareSize - 1 - currentCol % squareSize;
+                case UP -> newQuadrant.row * squareSize + squareSize - 1;
+            };
+        };
+    }
 
-        public int newQuadrantColumn(Direction oldDirection, Direction newDirection, Quadrant newQuadrant) {
-            return switch (oldDirection) {
-                case RIGHT -> switch (newDirection) {
-                    case DOWN -> newQuadrant.col * squareSize + squareSize - 1 - currentRow % squareSize;
-                    case RIGHT -> newQuadrant.col * squareSize;
-                    case LEFT -> newQuadrant.col * squareSize + squareSize - 1;
-                    case UP -> newQuadrant.col * squareSize + currentRow % squareSize;
-                };
-                case LEFT -> switch (newDirection) {
-                    case DOWN -> newQuadrant.col * squareSize + currentRow % squareSize;
-                    case RIGHT -> newQuadrant.col * squareSize;
-                    case LEFT -> newQuadrant.col * squareSize + squareSize - 1;
-                    case UP -> newQuadrant.col * squareSize + squareSize - 1 - currentRow % squareSize;
-                };
-                case DOWN -> switch (newDirection) {
-                    case DOWN -> newQuadrant.col * squareSize + currentCol % squareSize;
-                    case RIGHT -> newQuadrant.col * squareSize;
-                    case LEFT -> newQuadrant.col * squareSize + squareSize - 1;
-                    case UP -> newQuadrant.col * squareSize + squareSize - 1 - currentCol % squareSize;
-                };
-                case UP -> switch (newDirection) {
-                    case DOWN -> newQuadrant.col * squareSize + squareSize - 1 - currentCol % squareSize;
-                    case RIGHT -> newQuadrant.col * squareSize;
-                    case LEFT -> newQuadrant.col * squareSize + squareSize - 1;
-                    case UP -> newQuadrant.col * squareSize + currentCol % squareSize;
-                };
+    private static int newQuadrantColumn(Direction oldDirection, Direction newDirection, Quadrant newQuadrant) {
+        return switch (oldDirection) {
+            case RIGHT -> switch (newDirection) {
+                case DOWN -> newQuadrant.col * squareSize + squareSize - 1 - currentRow % squareSize;
+                case RIGHT -> newQuadrant.col * squareSize;
+                case LEFT -> newQuadrant.col * squareSize + squareSize - 1;
+                case UP -> newQuadrant.col * squareSize + currentRow % squareSize;
             };
-        }
+            case LEFT -> switch (newDirection) {
+                case DOWN -> newQuadrant.col * squareSize + currentRow % squareSize;
+                case RIGHT -> newQuadrant.col * squareSize;
+                case LEFT -> newQuadrant.col * squareSize + squareSize - 1;
+                case UP -> newQuadrant.col * squareSize + squareSize - 1 - currentRow % squareSize;
+            };
+            case DOWN -> switch (newDirection) {
+                case DOWN -> newQuadrant.col * squareSize + currentCol % squareSize;
+                case RIGHT -> newQuadrant.col * squareSize;
+                case LEFT -> newQuadrant.col * squareSize + squareSize - 1;
+                case UP -> newQuadrant.col * squareSize + squareSize - 1 - currentCol % squareSize;
+            };
+            case UP -> switch (newDirection) {
+                case DOWN -> newQuadrant.col * squareSize + squareSize - 1 - currentCol % squareSize;
+                case RIGHT -> newQuadrant.col * squareSize;
+                case LEFT -> newQuadrant.col * squareSize + squareSize - 1;
+                case UP -> newQuadrant.col * squareSize + currentCol % squareSize;
+            };
+        };
     }
 
     private static void initMoves() {
