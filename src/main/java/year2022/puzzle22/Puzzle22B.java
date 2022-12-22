@@ -100,222 +100,192 @@ public class Puzzle22B {
         }
     }
 
-    static class Quadrant {
-        final int row, col;
-
-        public Quadrant(int row, int col) {
-            this.row = row;
-            this.col = col;
-        }
+    record Quadrant(int row, int col) {
 
         public Quadrant moveToQuadrant(Direction direction) {
-            if (squareSize == 4) {
-                if (row == 0 && col == 2) {
-                    return switch (direction) {
-                        case DOWN -> new Quadrant(1, 2);
-                        case RIGHT -> new Quadrant(2, 3);
-                        case LEFT -> new Quadrant(1, 1);
-                        case UP -> new Quadrant(1, 0);
-                    };
-                }
-                if (row == 1 && col == 2) {
-                    return switch (direction) {
-                        case DOWN -> new Quadrant(2, 2);
-                        case RIGHT -> new Quadrant(2, 3);
-                        case LEFT -> new Quadrant(1, 1);
-                        case UP -> new Quadrant(0, 2);
-                    };
-                }
-                if (row == 2 && col == 2) {
-                    return switch (direction) {
-                        case DOWN -> new Quadrant(1, 0);
-                        case RIGHT -> new Quadrant(2, 3);
-                        case LEFT -> new Quadrant(1, 1);
-                        case UP -> new Quadrant(1, 2);
-                    };
-                }
-                if (row == 1 && col == 0) {
-                    return switch (direction) {
-                        case DOWN -> new Quadrant(2, 2);
-                        case RIGHT -> new Quadrant(1, 1);
-                        case LEFT -> new Quadrant(2, 3);
-                        case UP -> new Quadrant(0, 2);
-                    };
-                }
-                if (row == 2 && col == 3) {
-                    return switch (direction) {
-                        case DOWN -> new Quadrant(1, 0);
-                        case RIGHT -> new Quadrant(0, 2);
-                        case LEFT -> new Quadrant(2, 2);
-                        case UP -> new Quadrant(1, 2);
-                    };
-                }
-                if (row == 1 && col == 1) {
-                    return switch (direction) {
-                        case DOWN -> new Quadrant(2, 2);
-                        case RIGHT -> new Quadrant(1, 2);
-                        case LEFT -> new Quadrant(1, 0);
-                        case UP -> new Quadrant(0, 2);
-                    };
-                }
-                throw new IllegalArgumentException();
-            } else {
-                if (row == 0 && col == 1) {
-                    return switch (direction) {
-                        case DOWN -> new Quadrant(1, 1);
-                        case RIGHT -> new Quadrant(0, 2);
-                        case LEFT -> new Quadrant(2, 0);
-                        case UP -> new Quadrant(3, 0);
-                    };
-                }
-                if (row == 1 && col == 1) {
-                    return switch (direction) {
-                        case DOWN -> new Quadrant(2, 1);
-                        case RIGHT -> new Quadrant(0, 2);
-                        case LEFT -> new Quadrant(2, 0);
-                        case UP -> new Quadrant(0, 1);
-                    };
-                }
-                if (row == 2 && col == 1) {
-                    return switch (direction) {
-                        case DOWN -> new Quadrant(3, 0);
-                        case RIGHT -> new Quadrant(0, 2);
-                        case LEFT -> new Quadrant(2, 0);
-                        case UP -> new Quadrant(1, 1);
-                    };
-                }
-                if (row == 3 && col == 0) {
-                    return switch (direction) {
-                        case DOWN -> new Quadrant(0, 2);
-                        case RIGHT -> new Quadrant(2, 1);
-                        case LEFT -> new Quadrant(0, 1);
-                        case UP -> new Quadrant(2, 0);
-                    };
-                }
-                if (row == 0 && col == 2) {
-                    return switch (direction) {
-                        case DOWN -> new Quadrant(1, 1);
-                        case RIGHT -> new Quadrant(2, 1);
-                        case LEFT -> new Quadrant(0, 1);
-                        case UP -> new Quadrant(3, 0);
-                    };
-                }
-                if (row == 2 && col == 0) {
-                    return switch (direction) {
-                        case DOWN -> new Quadrant(3, 0);
-                        case RIGHT -> new Quadrant(2, 1);
-                        case LEFT -> new Quadrant(0, 1);
-                        case UP -> new Quadrant(1, 1);
-                    };
+                if (squareSize == 4) {
+                    if (row == 0 && col == 2) {
+                        return switch (direction) {
+                            case DOWN -> new Quadrant(1, 2);
+                            case RIGHT -> new Quadrant(2, 3);
+                            case LEFT -> new Quadrant(1, 1);
+                            case UP -> new Quadrant(1, 0);
+                        };
+                    }
+                    if (row == 1 && col == 2) {
+                        return switch (direction) {
+                            case DOWN -> new Quadrant(2, 2);
+                            case RIGHT -> new Quadrant(2, 3);
+                            case LEFT -> new Quadrant(1, 1);
+                            case UP -> new Quadrant(0, 2);
+                        };
+                    }
+                    if (row == 2 && col == 2) {
+                        return switch (direction) {
+                            case DOWN -> new Quadrant(1, 0);
+                            case RIGHT -> new Quadrant(2, 3);
+                            case LEFT -> new Quadrant(1, 1);
+                            case UP -> new Quadrant(1, 2);
+                        };
+                    }
+                    if (row == 1 && col == 0) {
+                        return switch (direction) {
+                            case DOWN -> new Quadrant(2, 2);
+                            case RIGHT -> new Quadrant(1, 1);
+                            case LEFT -> new Quadrant(2, 3);
+                            case UP -> new Quadrant(0, 2);
+                        };
+                    }
+                    if (row == 2 && col == 3) {
+                        return switch (direction) {
+                            case DOWN -> new Quadrant(1, 0);
+                            case RIGHT -> new Quadrant(0, 2);
+                            case LEFT -> new Quadrant(2, 2);
+                            case UP -> new Quadrant(1, 2);
+                        };
+                    }
+                    if (row == 1 && col == 1) {
+                        return switch (direction) {
+                            case DOWN -> new Quadrant(2, 2);
+                            case RIGHT -> new Quadrant(1, 2);
+                            case LEFT -> new Quadrant(1, 0);
+                            case UP -> new Quadrant(0, 2);
+                        };
+                    }
+                } else {
+                    if (row == 0 && col == 1) {
+                        return switch (direction) {
+                            case DOWN -> new Quadrant(1, 1);
+                            case RIGHT -> new Quadrant(0, 2);
+                            case LEFT -> new Quadrant(2, 0);
+                            case UP -> new Quadrant(3, 0);
+                        };
+                    }
+                    if (row == 1 && col == 1) {
+                        return switch (direction) {
+                            case DOWN -> new Quadrant(2, 1);
+                            case RIGHT -> new Quadrant(0, 2);
+                            case LEFT -> new Quadrant(2, 0);
+                            case UP -> new Quadrant(0, 1);
+                        };
+                    }
+                    if (row == 2 && col == 1) {
+                        return switch (direction) {
+                            case DOWN -> new Quadrant(3, 0);
+                            case RIGHT -> new Quadrant(0, 2);
+                            case LEFT -> new Quadrant(2, 0);
+                            case UP -> new Quadrant(1, 1);
+                        };
+                    }
+                    if (row == 3 && col == 0) {
+                        return switch (direction) {
+                            case DOWN -> new Quadrant(0, 2);
+                            case RIGHT -> new Quadrant(2, 1);
+                            case LEFT -> new Quadrant(0, 1);
+                            case UP -> new Quadrant(2, 0);
+                        };
+                    }
+                    if (row == 0 && col == 2) {
+                        return switch (direction) {
+                            case DOWN -> new Quadrant(1, 1);
+                            case RIGHT -> new Quadrant(2, 1);
+                            case LEFT -> new Quadrant(0, 1);
+                            case UP -> new Quadrant(3, 0);
+                        };
+                    }
+                    if (row == 2 && col == 0) {
+                        return switch (direction) {
+                            case DOWN -> new Quadrant(3, 0);
+                            case RIGHT -> new Quadrant(2, 1);
+                            case LEFT -> new Quadrant(0, 1);
+                            case UP -> new Quadrant(1, 1);
+                        };
+                    }
                 }
                 throw new IllegalArgumentException();
             }
-        }
 
-        public Direction newQuadrantDirection(Direction direction) {
-            if (squareSize == 4) {
-                if (row == 0 && col == 2) {
-                    return switch (direction) {
-                        case DOWN -> Direction.DOWN;
-                        case RIGHT -> Direction.LEFT;
-                        case LEFT -> Direction.DOWN;
-                        case UP -> Direction.DOWN;
-                    };
-                }
-                if (row == 1 && col == 2) {
-                    return switch (direction) {
-                        case DOWN -> Direction.DOWN;
-                        case RIGHT -> Direction.DOWN;
-                        case LEFT -> Direction.LEFT;
-                        case UP -> Direction.UP;
-                    };
-                }
-                if (row == 2 && col == 2) {
-                    return switch (direction) {
-                        case DOWN -> Direction.UP;
-                        case RIGHT -> Direction.RIGHT;
-                        case LEFT -> Direction.UP;
-                        case UP -> Direction.UP;
-                    };
-                }
-                if (row == 1 && col == 0) {
-                    return switch (direction) {
-                        case DOWN -> Direction.UP;
-                        case RIGHT -> Direction.RIGHT;
-                        case LEFT -> Direction.UP;
-                        case UP -> Direction.DOWN;
-                    };
-                }
-                if (row == 2 && col == 3) {
-                    return switch (direction) {
-                        case DOWN -> Direction.RIGHT;
-                        case RIGHT -> Direction.LEFT;
-                        case LEFT -> Direction.LEFT;
-                        case UP -> Direction.LEFT;
-                    };
-                }
-                if (row == 1 && col == 1) {
-                    return switch (direction) {
-                        case DOWN -> Direction.RIGHT;
-                        case RIGHT -> Direction.RIGHT;
-                        case LEFT -> Direction.LEFT;
-                        case UP -> Direction.RIGHT;
-                    };
-                }
-                throw new IllegalArgumentException();
-            } else {
-                if (row == 0 && col == 1) {
-                    return switch (direction) {
-                        case DOWN -> Direction.DOWN;
-                        case RIGHT -> Direction.RIGHT;
-                        case LEFT -> Direction.RIGHT;
-                        case UP -> Direction.RIGHT;
-                    };
-                }
-                if (row == 1 && col == 1) {
-                    return switch (direction) {
-                        case DOWN -> Direction.DOWN;
-                        case RIGHT -> Direction.UP;
-                        case LEFT -> Direction.DOWN;
-                        case UP -> Direction.UP;
-                    };
-                }
-                if (row == 2 && col == 1) {
-                    return switch (direction) {
-                        case DOWN -> Direction.LEFT;
-                        case RIGHT -> Direction.LEFT;
-                        case LEFT -> Direction.LEFT;
-                        case UP -> Direction.UP;
-                    };
-                }
-                if (row == 3 && col == 0) {
-                    return switch (direction) {
-                        case DOWN -> Direction.DOWN;
-                        case RIGHT -> Direction.UP;
-                        case LEFT -> Direction.DOWN;
-                        case UP -> Direction.UP;
-                    };
-                }
-                if (row == 0 && col == 2) {
-                    return switch (direction) {
-                        case DOWN -> Direction.LEFT;
-                        case RIGHT -> Direction.LEFT;
-                        case LEFT -> Direction.LEFT;
-                        case UP -> Direction.UP;
-                    };
-                }
-                if (row == 2 && col == 0) {
-                    return switch (direction) {
-                        case DOWN -> Direction.DOWN;
-                        case RIGHT -> Direction.RIGHT;
-                        case LEFT -> Direction.RIGHT;
-                        case UP -> Direction.RIGHT;
-                    };
+            public Direction newQuadrantDirection(Direction direction) {
+                if (squareSize == 4) {
+                    if (row == 0 && col == 2) {
+                        return switch (direction) {
+                            case DOWN, LEFT, UP -> Direction.DOWN;
+                            case RIGHT -> Direction.LEFT;
+                        };
+                    }
+                    if (row == 1 && col == 2) {
+                        return switch (direction) {
+                            case DOWN, RIGHT -> Direction.DOWN;
+                            case LEFT -> Direction.LEFT;
+                            case UP -> Direction.UP;
+                        };
+                    }
+                    if (row == 2 && col == 2) {
+                        return switch (direction) {
+                            case DOWN, UP, LEFT -> Direction.UP;
+                            case RIGHT -> Direction.RIGHT;
+                        };
+                    }
+                    if (row == 1 && col == 0) {
+                        return switch (direction) {
+                            case DOWN, LEFT -> Direction.UP;
+                            case RIGHT -> Direction.RIGHT;
+                            case UP -> Direction.DOWN;
+                        };
+                    }
+                    if (row == 2 && col == 3) {
+                        return switch (direction) {
+                            case DOWN -> Direction.RIGHT;
+                            case RIGHT, LEFT, UP -> Direction.LEFT;
+                        };
+                    }
+                    if (row == 1 && col == 1) {
+                        return switch (direction) {
+                            case DOWN, UP, RIGHT -> Direction.RIGHT;
+                            case LEFT -> Direction.LEFT;
+                        };
+                    }
+                } else {
+                    if (row == 0 && col == 1) {
+                        return switch (direction) {
+                            case DOWN -> Direction.DOWN;
+                            case RIGHT, LEFT, UP -> Direction.RIGHT;
+                        };
+                    }
+                    if (row == 1 && col == 1) {
+                        return switch (direction) {
+                            case DOWN, LEFT -> Direction.DOWN;
+                            case RIGHT, UP -> Direction.UP;
+                        };
+                    }
+                    if (row == 2 && col == 1) {
+                        return switch (direction) {
+                            case DOWN, RIGHT, LEFT -> Direction.LEFT;
+                            case UP -> Direction.UP;
+                        };
+                    }
+                    if (row == 3 && col == 0) {
+                        return switch (direction) {
+                            case DOWN, LEFT -> Direction.DOWN;
+                            case RIGHT, UP -> Direction.UP;
+                        };
+                    }
+                    if (row == 0 && col == 2) {
+                        return switch (direction) {
+                            case DOWN, LEFT, RIGHT -> Direction.LEFT;
+                            case UP -> Direction.UP;
+                        };
+                    }
+                    if (row == 2 && col == 0) {
+                        return switch (direction) {
+                            case DOWN -> Direction.DOWN;
+                            case RIGHT, LEFT, UP -> Direction.RIGHT;
+                        };
+                    }
                 }
                 throw new IllegalArgumentException();
             }
         }
-    }
 
     private static int newQuadrantRow(Direction oldDirection, Direction newDirection, Quadrant newQuadrant) {
         return switch (oldDirection) {
