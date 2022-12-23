@@ -14,7 +14,6 @@ public class Puzzle23B {
     //Part A 3812
     //Part B 1003
     static List<Elf> elves = new ArrayList<>();
-    static List<Position> proposedPositions = new ArrayList<>();
     static List<Pair<Movement, List<Movement>>> checks = List.of(
             Pair.with(Movement.N, List.of(Movement.N, Movement.NE, Movement.NW)),
             Pair.with(Movement.S, List.of(Movement.S, Movement.SE, Movement.SW)),
