@@ -90,25 +90,19 @@ public class Puzzle23B {
 
         void fillProposedPosition() {
             this.proposedPosition = null;
-            boolean noElvesInArea = Arrays.stream(Movement.values())
-                    .noneMatch(m -> elves.contains(new Elf(new Position(m.rowFunction.apply(currentPosition.row),
-                            m.colFunction.apply(currentPosition.col)))));
+            boolean elvesInArea = Arrays.stream(Movement.values())
+                    .anyMatch(m -> elves.contains(new Elf(m.move(currentPosition))));
 
-            if (noElvesInArea) {
-                proposedPosition = null;
-            } else {
+            if (elvesInArea) {
                 IntStream.range(0, checks.size())
                         .boxed()
                         .map(i -> (round + i) % checks.size())
                         .map(index -> checks.get(index))
                         .filter(check -> check.getValue1().stream()
-                                .noneMatch(m -> elves.contains(new Elf(new Position(m.rowFunction.apply(currentPosition.row),
-                                        m.colFunction.apply(currentPosition.col))))))
+                                .noneMatch(m -> elves.contains(new Elf(m.move(currentPosition)))))
                         .findFirst()
                         .map(Pair::getValue0)
-                        .ifPresent(proposedMovement -> proposedPosition = new Position(proposedMovement.rowFunction.apply(
-                                currentPosition.row),
-                                proposedMovement.colFunction.apply(currentPosition.col)));
+                        .ifPresent(proposedMovement -> proposedPosition = proposedMovement.move(currentPosition));
             }
         }
 
@@ -161,12 +155,16 @@ public class Puzzle23B {
         SW(i -> i + 1, j -> j - 1);
 
 
-        final Function<Integer, Integer> rowFunction;
-        final Function<Integer, Integer> colFunction;
+        private final Function<Integer, Integer> rowFunction;
+        private final Function<Integer, Integer> colFunction;
 
         Movement(Function<Integer, Integer> rowFunction, Function<Integer, Integer> colFunction) {
             this.rowFunction = rowFunction;
             this.colFunction = colFunction;
+        }
+
+        Position move(Position in) {
+            return new Position(rowFunction.apply(in.row), colFunction.apply(in.col));
         }
     }
 }
