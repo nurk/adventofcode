@@ -111,7 +111,8 @@ public class Puzzle23B {
                 boolean onlyOneToMoveToPosition = elves.stream()
                         .filter(e -> !e.equals(this))
                         .filter(e -> e.proposedPosition != null)
-                        .noneMatch(e -> e.proposedPosition.equals(this.proposedPosition));
+                        .map(e -> e.proposedPosition)
+                        .noneMatch(p -> p.equals(this.proposedPosition));
 
                 if (onlyOneToMoveToPosition) {
                     currentPosition = proposedPosition;
