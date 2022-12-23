@@ -11,8 +11,10 @@ import java.util.stream.IntStream;
 
 public class Puzzle23B {
 
+    //Part A 3812
     //Part B 1003
     static List<Elf> elves = new ArrayList<>();
+    static List<Position> proposedPositions = new ArrayList<>();
     static List<Pair<Movement, List<Movement>>> checks = List.of(
             Pair.with(Movement.N, List.of(Movement.N, Movement.NE, Movement.NW)),
             Pair.with(Movement.S, List.of(Movement.S, Movement.SE, Movement.SW)),
@@ -35,11 +37,37 @@ public class Puzzle23B {
 
         while (doRound()) {
             round++;
+            if (round == 10) {
+                printPartA();
+            }
         }
 
-        System.out.println(round + 1);
+        System.out.println("Part B: " + (round + 1));
     }
 
+    static void printPartA() {
+        int minRow = elves.stream()
+                .map(e -> e.currentPosition.row)
+                .min(Integer::compareTo)
+                .orElseThrow();
+
+        int maxRow = elves.stream()
+                .map(e -> e.currentPosition.row)
+                .max(Integer::compareTo)
+                .orElseThrow();
+
+        int minCol = elves.stream()
+                .map(e -> e.currentPosition.col)
+                .min(Integer::compareTo)
+                .orElseThrow();
+
+        int maxCol = elves.stream()
+                .map(e -> e.currentPosition.col)
+                .max(Integer::compareTo)
+                .orElseThrow();
+
+        System.out.println("Part A: " + ((maxRow - minRow + 1) * (maxCol - minCol + 1) - elves.size()));
+    }
 
     static boolean doRound() {
         boolean moved = false;
