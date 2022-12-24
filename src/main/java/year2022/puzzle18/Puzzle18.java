@@ -106,11 +106,9 @@ public class Puzzle18 {
             }
 
             int currentCost = costSoFar.get(current);
+            int newCost = currentCost + 1;
 
             for (Cube neighbour : current.canMoveTo) {
-
-                int newCost = currentCost + 1;
-
                 if (!costSoFar.containsKey(neighbour) || newCost < costSoFar.get(neighbour)) {
                     costSoFar.put(neighbour, newCost);
                     pq.add(neighbour);

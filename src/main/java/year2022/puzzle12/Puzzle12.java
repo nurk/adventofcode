@@ -57,16 +57,12 @@ public class Puzzle12 {
 
             int currentCost = costSoFar.get(current);
 
-            // don't remember why I put this if in 2021 / puzzle 15
-            // aah, there we had link costs that were not equal so a different path could have a lower cost
-            if (currentCost <= costSoFar.get(current)) {
-                for (Node neighbour : getNeighbours(current)) {
-                    int newCost = currentCost + neighbour.cost();
+            for (Node neighbour : getNeighbours(current)) {
+                int newCost = currentCost + neighbour.cost();
 
-                    if (!costSoFar.containsKey(neighbour) || newCost < costSoFar.get(neighbour)) {
-                        costSoFar.put(neighbour, newCost);
-                        pq.add(neighbour);
-                    }
+                if (!costSoFar.containsKey(neighbour) || newCost < costSoFar.get(neighbour)) {
+                    costSoFar.put(neighbour, newCost);
+                    pq.add(neighbour);
                 }
             }
         }
