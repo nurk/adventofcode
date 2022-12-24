@@ -15,6 +15,7 @@ public class Puzzle24 {
     static Map<Integer, List<String>[][]> boards = new HashMap<>();
 
     //PART A: 245
+    //PART B: 798
     public static void main(String[] args) {
         List<String> input = Utils.getInput("2022/input24.txt");
         rows = input.size();
@@ -33,10 +34,17 @@ public class Puzzle24 {
             }
         }
         boards.put(0, rootBoard);
-        System.out.println(shortestPath(startPosition, endPosition));
+        int toEnd = shortestPath(startPosition, endPosition);
+        System.out.println("Part A: " + toEnd);
+        int backToStart = toEnd + shortestPath(new Position(endPosition.row, endPosition.col, toEnd), startPosition);
+        System.out.println("Go back to start to pick up the snack: " + backToStart);
+        System.out.println("Go back to end for part B: " + (backToStart + shortestPath(new Position(startPosition.row,
+                        startPosition.col,
+                        backToStart),
+                endPosition)));
     }
 
-    public static long shortestPath(Position start, Position end) {
+    public static int shortestPath(Position start, Position end) {
         PriorityQueue<Position> pq = new PriorityQueue<>(rows * cols);
         pq.add(start);
 
@@ -53,7 +61,7 @@ public class Puzzle24 {
 
             int currentCost = current.pathCost;
 
-            List<String>[][] thisBoard = simulateBlizzard(currentCost + 1);
+            List<String>[][] thisBoard = simulateBlizzard(current.blizzards + 1);
             //can stay put
             if (thisBoard[current.row][current.col].isEmpty()) {
                 int newCost = currentCost + 1;
@@ -80,11 +88,10 @@ public class Puzzle24 {
         }
 
         return costSoFar.entrySet().stream()
-                .filter(entry -> entry.getKey().row == endPosition.row && entry.getKey().col == endPosition.col)
+                .filter(entry -> entry.getKey().row == end.row && entry.getKey().col == end.col)
                 .findFirst()
                 .map(Map.Entry::getValue)
                 .orElse(Integer.MAX_VALUE);
-
     }
 
     static List<String>[][] simulateBlizzard(int times) {
