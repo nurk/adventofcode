@@ -5,6 +5,7 @@ import util.Utils;
 import java.util.*;
 import java.util.function.Function;
 
+@SuppressWarnings("unchecked")
 public class Puzzle24 {
 
     static int rows = 0;
@@ -129,23 +130,15 @@ public class Puzzle24 {
     }
 
     static final class Position implements Comparable<Position> {
-        private final int row;
-        private final int col;
-        private final int minute;
+        final int row;
+        final int col;
+        final int minute;
         int pathCost = 0;
 
         Position(int row, int col, int minute) {
             this.row = row;
             this.col = col;
             this.minute = minute;
-        }
-
-        public int row() {
-            return row;
-        }
-
-        public int col() {
-            return col;
         }
 
         @Override
