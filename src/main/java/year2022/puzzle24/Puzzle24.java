@@ -46,7 +46,7 @@ public class Puzzle24 {
     }
 
     public static int shortestPath(Position start, Position end) {
-        PriorityQueue<Position> pq = new PriorityQueue<>(rows * cols);
+        Queue<Position> pq = new ArrayDeque<>(rows * cols);
         pq.add(start);
 
         Map<Position, Integer> costSoFar = new HashMap<>();
@@ -60,28 +60,25 @@ public class Puzzle24 {
                 break;
             }
 
-            int currentCost = current.pathCost;
+            int currentCost = costSoFar.get(current);
+            int newCost = currentCost + 1;
 
             List<String>[][] blizzards = getBlizzardsAt(current.minute + 1);
             //can stay put?
             if (blizzards[current.row][current.col].isEmpty()) {
-                int newCost = currentCost + 1;
                 Position newPos = new Position(current.row, current.col, current.minute + 1);
                 if (!costSoFar.containsKey(newPos) || newCost < costSoFar.get(newPos)) {
-                    newPos.pathCost = newCost;
                     costSoFar.put(newPos, newCost);
                     pq.add(newPos);
                 }
             }
             for (Movement movement : Movement.values()) {
                 //can move in a direction
-                int newCost = currentCost + 1;
                 Position newPos = new Position(movement.rowFunction.apply(current.row),
                         movement.colFunction.apply(current.col),
                         current.minute + 1);
                 if (blizzards[newPos.row][newPos.col].isEmpty()) {
                     if (!costSoFar.containsKey(newPos) || newCost < costSoFar.get(newPos)) {
-                        newPos.pathCost = newCost;
                         costSoFar.put(newPos, newCost);
                         pq.add(newPos);
                     }
@@ -129,50 +126,7 @@ public class Puzzle24 {
         return tempBoard;
     }
 
-    static final class Position implements Comparable<Position> {
-        final int row;
-        final int col;
-        final int minute;
-        int pathCost = 0;
-
-        Position(int row, int col, int minute) {
-            this.row = row;
-            this.col = col;
-            this.minute = minute;
-        }
-
-        @Override
-        public int compareTo(Position o) {
-            return Integer.compare(this.pathCost, o.pathCost);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-
-            Position position = (Position) o;
-
-            if (row != position.row) {
-                return false;
-            }
-            if (col != position.col) {
-                return false;
-            }
-            return minute == position.minute;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = row;
-            result = 31 * result + col;
-            result = 31 * result + minute;
-            return result;
-        }
+    record Position(int row, int col, int minute) {
     }
 
     enum Movement {

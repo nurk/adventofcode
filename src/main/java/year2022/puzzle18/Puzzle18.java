@@ -91,8 +91,7 @@ public class Puzzle18 {
     }
 
     public static long shortestPath(Cube start, Cube end) {
-        allFeeCubes.forEach(c -> c.pathCost = 0);
-        PriorityQueue<Cube> pq = new PriorityQueue<>(allFeeCubes.size());
+        Queue<Cube> pq = new ArrayDeque<>(allFeeCubes.size());
         pq.add(start);
 
         Map<Cube, Integer> costSoFar = new HashMap<>();
@@ -106,14 +105,13 @@ public class Puzzle18 {
                 break;
             }
 
-            int currentCost = current.pathCost;
+            int currentCost = costSoFar.get(current);
 
             for (Cube neighbour : current.canMoveTo) {
 
                 int newCost = currentCost + 1;
 
                 if (!costSoFar.containsKey(neighbour) || newCost < costSoFar.get(neighbour)) {
-                    neighbour.pathCost = newCost;
                     costSoFar.put(neighbour, newCost);
                     pq.add(neighbour);
                 }
@@ -123,10 +121,9 @@ public class Puzzle18 {
         return costSoFar.getOrDefault(end, Integer.MAX_VALUE);
     }
 
-    static class Cube implements Comparable<Cube> {
+    static class Cube {
         int x, y, z;
         List<Cube> canMoveTo = new ArrayList<>();
-        int pathCost = 0;
 
         public Cube(String s) {
             String[] split = s.split(",");
@@ -187,11 +184,6 @@ public class Puzzle18 {
                 exposedSides--;
             }
             return exposedSides;
-        }
-
-        @Override
-        public int compareTo(Cube o) {
-            return Integer.compare(this.pathCost, o.pathCost);
         }
 
         @Override
