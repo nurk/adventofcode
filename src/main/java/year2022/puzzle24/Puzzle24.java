@@ -7,12 +7,11 @@ import java.util.function.Function;
 
 public class Puzzle24 {
 
-    static List<String>[][] rootBoard;
     static int rows = 0;
     static int cols = 0;
     static Position startPosition = new Position(0, 1, 0);
     static Position endPosition;
-    static Map<Integer, List<String>[][]> boards = new HashMap<>();
+    static Map<Integer, List<String>[][]> blizzardsAtMinute = new HashMap<>();
 
     //PART A: 245
     //PART B: 798
@@ -22,7 +21,7 @@ public class Puzzle24 {
         cols = input.get(0).length();
         endPosition = new Position(rows - 1, cols - 2, 0);
 
-        rootBoard = new ArrayList[rows][cols];
+        List<String>[][] rootBlizzards = new ArrayList[rows][cols];
         for (int i = 0; i < rows; i++) {
             String[] line = input.get(i).split("");
             for (int j = 0; j < line.length; j++) {
@@ -30,14 +29,15 @@ public class Puzzle24 {
                 if (!line[j].equals(".")) {
                     item.add(line[j]);
                 }
-                rootBoard[i][j] = item;
+                rootBlizzards[i][j] = item;
             }
         }
-        boards.put(0, rootBoard);
+        blizzardsAtMinute.put(0, rootBlizzards);
+
         int toEnd = shortestPath(startPosition, endPosition);
         System.out.println("Part A: " + toEnd);
         int backToStart = toEnd + shortestPath(new Position(endPosition.row, endPosition.col, toEnd), startPosition);
-        System.out.println("Go back to start to pick up the snack: " + backToStart);
+        System.out.println("Go back to start to pick up the snacks: " + backToStart);
         System.out.println("Go back to end for part B: " + (backToStart + shortestPath(new Position(startPosition.row,
                         startPosition.col,
                         backToStart),
@@ -61,11 +61,11 @@ public class Puzzle24 {
 
             int currentCost = current.pathCost;
 
-            List<String>[][] thisBoard = simulateBlizzard(current.blizzards + 1);
-            //can stay put
-            if (thisBoard[current.row][current.col].isEmpty()) {
+            List<String>[][] blizzards = getBlizzardsAt(current.minute + 1);
+            //can stay put?
+            if (blizzards[current.row][current.col].isEmpty()) {
                 int newCost = currentCost + 1;
-                Position newPos = new Position(current.row, current.col, current.blizzards + 1);
+                Position newPos = new Position(current.row, current.col, current.minute + 1);
                 if (!costSoFar.containsKey(newPos) || newCost < costSoFar.get(newPos)) {
                     newPos.pathCost = newCost;
                     costSoFar.put(newPos, newCost);
@@ -73,11 +73,12 @@ public class Puzzle24 {
                 }
             }
             for (Movement movement : Movement.values()) {
+                //can move in a direction
                 int newCost = currentCost + 1;
                 Position newPos = new Position(movement.rowFunction.apply(current.row),
                         movement.colFunction.apply(current.col),
-                        current.blizzards + 1);
-                if (thisBoard[newPos.row][newPos.col].isEmpty()) {
+                        current.minute + 1);
+                if (blizzards[newPos.row][newPos.col].isEmpty()) {
                     if (!costSoFar.containsKey(newPos) || newCost < costSoFar.get(newPos)) {
                         newPos.pathCost = newCost;
                         costSoFar.put(newPos, newCost);
@@ -94,9 +95,9 @@ public class Puzzle24 {
                 .orElse(Integer.MAX_VALUE);
     }
 
-    static List<String>[][] simulateBlizzard(int times) {
-        if (boards.containsKey(times)) {
-            return boards.get(times);
+    static List<String>[][] getBlizzardsAt(int minute) {
+        if (blizzardsAtMinute.containsKey(minute)) {
+            return blizzardsAtMinute.get(minute);
         }
         List<String>[][] tempBoard = new ArrayList[rows][cols];
         for (int i = 0; i < rows; i++) {
@@ -106,7 +107,7 @@ public class Puzzle24 {
         }
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                List<String> currentStrings = boards.get(times - 1)[i][j];
+                List<String> currentStrings = blizzardsAtMinute.get(minute - 1)[i][j];
                 if (currentStrings.contains("#")) {
                     tempBoard[i][j].add("#");
                 } else {
@@ -117,26 +118,26 @@ public class Puzzle24 {
                         do {
                             newRow = m.rowFunction.apply(newRow);
                             newCol = m.colFunction.apply(newCol);
-                        } while (boards.get(times - 1)[newRow][newCol].contains("#"));
+                        } while (blizzardsAtMinute.get(minute - 1)[newRow][newCol].contains("#"));
                         tempBoard[newRow][newCol].add(currentString);
                     }
                 }
             }
         }
-        boards.put(times, tempBoard);
+        blizzardsAtMinute.put(minute, tempBoard);
         return tempBoard;
     }
 
     static final class Position implements Comparable<Position> {
         private final int row;
         private final int col;
-        private final int blizzards;
-        int pathCost;
+        private final int minute;
+        int pathCost = 0;
 
-        Position(int row, int col, int blizzards) {
+        Position(int row, int col, int minute) {
             this.row = row;
             this.col = col;
-            this.blizzards = blizzards;
+            this.minute = minute;
         }
 
         public int row() {
@@ -169,24 +170,15 @@ public class Puzzle24 {
             if (col != position.col) {
                 return false;
             }
-            return blizzards == position.blizzards;
+            return minute == position.minute;
         }
 
         @Override
         public int hashCode() {
             int result = row;
             result = 31 * result + col;
-            result = 31 * result + blizzards;
+            result = 31 * result + minute;
             return result;
-        }
-
-        @Override
-        public String toString() {
-            return "Position{" +
-                    "row=" + row +
-                    ", col=" + col +
-                    ", pathCost=" + pathCost +
-                    '}';
         }
     }
 
