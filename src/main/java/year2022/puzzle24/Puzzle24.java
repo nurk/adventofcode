@@ -46,15 +46,16 @@ public class Puzzle24 {
     }
 
     public static int shortestPath(Position start, Position end) {
-        Queue<Position> pq = new ArrayDeque<>(rows * cols);
-        pq.add(start);
+        //This is LIFO
+        Deque<Position> pq = new ArrayDeque<>();
+        pq.addLast(start);
 
         Map<Position, Integer> costSoFar = new HashMap<>();
 
         costSoFar.put(start, 0);
 
         while (!pq.isEmpty()) {
-            Position current = pq.remove();
+            Position current = pq.pop();
 
             if (current.row == end.row && current.col == end.col) {
                 break;
@@ -69,7 +70,7 @@ public class Puzzle24 {
                 Position newPos = new Position(current.row, current.col, current.minute + 1);
                 if (!costSoFar.containsKey(newPos) || newCost < costSoFar.get(newPos)) {
                     costSoFar.put(newPos, newCost);
-                    pq.add(newPos);
+                    pq.addLast(newPos);
                 }
             }
             for (Movement movement : Movement.values()) {
@@ -80,7 +81,7 @@ public class Puzzle24 {
                 if (blizzards[newPos.row][newPos.col].isEmpty()) {
                     if (!costSoFar.containsKey(newPos) || newCost < costSoFar.get(newPos)) {
                         costSoFar.put(newPos, newCost);
-                        pq.add(newPos);
+                        pq.addLast(newPos);
                     }
                 }
             }

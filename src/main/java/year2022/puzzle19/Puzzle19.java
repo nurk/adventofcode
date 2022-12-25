@@ -265,11 +265,13 @@ public class Puzzle19 {
         }
 
         private int findMaxGeodeCount(int totalMinutes) {
-            Stack<State> toCheck = new Stack<>();
+            // this is LIFO
+            // we want to get to an end fast because we want to limit the number of viable new states
+            Deque<State> toCheck = new ArrayDeque<>();
             Set<State> seen = new HashSet<>();
             int maxGeodeCount = 0;
 
-            toCheck.add(new State(this));
+            toCheck.addFirst(new State(this));
 
             while (!toCheck.isEmpty()) {
                 State current = toCheck.pop();
@@ -278,7 +280,7 @@ public class Puzzle19 {
                 if (current.minute < totalMinutes) {
                     for (State newState : current.getNewStates()) {
                         if (newState.getMaxPossibleGeodeCount(totalMinutes) > maxGeodeCount && !seen.contains(newState)) {
-                            toCheck.push(newState);
+                            toCheck.addFirst(newState);
                         }
                     }
                 } else if (current.minute == totalMinutes) {
