@@ -7,7 +7,8 @@ import util.Utils;
 import java.util.*;
 import java.util.stream.IntStream;
 
-//https://github.com/RyanFoulds/AdventOfCode22/blob/main/Day19/src/main/java/xyz/foulds/aoc/year22/day19/Blueprint.java
+// https://github.com/RyanFoulds/AdventOfCode22/blob/main/Day19/src/main/java/xyz/foulds/aoc/year22/day19/Blueprint.java
+// cheated part A and B (heavily inspired.  after doing day 24 I think I could have figured this out but I already looked at this is it is cheating)
 public class Puzzle19 {
 
     static List<Blueprint> blueprints;

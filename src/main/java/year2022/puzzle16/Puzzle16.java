@@ -5,7 +5,8 @@ import util.Utils;
 
 import java.util.*;
 
-//https://github.com/ash42/adventofcode/blob/main/adventofcode2022/src/nl/michielgraat/adventofcode2022/day16/Day16.java
+// https://github.com/ash42/adventofcode/blob/main/adventofcode2022/src/nl/michielgraat/adventofcode2022/day16/Day16.java
+// cheated part A and B
 public class Puzzle16 {
     static List<Valve> valves;
     static Map<State, Integer> cache = new HashMap<>();
