@@ -46,7 +46,7 @@ public class Puzzle24 {
     }
 
     public static int shortestPath(Position start, Position end) {
-        //This is LIFO
+        //This is FIFO
         Deque<Position> pq = new ArrayDeque<>();
         pq.addLast(start);
 
