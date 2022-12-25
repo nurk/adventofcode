@@ -19,14 +19,16 @@ public class Puzzle25 {
         StringBuilder result = new StringBuilder();
         while (sum != 0) {
             long remainder = sum % 5;
-            sum = sum / 5;
 
             if (remainder <= 2) {
                 result.insert(0, remainder);
             } else {
                 result = new StringBuilder(remainder == 3 ? "=" + result : "-" + result);
-                sum++;
+                //we are negative, add the correct symbol but add 5 to remaining sum to compensate
+                sum += 5;
             }
+
+            sum = sum / 5;
         }
 
         return result.toString();
