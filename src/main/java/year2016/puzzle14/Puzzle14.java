@@ -46,14 +46,12 @@ public class Puzzle14 {
         String key = salt + index;
         return hashes.computeIfAbsent(key, k -> {
             String hash = DigestUtils.md5Hex(k);
-            if (isPartA) {
-                return hash;
-            } else {
+            if (!isPartA) {
                 for (int i = 0; i < 2016; i++) {
                     hash = DigestUtils.md5Hex(hash);
                 }
-                return hash;
             }
+            return hash;
         });
     }
 }
