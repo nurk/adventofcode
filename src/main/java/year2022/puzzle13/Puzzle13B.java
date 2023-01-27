@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 // cheated part A and B
 // https://github.com/abnew123/aoc2022/blob/main/src/aoc2022/Day13.java
@@ -23,10 +22,7 @@ public class Puzzle13B {
     public static void main(String[] args) {
         List<String> input = Utils.getInput("2022/input13.txt");
 
-        int[] splitIndexes = Utils.getSplitIndexes(input);
-
-        IntStream.range(0, splitIndexes.length - 1)
-                .mapToObj(i -> input.subList(splitIndexes[i] + 1, splitIndexes[i + 1]))
+        Utils.splitOnBlankLine(input)
                 .forEach(signalPair -> signals.add(Triplet.with(new Packet(signalPair.get(0)),
                         new Packet(signalPair.get(1)), ++pairIndex)));
 

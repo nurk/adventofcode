@@ -4,7 +4,6 @@ import util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 // does not work, gave up and cheated on Puzzle13B
 public class Puzzle13 {
@@ -16,11 +15,8 @@ public class Puzzle13 {
         // 2292 too low
         List<String> input = Utils.getInput("2022/input13.txt");
 
-        int[] splitIndexes = Utils.getSplitIndexes(input);
+        Utils.splitOnBlankLine(input).forEach(signalPair -> signalPairs.add(new SignalPair(signalPair)));
 
-        IntStream.range(0, splitIndexes.length - 1)
-                .mapToObj(i -> input.subList(splitIndexes[i] + 1, splitIndexes[i + 1]))
-                .forEach(signalPair -> signalPairs.add(new SignalPair(signalPair)));
 
         System.out.println(signalPairs.stream()
                 .filter(SignalPair::areInRightOrder)
@@ -87,7 +83,7 @@ public class Puzzle13 {
 
             for (int i = 0; i < Math.min(data.size(), other.data.size()); i++) {
                 if (data.get(i) instanceof Integer && other.data.get(i) instanceof Integer) {
-                    if(data.get(i) != other.data.get(i)){
+                    if (data.get(i) != other.data.get(i)) {
                         onlyEquals = false;
                     }
                     if (((Integer) data.get(i)) > ((Integer) other.data.get(i))) {

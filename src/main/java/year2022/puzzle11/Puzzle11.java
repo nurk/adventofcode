@@ -13,17 +13,13 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Puzzle11 {
-
     static final List<Monkey> monkeys = new ArrayList<>();
     static BigInteger superModulo;
 
     public static void main(String[] args) {
         List<String> input = Utils.getInput("2022/input11.txt");
 
-        int[] splitIndexes = Utils.getSplitIndexes(input);
-
-        IntStream.range(0, splitIndexes.length - 1)
-                .mapToObj(i -> input.subList(splitIndexes[i] + 1, splitIndexes[i + 1]))
+        Utils.splitOnBlankLine(input)
                 .forEach(monkeyStrings -> monkeys.add(new Monkey(monkeyStrings)));
 
         IntStream.range(0, 20)
@@ -39,10 +35,8 @@ public class Puzzle11 {
         // solution from internet (searched after I had a solution myself
         monkeys.clear();
 
-        IntStream.range(0, splitIndexes.length - 1)
-                .mapToObj(i -> input.subList(splitIndexes[i] + 1, splitIndexes[i + 1]))
+        Utils.splitOnBlankLine(input)
                 .forEach(monkeyStrings -> monkeys.add(new Monkey(monkeyStrings)));
-
         superModulo = monkeys.stream()
                 .map(m -> m.testValue)
                 .reduce(BigInteger.ONE, BigInteger::multiply);
@@ -60,8 +54,7 @@ public class Puzzle11 {
         // my very inefficient solution but it worked
         monkeys.clear();
 
-        IntStream.range(0, splitIndexes.length - 1)
-                .mapToObj(i -> input.subList(splitIndexes[i] + 1, splitIndexes[i + 1]))
+        Utils.splitOnBlankLine(input)
                 .forEach(monkeyStrings -> monkeys.add(new Monkey(monkeyStrings)));
 
         IntStream.range(0, 10000)

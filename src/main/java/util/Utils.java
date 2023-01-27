@@ -1,9 +1,12 @@
 package util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -57,10 +60,21 @@ public class Utils {
         }
     }
 
-    public static int[] getSplitIndexes(List<String> input) {
-        return Stream.of(IntStream.of(-1),
-                        IntStream.range(0, input.size()).filter(i -> input.get(i).isBlank()),
-                        IntStream.of(input.size()))
-                .flatMapToInt(s -> s).toArray();
+    public static List<List<String>> splitOnBlankLine(List<String> input) {
+        List<List<String>> output = new ArrayList<>();
+        List<String> subList = new ArrayList<>();
+
+        for (String line : input) {
+            if (StringUtils.isBlank(line)) {
+                output.add(subList);
+                subList = new ArrayList<>();
+            } else {
+                subList.add(line);
+            }
+        }
+
+        output.add(subList);
+
+        return output;
     }
 }
