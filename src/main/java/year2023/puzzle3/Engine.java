@@ -39,21 +39,21 @@ public class Engine {
         }
     }
 
-    @Override
+/*    @Override
     public String toString() {
         return Arrays.stream(places)
                 .map(row -> Arrays.stream(row)
                         .map(s -> StringUtils.leftPad(s.getValue(), 1))
                         .collect(Collectors.joining("")))
                 .collect(Collectors.joining("\n"));
-    }
+    }*/
 
-/*    @Override
+    @Override
     public String toString() {
         return Arrays.stream(places)
                 .map(row -> Arrays.stream(row)
                         .map(s -> StringUtils.leftPad(s.getValue() + "(" + s.getId() + ")", 7))
                         .collect(Collectors.joining(" ")))
                 .collect(Collectors.joining("\n"));
-    }*/
+    }
 }
