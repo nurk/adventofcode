@@ -24,7 +24,7 @@ public class Engine {
                     String currentValue = s;
                     int currentColumn = j;
                     currentColumn++;
-                    while (StringUtils.isNumeric(split[currentColumn])) {
+                    while (currentColumn != split.length && StringUtils.isNumeric(split[currentColumn])) {
                         currentValue = currentValue + split[currentColumn];
                         currentColumn++;
                     }
@@ -43,8 +43,17 @@ public class Engine {
     public String toString() {
         return Arrays.stream(places)
                 .map(row -> Arrays.stream(row)
+                        .map(s -> StringUtils.leftPad(s.getValue(), 1))
+                        .collect(Collectors.joining("")))
+                .collect(Collectors.joining("\n"));
+    }
+
+/*    @Override
+    public String toString() {
+        return Arrays.stream(places)
+                .map(row -> Arrays.stream(row)
                         .map(s -> StringUtils.leftPad(s.getValue() + "(" + s.getId() + ")", 7))
                         .collect(Collectors.joining(" ")))
                 .collect(Collectors.joining("\n"));
-    }
+    }*/
 }
