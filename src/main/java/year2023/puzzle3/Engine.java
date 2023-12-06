@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Engine {
-    private Place[][] places;
+    private final Place[][] places;
 
     public Engine(List<String> lines) {
         places = new Place[lines.get(0).length()][lines.size()];

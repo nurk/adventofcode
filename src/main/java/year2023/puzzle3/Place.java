@@ -3,10 +3,10 @@ package year2023.puzzle3;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
+@Getter
 public class Place {
-    @Getter
+
     private final String id;
-    @Getter
     private final String value;
 
     public Place(String id, String value) {
