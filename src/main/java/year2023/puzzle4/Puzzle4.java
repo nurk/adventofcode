@@ -4,6 +4,9 @@ import util.Utils;
 
 import java.util.List;
 
+/**
+ * Part A: 32609
+ */
 public class Puzzle4 {
 
     public static void main(String[] args) {

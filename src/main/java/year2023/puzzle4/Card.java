@@ -25,7 +25,6 @@ public class Card {
         scratchedNumbers = Stream.of(split[1].split(" "))
                 .map(Integer::parseInt)
                 .toList();
-        System.out.println(cardId);
     }
 
     public int getScore() {

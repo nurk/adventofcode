@@ -4,9 +4,9 @@ import util.Utils;
 
 import java.util.List;
 
-/*
-Part A: 529618
-Part B: 77509019
+/**
+ * Part A: 529618
+ * Part B: 77509019
  */
 public class Puzzle3 {
     public static void main(String[] args) {
