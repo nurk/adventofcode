@@ -1,13 +1,15 @@
 package year2023.puzzle4;
 
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Card {
+public class Card implements Comparable<Card> {
 
+    @Getter
     private final Integer cardId;
     private final List<Integer> winningNumbers;
     private final List<Integer> scratchedNumbers;
@@ -41,6 +43,16 @@ public class Card {
         return score;
     }
 
+    public int getAmountOfWinningNumbers() {
+        int score = 0;
+        for (Integer scratchedNumber : scratchedNumbers) {
+            if (winningNumbers.contains(scratchedNumber)) {
+                score++;
+            }
+        }
+        return score;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -69,5 +81,10 @@ public class Card {
                 .map(Object::toString)
                 .collect(Collectors.joining(",")) +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Card o) {
+        return this.cardId.compareTo(o.getCardId());
     }
 }
