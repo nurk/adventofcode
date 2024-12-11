@@ -21,7 +21,7 @@ public class Rule {
         return true;
     }
 
-    public void swapIfNotSatisfies(List<Integer> update) {
+    public void swapIfNotSatisfied(List<Integer> update) {
         if(!satisfies(update)) {
             int leftIndex = update.indexOf(left);
             int rightIndex = update.indexOf(right);

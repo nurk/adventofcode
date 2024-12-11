@@ -39,7 +39,7 @@ public class Puzzle5 {
                 sum.getAndAdd(getMiddle(u));
             } else {
                 do {
-                    rules.forEach(rule -> rule.swapIfNotSatisfies(u));
+                    rules.forEach(rule -> rule.swapIfNotSatisfied(u));
                 } while (!rules.stream().allMatch(rule -> rule.satisfies(u)));
                 sumBroken.getAndAdd(getMiddle(u));
             }
