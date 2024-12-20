@@ -18,6 +18,16 @@ public enum Direction {
         public Pair<Integer, Integer> getPosition(Pair<Integer, Integer> position) {
             return Pair.with(position.getValue0() - 1, position.getValue1());
         }
+
+        @Override
+        public int getCost(Direction direction) {
+            return switch (direction) {
+                case UP -> 1;
+                case DOWN -> Integer.MAX_VALUE;
+                case LEFT -> 1001;
+                case RIGHT -> 1001;
+            };
+        }
     }, DOWN("v") {
         @Override
         public int getColumn(int col) {
@@ -32,6 +42,16 @@ public enum Direction {
         @Override
         public Pair<Integer, Integer> getPosition(Pair<Integer, Integer> position) {
             return Pair.with(position.getValue0() + 1, position.getValue1());
+        }
+
+        @Override
+        public int getCost(Direction direction) {
+            return switch (direction) {
+                case UP -> Integer.MAX_VALUE;
+                case DOWN -> 1;
+                case LEFT -> 1001;
+                case RIGHT -> 1001;
+            };
         }
     }, LEFT("<") {
         @Override
@@ -48,6 +68,16 @@ public enum Direction {
         public Pair<Integer, Integer> getPosition(Pair<Integer, Integer> position) {
             return Pair.with(position.getValue0(), position.getValue1() - 1);
         }
+
+        @Override
+        public int getCost(Direction direction) {
+            return switch (direction) {
+                case UP -> 1001;
+                case DOWN -> 2001;
+                case LEFT -> 1;
+                case RIGHT -> Integer.MAX_VALUE;
+            };
+        }
     }, RIGHT(">") {
         @Override
         public int getColumn(int col) {
@@ -63,6 +93,16 @@ public enum Direction {
         public Pair<Integer, Integer> getPosition(Pair<Integer, Integer> position) {
             return Pair.with(position.getValue0(), position.getValue1() + 1);
         }
+
+        @Override
+        public int getCost(Direction direction) {
+            return switch (direction) {
+                case UP -> 1001;
+                case DOWN -> 1001;
+                case LEFT -> Integer.MAX_VALUE;
+                case RIGHT -> 1;
+            };
+        }
     };
 
     private final String symbol;
@@ -76,6 +116,8 @@ public enum Direction {
     public abstract int getRow(int row);
 
     public abstract Pair<Integer, Integer> getPosition(Pair<Integer, Integer> position);
+
+    public abstract int getCost(Direction direction);
 
     public static Direction fromSymbol(String symbol) {
         for (Direction direction : Direction.values()) {
