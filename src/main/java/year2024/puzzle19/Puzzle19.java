@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Part A: 327
+ * Part B: 772696486795255
  */
 public class Puzzle19 {
     public static void main(String[] args) {
@@ -17,13 +18,24 @@ public class Puzzle19 {
         input.removeFirst();
 
         int count = 0;
+        List<String> possibleTargets = new ArrayList<>();
         for (String target : input) {
-            System.out.println(input.indexOf(target));
             if (new Towel(options).isPossible(target)) {
+                possibleTargets.add(target);
                 count++;
             }
         }
 
         System.out.println("Part A: " + count);
+
+        long sum = 0;
+        for (String target : possibleTargets) {
+            long i = new TowelB(options).countPossibilities(target);
+            if (i > 0) {
+                sum += i;
+            }
+        }
+
+        System.out.println("Part B: " + sum);
     }
 }
