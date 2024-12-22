@@ -12,10 +12,10 @@ public class TowelB {
     }
 
     public long countPossibilities(String target) {
-        return buildPattern(target, new HashMap<>());
+        return reducePattern(target, new HashMap<>());
     }
 
-    private long buildPattern(String target, Map<String, Long> seen) {
+    private long reducePattern(String target, Map<String, Long> seen) {
         if (seen.containsKey(target)) {
             return seen.get(target);
         }
@@ -29,7 +29,7 @@ public class TowelB {
         for (String option : options) {
             if (target.startsWith(option)) {
                 String remainder = target.substring(option.length());
-                count += buildPattern(remainder, seen);
+                count += reducePattern(remainder, seen);
             }
         }
 
