@@ -30,10 +30,7 @@ public class Puzzle19 {
 
         long sum = 0;
         for (String target : possibleTargets) {
-            long i = new TowelB(options).countPossibilities(target);
-            if (i > 0) {
-                sum += i;
-            }
+            sum += new TowelB(options).countPossibilities(target);
         }
 
         System.out.println("Part B: " + sum);
