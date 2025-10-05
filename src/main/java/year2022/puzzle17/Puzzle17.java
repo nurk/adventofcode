@@ -1,9 +1,9 @@
 package year2022.puzzle17;
 
+import jakarta.annotation.Nonnull;
 import org.apache.commons.lang3.time.StopWatch;
 import util.Utils;
 
-import javax.annotation.Nonnull;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.stream.Collectors;

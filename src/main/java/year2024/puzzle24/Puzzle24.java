@@ -1,6 +1,7 @@
 package year2024.puzzle24;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import util.Utils;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class Puzzle24 {
         List<Gate> gates = new ArrayList<>();
 
         lines.forEach(line -> {
-            if (StringUtils.contains(line, "->")) {
+            if (Strings.CS.contains(line, "->")) {
                 gates.add(GateFactory.createGate(line, pins));
             } else if (StringUtils.isNotBlank(line)) {
                 String[] split = StringUtils.split(line, ": ");
@@ -43,13 +44,5 @@ public class Puzzle24 {
                 .collect(Collectors.joining());
         System.out.println("Part A binary: " + binary);
         System.out.println("Part A: " + Long.valueOf(binary, 2));
-
-//        System.out.println();
-//        pins.entrySet().stream().forEach(entry -> {
-//            System.out.println(entry.getKey() + " -> " + entry.getValue());
-//        });
-//        gates.stream().forEach(gate -> {
-//            System.out.println(gate);
-//        });
     }
 }
