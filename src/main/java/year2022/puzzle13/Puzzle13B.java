@@ -1,10 +1,10 @@
 package year2022.puzzle13;
 
+import jakarta.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.javatuples.Triplet;
 import util.Utils;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
