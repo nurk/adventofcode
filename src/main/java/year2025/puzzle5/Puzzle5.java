@@ -29,20 +29,21 @@ public class Puzzle5 {
         System.out.println("Part A: " + partA);
 
         boolean merged;
+        Collections.sort(ingredientRanges);
         do {
             merged = false;
-            Collections.sort(ingredientRanges);
             for (int i = ingredientRanges.size() - 1; i >= 1; i--) {
                 IngredientRange last = ingredientRanges.remove(i);
                 IngredientRange secondToLast = ingredientRanges.remove(i - 1);
 
                 if (last.overlapsWith(secondToLast)) {
-                    ingredientRanges.add(i - 1, secondToLast.mergeWith(last));
+                    ingredientRanges.add(secondToLast.mergeWith(last));
                     merged = true;
                 } else {
-                    ingredientRanges.add(i - 1, secondToLast);
-                    ingredientRanges.add(i, last);
+                    ingredientRanges.add(secondToLast);
+                    ingredientRanges.add(last);
                 }
+                Collections.sort(ingredientRanges);
             }
         } while (merged);
 
