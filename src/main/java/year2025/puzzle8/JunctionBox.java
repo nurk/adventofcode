@@ -1,11 +1,6 @@
 package year2025.puzzle8;
 
 import lombok.Getter;
-import org.apache.commons.math3.ml.distance.EuclideanDistance;
-import org.apache.commons.math3.util.MathArrays;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class JunctionBox implements Comparable<JunctionBox> {
     @Getter
