@@ -8,9 +8,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class JunctionBox implements Comparable<JunctionBox> {
-    private final double x, y, z;
     @Getter
-    private final Set<JunctionBox> connectedBoxes = new HashSet<>();
+    private final double x, y, z;
 
     public JunctionBox(String line) {
         String[] split = line.split(",");
@@ -20,20 +19,9 @@ public class JunctionBox implements Comparable<JunctionBox> {
     }
 
     public double computeDistance(JunctionBox other) {
-//        return MathArrays.distance(new double[]{this.x, this.y, this.z},
-//                new double[]{other.x, other.y, other.z});
         return Math.sqrt(Math.pow(this.x - other.x, 2) +
                 Math.pow(this.y - other.y, 2) +
                 Math.pow(this.z - other.z, 2));
-    }
-
-    public void connectTo(JunctionBox other) {
-        this.connectedBoxes.add(other);
-        other.connectedBoxes.add(this);
-    }
-
-    public boolean isNotConnected() {
-        return connectedBoxes.isEmpty();
     }
 
     @Override

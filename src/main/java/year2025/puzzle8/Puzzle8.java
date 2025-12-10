@@ -1,79 +1,60 @@
 package year2025.puzzle8;
 
-import org.apache.commons.lang3.tuple.Triple;
-import org.apache.commons.math3.util.Pair;
+import org.apache.commons.lang3.tuple.Pair;
 import util.Utils;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
+/**
+ * Part A: 57564
+ * Part B: 133296744
+ */
 public class Puzzle8 {
-
-    public Puzzle8() {
-    }
 
     public static void main(String[] args) {
         List<JunctionBox> junctionBoxes = Utils.getInput("2025/input8.txt", JunctionBox::new);
-        int connectionsToMake = 1000;
+        int connectionsToMake = junctionBoxes.size() < 1000 ? 10 : 1000;
 
-
-        // connect 10 closest junction boxes
-        // find 1 not connected junction box that has the closest other junction box
-
-        // closest first iteration
-        // 162,817,812 and 425,690,689
-        // 162,817,812 and 431,825,988
-        // 906,360,560 and 805,96,715
-        // 431,825,988 and 425,690,689
-
-        Set<JunctionBoxPair> shortestPairs = new HashSet<>();
+        Map<Double, Pair<JunctionBox, JunctionBox>> allDistances = new TreeMap<>();
 
         for (JunctionBox junctionBox : junctionBoxes) {
-            JunctionBoxPair closestPair;
-
-            List<JunctionBox> possiblePairs = new ArrayList<>(junctionBoxes);
-
-            do {
-                JunctionBox closestJunctionBox = possiblePairs.stream()
-                        .filter(j -> !j.equals(junctionBox))
-                        .min(Comparator.comparingDouble(junctionBox::computeDistance))
-                        .orElseThrow();
-
-                possiblePairs.remove(closestJunctionBox);
-
-                closestPair = new JunctionBoxPair(junctionBox,
-                        closestJunctionBox,
-                        junctionBox.computeDistance(closestJunctionBox));
-            } while (shortestPairs.contains(closestPair));
-            shortestPairs.add(closestPair);
+            for (JunctionBox junctionBoxOther : junctionBoxes) {
+                if (!junctionBox.equals(junctionBoxOther)) {
+                    double distance = junctionBox.computeDistance(junctionBoxOther);
+                    allDistances.put(distance, Pair.of(junctionBox, junctionBoxOther));
+                }
+            }
         }
 
-        List<JunctionBoxPair> sortedList = new ArrayList<>(shortestPairs.stream()
-                .sorted(Comparator.comparing(JunctionBoxPair::getDistance))
+        partA(allDistances, connectionsToMake);
+        partB(allDistances, junctionBoxes.size());
+    }
+
+    private static void partB(Map<Double, Pair<JunctionBox, JunctionBox>> allDistances, int junctionBoxesCount) {
+        Set<Set<JunctionBox>> loops = new HashSet<>();
+        List<Map.Entry<Double, Pair<JunctionBox, JunctionBox>>> sortedDistances = new ArrayList<>(allDistances.entrySet()
+                .stream()
                 .toList());
 
-        Set<Set<JunctionBox>> loops = new HashSet<>();
-        int pairParsed = 0;
+        Pair<JunctionBox, JunctionBox> pair;
         do {
-            if (sortedList.isEmpty()) {
-                break;
-            }
-            JunctionBoxPair pair = sortedList.removeFirst();
-            pairParsed++;
+            pair = sortedDistances.removeFirst().getValue();
+
+            Pair<JunctionBox, JunctionBox> localPair = pair;
 
             List<Set<JunctionBox>> list = loops.stream()
-                    .filter(set -> set.contains(pair.getBox1()) || set.contains(pair.getBox2()))
+                    .filter(set -> set.contains(localPair.getLeft()) || set.contains(localPair.getRight()))
                     .toList();
 
-            if(list.isEmpty()){
+            if (list.isEmpty()) {
                 Set<JunctionBox> newSet = new HashSet<>();
-                newSet.add(pair.getBox1());
-                newSet.add(pair.getBox2());
+                newSet.add(pair.getLeft());
+                newSet.add(pair.getRight());
                 loops.add(newSet);
-            }else {
+            } else {
                 list.forEach(l -> {
-                    l.add(pair.getBox1());
-                    l.add(pair.getBox2());
+                    l.add(localPair.getLeft());
+                    l.add(localPair.getRight());
                 });
             }
 
@@ -91,21 +72,61 @@ public class Puzzle8 {
                 }
             }
             loops = mergedLoops;
-        } while (pairParsed < connectionsToMake);
+        } while (!(loops.size() == 1 && loops.stream().findFirst().orElseThrow().size() == junctionBoxesCount));
+
+        System.out.println("Part B: " + Double.valueOf(pair.getLeft().getX())
+                .longValue() * Double.valueOf(pair.getRight().getX()).longValue());
+    }
+
+    private static void partA(Map<Double, Pair<JunctionBox, JunctionBox>> allDistances, int connectionsToMake) {
+        Set<Set<JunctionBox>> loops = new HashSet<>();
+        List<Map.Entry<Double, Pair<JunctionBox, JunctionBox>>> sortedDistances = allDistances.entrySet()
+                .stream()
+                .toList();
+
+        for (int i = 0; i < connectionsToMake; i++) {
+            Pair<JunctionBox, JunctionBox> pair = sortedDistances.get(i).getValue();
+
+            List<Set<JunctionBox>> list = loops.stream()
+                    .filter(set -> set.contains(pair.getLeft()) || set.contains(pair.getRight()))
+                    .toList();
+
+            if (list.isEmpty()) {
+                Set<JunctionBox> newSet = new HashSet<>();
+                newSet.add(pair.getLeft());
+                newSet.add(pair.getRight());
+                loops.add(newSet);
+            } else {
+                list.forEach(l -> {
+                    l.add(pair.getLeft());
+                    l.add(pair.getRight());
+                });
+            }
+
+
+            Set<Set<JunctionBox>> mergedLoops = new HashSet<>();
+            for (Set<JunctionBox> loop : loops) {
+                List<Set<JunctionBox>> loopsToBeMerged = mergedLoops.stream()
+                        .filter(ml -> !Collections.disjoint(ml, loop))
+                        .toList();
+
+                if (!loopsToBeMerged.isEmpty()) {
+                    loopsToBeMerged.forEach(ml -> ml.addAll(loop));
+                } else {
+                    mergedLoops.add(loop);
+                }
+            }
+            loops = mergedLoops;
+        }
 
         long partA = loops.stream()
                 .map(Set::size)
                 .sorted(Comparator.reverseOrder())
+                //.peek(System.out::println)
                 .limit(3)
                 .mapToLong(Long::valueOf)
                 .reduce(1, (a, b) -> a * b);
 
         System.out.println("Part A: " + partA);
-
-        // 1100 too low
-        // 7038 too low
-        // 7866 too low
-        // 12012 not correct
-        // 34481 not correct
     }
 }
