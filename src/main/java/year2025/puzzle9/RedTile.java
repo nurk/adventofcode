@@ -4,23 +4,23 @@ import lombok.Getter;
 
 public class RedTile {
     @Getter
-    private final long column, row;
+    private final long x, y;
 
     public RedTile(String line) {
         String[] split = line.split(",");
-        this.column = Long.parseLong(split[0]);
-        this.row = Long.parseLong(split[1]);
+        this.x = Long.parseLong(split[0]);
+        this.y = Long.parseLong(split[1]);
     }
 
     public long areaBetween(RedTile other) {
-        return (Math.abs(this.column - other.column) + 1) * (Math.abs(this.row - other.row) + 1);
+        return (Math.abs(this.x - other.x) + 1) * (Math.abs(this.y - other.y) + 1);
     }
 
     @Override
     public String toString() {
         return "RedTile{" +
-                "x=" + column +
-                ", y=" + row +
+                "x=" + x +
+                ", y=" + y +
                 '}';
     }
 
@@ -31,13 +31,13 @@ public class RedTile {
         }
 
         RedTile redTile = (RedTile) o;
-        return column == redTile.column && row == redTile.row;
+        return x == redTile.x && y == redTile.y;
     }
 
     @Override
     public int hashCode() {
-        int result = Long.hashCode(column);
-        result = 31 * result + Long.hashCode(row);
+        int result = Long.hashCode(x);
+        result = 31 * result + Long.hashCode(y);
         return result;
     }
 }
