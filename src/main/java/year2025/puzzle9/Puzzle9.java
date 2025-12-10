@@ -46,7 +46,6 @@ public class Puzzle9 {
         long maxY = Math.max(rt.getY(), rt2.getY());
 
         for (Edge edge : edges) {
-            // if min_x < e_max_x and max_x > e_min_x and min_y < e_max_y and max_y > e_min_y:
             if (minX < edge.getMaxX() &&
                     maxX > edge.getMinX() &&
                     minY < edge.getMaxY() &&
