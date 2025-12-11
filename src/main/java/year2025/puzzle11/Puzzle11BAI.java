@@ -5,7 +5,7 @@ import util.Utils;
 import java.util.*;
 
 /**
- * Part B: ???
+ * Part B: 290219757077250
  */
 public class Puzzle11BAI {
 
