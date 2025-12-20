@@ -58,7 +58,6 @@ public class HotSpring {
         long count = 0;
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
-                Pair<Integer, Integer> position = Pair.of(i, j);
                 if (!board[i][j].getRight()) {
                     if (polygon.contains(j, i)) {
                         System.out.print("#");
