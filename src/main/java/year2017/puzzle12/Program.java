@@ -10,7 +10,7 @@ public class Program {
     @Getter
     private final String id;
     private final String input;
-    private List<Program> groups = new ArrayList<>();
+    private final List<Program> groups = new ArrayList<>();
 
     public Program(String line) {
         //2 <-> 0, 3, 4
