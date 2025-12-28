@@ -36,6 +36,23 @@ public class Puzzle11 {
 
     /**
      * https://ferd.ca/advent-of-code-2017.html
+     *                         x
+     *
+     *           (+y)         +--+        (-z)
+     *              z        /    \       y
+     *                   +--+  B   +--+
+     *                  /    \    /    \
+     *              +--+  I   +--+  C   +--+
+     *             /    \    /    \    /    \
+     *     (-x)   +  H   +--+  A   +--+  D   +   (+x)
+     *             \    /    \    /    \    /
+     *              +--+  G   +--+  E   +--+
+     *                  \    /    \    /
+     *                   +--+  F   +--+
+     *                       \    /
+     *              y         +--+        z
+     *           (+z)                     (-y)
+     *                         x
      */
     private static Triple<Integer, Integer, Integer> move(String direction,
                                                           Triple<Integer, Integer, Integer> position) {
