@@ -1,15 +1,13 @@
 package year2020.puzzle3;
 
-import org.apache.commons.lang3.StringUtils;
-
-public class Map {
+public class MapPuzzle3 {
     private String[][] map;
     private int columns;
     private int rows;
     private int currentRow = 0;
     private int currentColumn = 0;
 
-    public Map(int rows, int columns) {
+    public MapPuzzle3(int rows, int columns) {
         map = new String[rows][columns];
         this.columns = columns;
         this.rows = rows;

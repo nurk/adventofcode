@@ -17,7 +17,7 @@ public class Puzzle3 {
                 }
         );
 
-        Map map = new Map(lines.size(), lines.get(0).length());
+        MapPuzzle3 map = new MapPuzzle3(lines.size(), lines.get(0).length());
 
         for (int i = 0; i < lines.size(); i++) {
             map.addRow(i, lines.get(i));
@@ -28,7 +28,7 @@ public class Puzzle3 {
         System.out.println(solve(1, 1, map) * solve(3, 1, map) * solve(5, 1, map) * solve(7, 1, map) * solve(1, 2, map));
     }
 
-    public static long solve(int right, int down, Map map) {
+    public static long solve(int right, int down, MapPuzzle3 map) {
         map.reset();
         long trees = 0;
         while (true) {
