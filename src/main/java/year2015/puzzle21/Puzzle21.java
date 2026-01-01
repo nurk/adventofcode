@@ -42,6 +42,9 @@ public class Puzzle21 {
             }
 
         }
+        if(dearestLoadoutThatLoses == null){
+            throw new IllegalStateException("No losing loadout found");
+        }
         System.out.println("Part B: " + dearestLoadoutThatLoses.getTotalCost());
     }
 
@@ -71,6 +74,9 @@ public class Puzzle21 {
                 break;
             }
 
+        }
+        if(cheapestWinningLoadout == null){
+            throw new IllegalStateException("No winning loadout found");
         }
         System.out.println("Part A: " + cheapestWinningLoadout.getTotalCost());
     }
