@@ -2,6 +2,7 @@ package year2023.puzzle4;
 
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,7 +16,7 @@ public class Card implements Comparable<Card> {
     private final List<Integer> scratchedNumbers;
 
     public Card(String line) {
-        line = StringUtils.replace(line, "  ", " ");
+        line = Strings.CS.replace(line, "  ", " ");
         cardId = Integer.parseInt(StringUtils.substringAfter(StringUtils.substringBefore(line, ":"), "Card ").trim());
         line = StringUtils.substringAfter(line, ": ");
         String[] split = line.split(" \\| ");

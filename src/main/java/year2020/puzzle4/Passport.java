@@ -1,6 +1,7 @@
 package year2020.puzzle4;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,12 +47,12 @@ public class Passport {
                 int eyr = Integer.parseInt(value);
                 return eyr >= 2020 && eyr <= 2030;
             case "hgt":
-                if (StringUtils.contains(value, "cm")) {
-                    int hgtCm = Integer.parseInt(StringUtils.remove(value, "cm"));
+                if (Strings.CS.contains(value, "cm")) {
+                    int hgtCm = Integer.parseInt(Strings.CS.remove(value, "cm"));
                     return hgtCm >= 150 && hgtCm <= 193;
                 }
-                if (StringUtils.contains(value, "in")) {
-                    int hgtCm = Integer.parseInt(StringUtils.remove(value, "in"));
+                if (Strings.CS.contains(value, "in")) {
+                    int hgtCm = Integer.parseInt(Strings.CS.remove(value, "in"));
                     return hgtCm >= 59 && hgtCm <= 76;
                 }
                 return false;

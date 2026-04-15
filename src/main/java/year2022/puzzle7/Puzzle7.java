@@ -1,6 +1,7 @@
 package year2022.puzzle7;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import util.Utils;
 
 import java.util.ArrayDeque;
@@ -18,7 +19,7 @@ public class Puzzle7 {
     public static void main(String[] args) {
         Utils.getInput("2022/input7.txt")
                 .forEach(data -> {
-                    if (StringUtils.startsWith(data, "$ cd ")) {
+                    if (Strings.CS.startsWith(data, "$ cd ")) {
                         String directory = StringUtils.substringAfter(data, "$ cd ");
                         if ("..".equals(directory)) {
                             CURRENT_DIRECTORY.pop();
@@ -29,7 +30,7 @@ public class Puzzle7 {
                             CURRENT_DIRECTORY.push(directory);
                         }
                     }
-                    if (StringUtils.startsWith(data, "dir ")) {
+                    if (Strings.CS.startsWith(data, "dir ")) {
                         DIRECTORY_SIZES.merge(queueToFqn(CURRENT_DIRECTORY), 0L, Long::sum);
                     }
 

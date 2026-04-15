@@ -1,6 +1,7 @@
 package year2018.puzzle4;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,9 +15,9 @@ public class Line {
 
     public Line(String line) {
         dateTime = LocalDateTime.parse(StringUtils.substringBetween(line, "[", "]"), df);
-        if (StringUtils.contains(line, "asleep")) {
+        if (Strings.CS.contains(line, "asleep")) {
             action = Action.SLEEP;
-        } else if (StringUtils.contains(line, "wakes")) {
+        } else if (Strings.CS.contains(line, "wakes")) {
             action = Action.WAKEUP;
         } else {
             action = Action.START;

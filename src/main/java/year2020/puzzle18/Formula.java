@@ -1,6 +1,7 @@
 package year2020.puzzle18;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 public class Formula {
     private final String formula;
@@ -13,7 +14,7 @@ public class Formula {
         String localFormula = formula;
         while (localFormula.contains("(")) {
             String part = StringUtils.substringBefore(StringUtils.substringAfterLast(localFormula, "("), ")");
-            localFormula = StringUtils.replace(localFormula, "(" + part + ")", String.valueOf(calculatePart(part)));
+            localFormula = Strings.CS.replace(localFormula, "(" + part + ")", String.valueOf(calculatePart(part)));
         }
         return calculatePart(localFormula);
     }

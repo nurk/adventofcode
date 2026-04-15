@@ -1,6 +1,6 @@
 package year2020.puzzle17;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.List;
 
@@ -67,7 +67,7 @@ public class Board3D {
             for (int j = 0; j < strings.length; j++) {
                 String[] string = strings[j];
                 for (int k = 0; k < string.length; k++) {
-                    if(isActive(i,j,k)){
+                    if (isActive(i, j, k)) {
                         sum++;
                     }
 
@@ -95,7 +95,7 @@ public class Board3D {
 
     public boolean isActive(int x, int y, int z) {
         try {
-            return StringUtils.equals(board[x][y][z], "#");
+            return Strings.CS.equals(board[x][y][z], "#");
         } catch (Exception e) {
             return false;
         }

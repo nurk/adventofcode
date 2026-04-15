@@ -1,6 +1,7 @@
 package year2020.puzzle14;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import util.Utils;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class Puzzle14 {
 
         for (String s : input) {
             if (s.startsWith("mask = ")) {
-                mask = StringUtils.removeStart(s, "mask = ").toCharArray();
+                mask = Strings.CS.removeStart(s, "mask = ").toCharArray();
             } else {
                 int location = Integer.parseInt(StringUtils.substringBetween(s, "[", "]"));
                 long number = Long.parseLong(StringUtils.substringAfter(s, "= "));
@@ -34,7 +35,7 @@ public class Puzzle14 {
 
         for (String s : input) {
             if (s.startsWith("mask = ")) {
-                maskB = StringUtils.removeStart(s, "mask = ").toCharArray();
+                maskB = Strings.CS.removeStart(s, "mask = ").toCharArray();
             } else {
                 int location = Integer.parseInt(StringUtils.substringBetween(s, "[", "]"));
                 long number = Long.parseLong(StringUtils.substringAfter(s, "= "));
@@ -67,7 +68,7 @@ public class Puzzle14 {
         for (char[] permutation : getAllPermutations(binaryLocation)) {
             String binaryString = String.valueOf(binaryLocation);
             for (char c : permutation) {
-                binaryString = StringUtils.replaceOnce(binaryString, "X", String.valueOf(c));
+                binaryString = Strings.CS.replaceOnce(binaryString, "X", String.valueOf(c));
             }
             memoryB.put(Long.valueOf(binaryString, 2), number);
 

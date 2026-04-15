@@ -1,6 +1,7 @@
 package year2020.puzzle19;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,21 +27,25 @@ public class RulesSecondAttempt {
     }
 
     public List<String> getValidMessages() {
-        return ruleZero.ruleElements.stream().map(s -> StringUtils.remove(s.getElement(), " ")).collect(Collectors.toList());
+        return ruleZero.ruleElements.stream()
+                .map(s -> Strings.CS.remove(s.getElement(), " "))
+                .collect(Collectors.toList());
     }
 
     private static class Rule {
         private List<RuleElement> ruleElements;
 
         public Rule(String rule) {
-            this.ruleElements = Arrays.stream(StringUtils.remove(rule, "\"").split(" \\| ")).map(RuleElement::new).collect(Collectors.toList());
+            this.ruleElements = Arrays.stream(Strings.CS.remove(rule, "\"").split(" \\| "))
+                    .map(RuleElement::new)
+                    .collect(Collectors.toList());
 
         }
 
         public boolean isFullyParsed() {
             for (RuleElement ruleElement : ruleElements) {
                 for (String c : ruleElement.getElement().split(" ")) {
-                    if (StringUtils.isNumeric(c) ) {
+                    if (StringUtils.isNumeric(c)) {
                         return false;
                     }
                 }
@@ -58,14 +63,14 @@ public class RulesSecondAttempt {
                         String someotherOriginalRuleElementText = ruleElement.getElement();
                         for (int i = 0; i < otherRule.ruleElements.size(); i++) {
                             if (i == 0) {
-                                String replacement = StringUtils.replace(someotherOriginalRuleElementText,
-                                    " " + c + " ",
-                                    " " + otherRule.ruleElements.get(i).getElement()) + " ";
+                                String replacement = Strings.CS.replace(someotherOriginalRuleElementText,
+                                        " " + c + " ",
+                                        " " + otherRule.ruleElements.get(i).getElement()) + " ";
                                 ruleElement.setElement(replacement);
                             } else {
-                                ruleElements.add(new RuleElement(StringUtils.replace(someotherOriginalRuleElementText,
-                                    " " + c + " ",
-                                    " " + otherRule.ruleElements.get(i).getElement() + " ")));
+                                ruleElements.add(new RuleElement(Strings.CS.replace(someotherOriginalRuleElementText,
+                                        " " + c + " ",
+                                        " " + otherRule.ruleElements.get(i).getElement() + " ")));
                             }
                         }
                     }
@@ -92,8 +97,8 @@ public class RulesSecondAttempt {
         @Override
         public String toString() {
             return "RuleElement{" +
-                "element='" + element + '\'' +
-                '}';
+                    "element='" + element + '\'' +
+                    '}';
         }
     }
 }

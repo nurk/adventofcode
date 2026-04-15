@@ -1,7 +1,7 @@
 package year2015;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 public class Puzzle4 {
     public static void main(String[] args) {
@@ -11,7 +11,7 @@ public class Puzzle4 {
         boolean found = false;
         while (!found) {
             salt++;
-            found = StringUtils.startsWith(DigestUtils.md5Hex(input + salt), "000000");
+            found = Strings.CS.startsWith(DigestUtils.md5Hex(input + salt), "000000");
         }
 
         System.out.println(salt);

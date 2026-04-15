@@ -1,6 +1,7 @@
 package year2016.puzzle7;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import util.Utils;
 
 import java.util.Arrays;
@@ -43,7 +44,7 @@ public class Puzzle7 {
     private static String[] getSupernets(String input, String[] hypernets) {
         AtomicReference<String> superNet = new AtomicReference<>(input);
         Arrays.stream(hypernets).forEach(
-                hypernet -> superNet.set(StringUtils.replace(superNet.get(), "[" + hypernet + "]", "|"))
+                hypernet -> superNet.set(Strings.CS.replace(superNet.get(), "[" + hypernet + "]", "|"))
         );
         return superNet.get().split("\\|");
     }

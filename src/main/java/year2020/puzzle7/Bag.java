@@ -1,6 +1,7 @@
 package year2020.puzzle7;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,15 +13,15 @@ public class Bag {
     private final Map<String, Integer> contents = new HashMap<>();
 
     public Bag(String definition) {
-        definition = StringUtils.removeEnd(definition, ".");
-        color = StringUtils.removeEnd(StringUtils.substringBefore(definition, " contain "), " bags");
+        definition = Strings.CS.removeEnd(definition, ".");
+        color = Strings.CS.removeEnd(StringUtils.substringBefore(definition, " contain "), " bags");
 
         if (!StringUtils.substringAfter(definition, " contain ").equals("no other bags")) {
             String[] content = StringUtils.splitByWholeSeparator(StringUtils.substringAfter(definition, " contain "),
                     ", ");
             for (String s : content) {
                 contents.put(
-                        StringUtils.remove(StringUtils.remove(StringUtils.substringAfter(s, " "), " bags"), " bag"),
+                        Strings.CS.remove(Strings.CS.remove(StringUtils.substringAfter(s, " "), " bags"), " bag"),
                         Integer.parseInt(StringUtils.substringBefore(s, " ")));
             }
         }

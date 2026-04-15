@@ -1,6 +1,6 @@
 package year2020.puzzle17;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.List;
 
@@ -101,7 +101,7 @@ public class Board4D {
 
     public boolean isActive(int x, int y, int z, int t) {
         try {
-            return StringUtils.equals(board[x][y][z][t], "#");
+            return Strings.CS.equals(board[x][y][z][t], "#");
         } catch (Exception e) {
             return false;
         }

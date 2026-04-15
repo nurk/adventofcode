@@ -1,6 +1,7 @@
 package year2019.puzzle7;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -113,7 +114,7 @@ public class IntCode {
 
     public int getOpCode(int curPos) {
         String op = StringUtils.leftPad(String.valueOf(curPos), 5, "0");
-        if (StringUtils.endsWith(op, "99")) {
+        if (Strings.CS.endsWith(op, "99")) {
             return 99;
         }
         return Integer.parseInt(StringUtils.substring(op, 4, 5));
@@ -134,7 +135,7 @@ public class IntCode {
         return result;
     }
 
-    public IntCode addInput(int input){
+    public IntCode addInput(int input) {
         this.inputs.add(input);
         return this;
     }

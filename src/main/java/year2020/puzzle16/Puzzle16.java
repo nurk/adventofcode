@@ -1,17 +1,13 @@
 package year2020.puzzle16;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import util.Utils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Puzzle16 {
@@ -34,7 +30,9 @@ public class Puzzle16 {
     }
 
     // this is a mess!!!!
-    private static void solveB(Map<Key, ValidRanges> validRanges, List<Integer> yourTicket, List<List<Integer>> validNearbySeats) {
+    private static void solveB(Map<Key, ValidRanges> validRanges,
+                               List<Integer> yourTicket,
+                               List<List<Integer>> validNearbySeats) {
         validNearbySeats.add(yourTicket);
         for (Map.Entry<Key, ValidRanges> entry : validRanges.entrySet()) {
             ValidRanges currentRange = entry.getValue();
@@ -70,7 +68,7 @@ public class Puzzle16 {
 
         long multiple = 1;
         for (Key stringIntegerTuple : keys) {
-            if (StringUtils.startsWithIgnoreCase(stringIntegerTuple.getKey(), "departure")) {
+            if (Strings.CI.startsWith(stringIntegerTuple.getKey(), "departure")) {
                 System.out.println(stringIntegerTuple);
                 multiple *= yourTicket.get(stringIntegerTuple.getValidPosition().get(0));
             }
@@ -120,7 +118,7 @@ public class Puzzle16 {
         boolean seenYourTicket = false;
         List<Integer> yourTicket = new ArrayList<>();
         for (String s : input) {
-            if (StringUtils.equalsIgnoreCase(s, "your ticket:")) {
+            if (Strings.CI.equals(s, "your ticket:")) {
                 seenYourTicket = true;
                 continue;
             }
@@ -136,7 +134,7 @@ public class Puzzle16 {
         boolean seenNearbyTickets = false;
         List<List<Integer>> nearbyTickets = new ArrayList<>();
         for (String s : input) {
-            if (StringUtils.equalsIgnoreCase(s, "nearby tickets:")) {
+            if (Strings.CI.equals(s, "nearby tickets:")) {
                 seenNearbyTickets = true;
                 continue;
             }
@@ -147,9 +145,11 @@ public class Puzzle16 {
         return nearbyTickets;
     }
 
-    private static void setupValidRanges(List<String> input, Map<Key, ValidRanges> validRanges, ValidRanges allValidRanges) {
+    private static void setupValidRanges(List<String> input,
+                                         Map<Key, ValidRanges> validRanges,
+                                         ValidRanges allValidRanges) {
         for (String s : input) {
-            if (StringUtils.equalsIgnoreCase(s, "your ticket:")) {
+            if (Strings.CI.equals(s, "your ticket:")) {
                 break;
             }
 

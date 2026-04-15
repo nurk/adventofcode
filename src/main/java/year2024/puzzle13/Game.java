@@ -1,6 +1,6 @@
 package year2024.puzzle13;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.javatuples.Pair;
 
 import java.util.ArrayList;
@@ -20,20 +20,20 @@ public class Game {
         String buttonB = gameLines.get(1);
         String result = gameLines.get(2);
 
-        buttonA = StringUtils.remove(buttonA, "Button A: ");
+        buttonA = Strings.CS.remove(buttonA, "Button A: ");
         String[] buttonASplit = buttonA.split(", ");
-        aX = Long.parseLong(StringUtils.remove(buttonASplit[0], "X+"));
-        aY = Long.parseLong(StringUtils.remove(buttonASplit[1], "Y+"));
+        aX = Long.parseLong(Strings.CS.remove(buttonASplit[0], "X+"));
+        aY = Long.parseLong(Strings.CS.remove(buttonASplit[1], "Y+"));
 
-        buttonB = StringUtils.remove(buttonB, "Button B: ");
+        buttonB = Strings.CS.remove(buttonB, "Button B: ");
         String[] buttonBSplit = buttonB.split(", ");
-        bX = Long.parseLong(StringUtils.remove(buttonBSplit[0], "X+"));
-        bY = Long.parseLong(StringUtils.remove(buttonBSplit[1], "Y+"));
+        bX = Long.parseLong(Strings.CS.remove(buttonBSplit[0], "X+"));
+        bY = Long.parseLong(Strings.CS.remove(buttonBSplit[1], "Y+"));
 
-        result = StringUtils.remove(result, "Prize: ");
+        result = Strings.CS.remove(result, "Prize: ");
         String[] resultSplit = result.split(", ");
-        x = Long.parseLong(StringUtils.remove(resultSplit[0], "X="));
-        y = Long.parseLong(StringUtils.remove(resultSplit[1], "Y="));
+        x = Long.parseLong(Strings.CS.remove(resultSplit[0], "X="));
+        y = Long.parseLong(Strings.CS.remove(resultSplit[1], "Y="));
     }
 
     public long solveA() {

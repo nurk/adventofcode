@@ -38,7 +38,7 @@ public class Puzzle24 {
         }
 
         String binary = pins.entrySet().stream()
-                .filter(entry -> StringUtils.startsWith(entry.getKey(), "z"))
+                .filter(entry -> Strings.CS.startsWith(entry.getKey(), "z"))
                 .sorted((o1, o2) -> o2.getKey().compareTo(o1.getKey()))
                 .map(entry -> String.valueOf(entry.getValue()))
                 .collect(Collectors.joining());

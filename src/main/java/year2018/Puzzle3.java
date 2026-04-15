@@ -1,6 +1,7 @@
 package year2018;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -26,11 +27,11 @@ public class Puzzle3 {
         Files.readAllLines(getInputUri()).forEach(
                 line -> {
                     String[] parts = StringUtils.split(line, " ");
-                    String[] xAndY = StringUtils.split(StringUtils.remove(parts[2], ":"), ",");
-                    String[] widthAndHeigth = StringUtils.split(parts[3], "x");
+                    String[] xAndY = StringUtils.split(Strings.CS.remove(parts[2], ":"), ",");
+                    String[] widthAndHeight = StringUtils.split(parts[3], "x");
 
-                    for (int i = getX(xAndY); i < getX(xAndY) + getWidth(widthAndHeigth); i++) {
-                        for (int j = getY(xAndY); j < getY(xAndY) + getHeigth(widthAndHeigth); j++) {
+                    for (int i = getX(xAndY); i < getX(xAndY) + getWidth(widthAndHeight); i++) {
+                        for (int j = getY(xAndY); j < getY(xAndY) + getHeigth(widthAndHeight); j++) {
                             fabric[i][j] = fabric[i][j] + 1;
                         }
                     }
@@ -54,12 +55,12 @@ public class Puzzle3 {
         Files.readAllLines(getInputUri()).forEach(
                 line -> {
                     String[] parts = StringUtils.split(line, " ");
-                    String[] xAndY = StringUtils.split(StringUtils.remove(parts[2], ":"), ",");
-                    String[] widthAndHeigth = StringUtils.split(parts[3], "x");
+                    String[] xAndY = StringUtils.split(Strings.CS.remove(parts[2], ":"), ",");
+                    String[] widthAndHeight = StringUtils.split(parts[3], "x");
 
                     boolean allOne = true;
-                    for (int i = getX(xAndY); i < getX(xAndY) + getWidth(widthAndHeigth); i++) {
-                        for (int j = getY(xAndY); j < getY(xAndY) + getHeigth(widthAndHeigth); j++) {
+                    for (int i = getX(xAndY); i < getX(xAndY) + getWidth(widthAndHeight); i++) {
+                        for (int j = getY(xAndY); j < getY(xAndY) + getHeigth(widthAndHeight); j++) {
                             if (fabric[i][j] != 1) {
                                 allOne = false;
                                 break;

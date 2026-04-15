@@ -1,6 +1,7 @@
 package year2024.puzzle23;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import util.Utils;
 
 import java.util.*;
@@ -33,7 +34,7 @@ public class Puzzle23 {
                         .anyMatch(ss -> ss.contains(nodeA) || ss.contains(nodeB))) {
                     Set<String> newSet = new HashSet<>(strings);
                     newSet.add(s);
-                        setsToAdd.add(newSet);
+                    setsToAdd.add(newSet);
                 }
             }
 
@@ -115,7 +116,7 @@ public class Puzzle23 {
         }
         System.out.println("Part A: " + triplets.stream()
                 .filter(triplet -> triplet.stream()
-                        .anyMatch(ss -> StringUtils.startsWith(ss, "t")))
+                        .anyMatch(ss -> Strings.CS.startsWith(ss, "t")))
                 .count());
     }
 }

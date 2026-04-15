@@ -1,6 +1,7 @@
 package year2022.puzzle10;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import util.Utils;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class Puzzle10 {
     public static void main(String[] args) {
         resetSprite();
         for (String s : Utils.getInput("2022/input10.txt")) {
-            if (StringUtils.equals(s, "noop")) {
+            if (Strings.CS.equals(s, "noop")) {
                 doCycle();
             } else {
                 int d = Integer.parseInt(s.split(" ")[1]);

@@ -1,6 +1,7 @@
 package year2021.puzzle10;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import util.Utils;
 
 import java.util.ArrayList;
@@ -46,9 +47,9 @@ public class Puzzle10 {
             Arrays.stream(Bracket.values())
                     .map(Bracket::getPair)
                     .forEach(pair -> {
-                        if (StringUtils.contains(ref.remainder, pair)) {
+                        if (Strings.CS.contains(ref.remainder, pair)) {
                             ref.found = true;
-                            ref.remainder = StringUtils.remove(ref.remainder, pair);
+                            ref.remainder = Strings.CS.remove(ref.remainder, pair);
                         }
                     });
         }

@@ -1,7 +1,7 @@
 package year2024.puzzle14;
 
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 @Getter
 public class Robot {
@@ -15,7 +15,7 @@ public class Robot {
 
     public Robot(String line) {
         String[] split = line.split(" ");
-        String p = StringUtils.remove(split[0], "p=");
+        String p = Strings.CS.remove(split[0], "p=");
         String[] pSplit = p.split(",");
 
         x = Integer.parseInt(pSplit[0]);
@@ -23,7 +23,7 @@ public class Robot {
         pX = x;
         pY = y;
 
-        String v = StringUtils.remove(split[1], "v=");
+        String v = Strings.CS.remove(split[1], "v=");
         String[] vSplit = v.split(",");
 
         vX = Integer.parseInt(vSplit[0]);

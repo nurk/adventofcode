@@ -1,16 +1,13 @@
 package year2019.puzzle8;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import util.Utils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 public class Puzzle8 {
     public static void main(String[] args) throws URISyntaxException, IOException {
@@ -33,8 +30,8 @@ public class Puzzle8 {
             for (int i = 0; i < 25; i++) {
                 for (Layer layer : unsortedLayers) {
                     String pixel = layer.getPixel(i + (j * 25));
-                    if (!StringUtils.equals(pixel, "2")) {
-                        if (StringUtils.equals(pixel, "0")) {
+                    if (!Strings.CS.equals(pixel, "2")) {
+                        if (Strings.CS.equals(pixel, "0")) {
                             System.out.print(" ");
                         } else {
                             System.out.print("0");

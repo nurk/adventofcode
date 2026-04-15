@@ -1,6 +1,7 @@
 package year2024.puzzle17;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.javatuples.Pair;
 import util.Utils;
 
@@ -80,7 +81,7 @@ public class Puzzle17 {
 
                     code.getValue0().execute(bInstructionPointer, bRegister, code.getValue1());
 
-                    if (!StringUtils.startsWith(originalProgram, bRegister.getValue())) {
+                    if (!Strings.CS.startsWith(originalProgram, bRegister.getValue())) {
                         break;
                     }
                 } catch (Exception e) {

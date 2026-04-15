@@ -5,16 +5,12 @@ import util.Utils;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.Objects.nonNull;
+import static java.util.Objects.*;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
-import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
+import static org.apache.commons.lang3.ObjectUtils.*;
 
 // https://github.com/benfff85/advent-of-code-2020/blob/master/src/main/java/com/adventofcode/day10/Controller.java
 public class Puzzle10Stolen {
@@ -41,12 +37,13 @@ public class Puzzle10Stolen {
 
         System.out.println("Product of adapters with diff 1 and adapters with diff 3: " + differenceOccurrenceMap.get(1) * differenceOccurrenceMap
                 .get(3));
-        System.out.println("Count of possible adapter configurations: " + getPossibleArrangements(0, new LinkedList<>(input)));
+        System.out.println("Count of possible adapter configurations: " + getPossibleArrangements(0,
+                new LinkedList<>(input)));
 
     }
 
     private static void trackOccurrencesOfDifferences(int difference) {
-        differenceOccurrenceMap.put(difference, defaultIfNull(differenceOccurrenceMap.get(difference), 0) + 1);
+        differenceOccurrenceMap.put(difference, getIfNull(differenceOccurrenceMap.get(difference), 0) + 1);
     }
 
     private static Long getPossibleArrangements(int previous, List<Integer> remainingAdapters) {

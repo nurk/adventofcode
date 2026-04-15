@@ -1,6 +1,7 @@
 package year2023.puzzle1;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import util.Utils;
 
 import java.util.Map;
@@ -86,7 +87,7 @@ public class Puzzle1 {
                                     if (StringUtils.isNumeric(firstChar)) {
                                         variables.firstDigit = firstChar;
                                     }
-                                    variables.line = StringUtils.removeStart(variables.line, firstChar);
+                                    variables.line = Strings.CS.removeStart(variables.line, firstChar);
                                 });
             }
 
@@ -103,7 +104,7 @@ public class Puzzle1 {
                                     if (StringUtils.isNumeric(lastChar)) {
                                         variables.lastDigit = lastChar;
                                     }
-                                    variables.line = StringUtils.removeEnd(variables.line, lastChar);
+                                    variables.line = Strings.CS.removeEnd(variables.line, lastChar);
                                 });
             }
             long number = Integer.parseInt(variables.firstDigit + variables.lastDigit);

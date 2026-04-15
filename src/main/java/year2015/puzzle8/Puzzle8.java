@@ -1,6 +1,6 @@
 package year2015.puzzle8;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.commons.text.StringEscapeUtils;
 import util.Utils;
 
@@ -18,8 +18,8 @@ public class Puzzle8 {
 
         input.stream()
                 .peek(s -> lengthPartA.codeLength += s.length())
-                .map(s -> StringUtils.removeStart(s, "\""))
-                .map(s -> StringUtils.removeEnd(s, "\""))
+                .map(s -> Strings.CS.removeStart(s, "\""))
+                .map(s -> Strings.CS.removeEnd(s, "\""))
                 .map(s -> s.replaceAll("\\\\x[0-9a-fA-F][0-9a-fA-F]", "a"))
                 .map(StringEscapeUtils::unescapeJava)
                 .forEach(s -> lengthPartA.memoryLength += s.length());

@@ -1,6 +1,7 @@
 package year2024.puzzle3;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,8 +30,8 @@ public class Puzzle3 {
         long sum = 0;
         while (matcher.find()) {
             String match = matcher.group();
-            match = StringUtils.remove(match, "mul(");
-            match = StringUtils.remove(match, ")");
+            match = Strings.CS.remove(match, "mul(");
+            match = Strings.CS.remove(match, ")");
             String[] split = match.split(",");
             sum += Long.parseLong(split[0]) * Long.parseLong(split[1]);
         }
@@ -44,12 +45,12 @@ public class Puzzle3 {
             String match = matcher2.group();
             int start = matcher2.start();
 
-            int doIndex = StringUtils.lastIndexOf(StringUtils.substring(input, 0, start), "do()");
-            int dontIndex = StringUtils.lastIndexOf(StringUtils.substring(input, 0, start), "don't()");
+            int doIndex = Strings.CS.lastIndexOf(StringUtils.substring(input, 0, start), "do()");
+            int dontIndex = Strings.CS.lastIndexOf(StringUtils.substring(input, 0, start), "don't()");
 
             if (doIndex > dontIndex || (doIndex == -1 && dontIndex == -1)) {
-                match = StringUtils.remove(match, "mul(");
-                match = StringUtils.remove(match, ")");
+                match = Strings.CS.remove(match, "mul(");
+                match = Strings.CS.remove(match, ")");
                 String[] split = match.split(",");
                 sum += Long.parseLong(split[0]) * Long.parseLong(split[1]);
             }

@@ -1,7 +1,7 @@
 package year2018.puzzle5;
 
 import org.apache.commons.lang3.RegExUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import util.Utils;
 
 import java.util.Arrays;
@@ -10,7 +10,7 @@ public class Puzzle5 {
     private final static String[] alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
 
     public static void main(String[] args) {
-        String input = Utils.getInput("2018/input5.txt", (s) -> s).get(0);
+        String input = Utils.getInput("2018/input5.txt", (s) -> s).getFirst();
 
         System.out.println("Part A: " + doReactions(input).length());
 
@@ -35,11 +35,11 @@ public class Puzzle5 {
                     .forEach(letter -> {
                         if (ref.text.contains(letter + letter.toUpperCase())) {
                             ref.found = true;
-                            ref.text = StringUtils.remove(ref.text, letter + letter.toUpperCase());
+                            ref.text = Strings.CS.remove(ref.text, letter + letter.toUpperCase());
                         }
                         if (ref.text.contains(letter.toUpperCase() + letter)) {
                             ref.found = true;
-                            ref.text = StringUtils.remove(ref.text, letter.toUpperCase() + letter);
+                            ref.text = Strings.CS.remove(ref.text, letter.toUpperCase() + letter);
                         }
 
                     });

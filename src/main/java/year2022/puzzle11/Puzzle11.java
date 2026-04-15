@@ -1,6 +1,7 @@
 package year2022.puzzle11;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import util.Utils;
 
 import java.math.BigInteger;
@@ -92,7 +93,7 @@ public class Puzzle11 {
                         stack.add(ss);
                     });
 
-            if (StringUtils.contains(monkeyStrings.get(2), "+")) {
+            if (Strings.CS.contains(monkeyStrings.get(2), "+")) {
                 operation = BigInteger::add;
             } else {
                 operation = BigInteger::multiply;
@@ -181,11 +182,11 @@ public class Puzzle11 {
         private BigInteger calculateCurrentWorryLevel(List<String> operations) {
             BigInteger currentWorryLevel = new BigInteger(operations.get(0));
             for (int i = 1; i < operations.size(); i++) {
-                if (StringUtils.equals(operations.get(i), "squared")) {
+                if (Strings.CS.equals(operations.get(i), "squared")) {
                     currentWorryLevel = currentWorryLevel.pow(2).remainder(testValue);
                 } else {
                     String[] split = operations.get(i).split(" ");
-                    if (StringUtils.equals(split[0], "+")) {
+                    if (Strings.CS.equals(split[0], "+")) {
                         currentWorryLevel = currentWorryLevel.add(new BigInteger(split[1]));
                     } else {
                         currentWorryLevel = currentWorryLevel.multiply(new BigInteger(split[1]).remainder(testValue));

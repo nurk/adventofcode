@@ -1,6 +1,6 @@
 package year2015.puzzle18;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import util.Utils;
 
 import java.util.ArrayList;
@@ -98,7 +98,7 @@ public class Puzzle18 {
 
         private boolean isPositionOn(int i, int j) {
             try {
-                return StringUtils.equals(board[i][j], "#");
+                return Strings.CS.equals(board[i][j], "#");
             } catch (Exception e) {
                 return false;
             }

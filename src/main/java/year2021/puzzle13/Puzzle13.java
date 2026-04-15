@@ -1,6 +1,6 @@
 package year2021.puzzle13;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import util.Utils;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class Puzzle13 {
     }
 
     private static void doFold(String fold, Board b) {
-        String[] split = StringUtils.remove(fold, "fold along ").split("=");
+        String[] split = Strings.CS.remove(fold, "fold along ").split("=");
         int val = Integer.parseInt(split[1]);
         if ("y".equals(split[0])) {
             b.foldRow(val);

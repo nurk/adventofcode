@@ -2,6 +2,7 @@ package year2023.puzzle2;
 
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,7 +15,7 @@ public class Game {
 
     public Game(String line) {
         String[] firstSplit = line.split(":");
-        gameId = Integer.parseInt(StringUtils.removeStart(firstSplit[0], "Game "));
+        gameId = Integer.parseInt(Strings.CS.removeStart(firstSplit[0], "Game "));
 
         for (String pull : firstSplit[1].split(";")) {
             Map<Colors, Integer> pullMap = new HashMap<>();

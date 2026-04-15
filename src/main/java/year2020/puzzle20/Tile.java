@@ -1,6 +1,6 @@
 package year2020.puzzle20;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public class Tile {
     private Long id;
 
     public Tile(List<String> input) {
-        id = Long.valueOf(StringUtils.remove(StringUtils.remove(input.get(0), "Tile "), ":"));
+        id = Long.valueOf(Strings.CS.remove(Strings.CS.remove(input.get(0), "Tile "), ":"));
         input.remove(0);
         input.remove(input.size() - 1);
 
@@ -69,10 +69,18 @@ public class Tile {
 
     public int numberOfMatchingBorders() {
         int sum = 0;
-        if (top.isFoundSame()) sum++;
-        if (left.isFoundSame()) sum++;
-        if (right.isFoundSame()) sum++;
-        if (bottom.isFoundSame()) sum++;
+        if (top.isFoundSame()) {
+            sum++;
+        }
+        if (left.isFoundSame()) {
+            sum++;
+        }
+        if (right.isFoundSame()) {
+            sum++;
+        }
+        if (bottom.isFoundSame()) {
+            sum++;
+        }
 
         return sum;
     }

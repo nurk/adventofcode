@@ -2,6 +2,7 @@ package year2015;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import util.Utils;
 
 import java.io.IOException;
@@ -47,9 +48,9 @@ public class Puzzle5 {
         }
 
         private boolean hasPairOfLetterThatDoNotOverlap() {
-            for (int i = 0; i < word.length()-2; i++) {
+            for (int i = 0; i < word.length() - 2; i++) {
                 String sequence = StringUtils.substring(word, i, i + 2);
-                if (StringUtils.contains(StringUtils.replaceOnce(word, sequence, "&&"), sequence)) {
+                if (Strings.CS.contains(Strings.CS.replaceOnce(word, sequence, "&&"), sequence)) {
                     return true;
                 }
             }
@@ -97,7 +98,7 @@ public class Puzzle5 {
         private boolean hasNaughtySequence() {
             List<String> naugthyWords = Lists.newArrayList("ab", "cd", "pq", "xy");
             for (String naugthyWord : naugthyWords) {
-                if (StringUtils.contains(word, naugthyWord)) {
+                if (Strings.CS.contains(word, naugthyWord)) {
                     return true;
                 }
             }

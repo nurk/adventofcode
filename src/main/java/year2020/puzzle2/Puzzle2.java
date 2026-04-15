@@ -1,6 +1,6 @@
 package year2020.puzzle2;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.RegExUtils;
 import util.Utils;
 
 import java.io.IOException;
@@ -48,7 +48,7 @@ public class Puzzle2 {
         String letter = rules[1];
         String password = split[1].trim();
 
-        String letters = StringUtils.removePattern(password, "[^" + letter + "]");
+        String letters = RegExUtils.removePattern((CharSequence) password, "[^" + letter + "]");
 
         return letters.length() >= minimun && letters.length() <= maximum;
     }
@@ -63,7 +63,9 @@ public class Puzzle2 {
         String letter = rules[1];
         String password = split[1].trim();
 
-        return (String.valueOf(password.charAt(pos1)).equals(letter) && !String.valueOf(password.charAt(pos2)).equals(letter)) ||
-                (!String.valueOf(password.charAt(pos1)).equals(letter) && String.valueOf(password.charAt(pos2)).equals(letter));
+        return (String.valueOf(password.charAt(pos1)).equals(letter) && !String.valueOf(password.charAt(pos2))
+                .equals(letter)) ||
+                (!String.valueOf(password.charAt(pos1)).equals(letter) && String.valueOf(password.charAt(pos2))
+                        .equals(letter));
     }
 }

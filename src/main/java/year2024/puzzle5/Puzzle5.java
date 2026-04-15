@@ -1,6 +1,6 @@
 package year2024.puzzle5;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import util.Utils;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class Puzzle5 {
                 .stream()
                 .filter(line -> !line.isEmpty())
                 .forEach(line -> {
-                    if (StringUtils.contains(line, "|")) {
+                    if (Strings.CS.contains(line, "|")) {
                         rules.add(new Rule(line));
                     } else {
                         updates.add(new ArrayList<>(Arrays.stream(line.split(","))

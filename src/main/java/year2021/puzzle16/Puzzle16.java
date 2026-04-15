@@ -1,6 +1,7 @@
 package year2021.puzzle16;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
@@ -42,11 +43,11 @@ public class Puzzle16 {
     private static int parseLiteral(String remainder) {
         String value = "";
         while (remainder.startsWith("1")) {
-            value = value + StringUtils.removeStart(remainder.substring(0, 5), "1");
+            value = value + Strings.CS.removeStart(remainder.substring(0, 5), "1");
             remainder = remainder.substring(5);
         }
 
-        value = value + StringUtils.removeStart(remainder.substring(0, 5), "0");
+        value = value + Strings.CS.removeStart(remainder.substring(0, 5), "0");
         remainder = remainder.substring(5);
         System.out.println(remainder);
 

@@ -1,6 +1,6 @@
 package year2024.puzzle19;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public class Towel {
             return true;
         }
 
-        if (!StringUtils.startsWith(target, builder) || builder.length() >= target.length()) {
+        if (!Strings.CS.startsWith(target, builder) || builder.length() >= target.length()) {
             return false;
         }
 

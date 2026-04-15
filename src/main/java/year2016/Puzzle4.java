@@ -1,6 +1,7 @@
 package year2016;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import util.Utils;
 
 import java.io.IOException;
@@ -47,7 +48,7 @@ public class Puzzle4 {
         public Room(String name) {
             String sectorIdAndChecksum = StringUtils.substringAfterLast(name, "-");
             sectorId = Integer.valueOf(StringUtils.substringBefore(sectorIdAndChecksum, "["));
-            checksum = StringUtils.removeEnd(StringUtils.substringAfterLast(sectorIdAndChecksum, "["), "]");
+            checksum = Strings.CS.removeEnd(StringUtils.substringAfterLast(sectorIdAndChecksum, "["), "]");
             AtomicReference<String> codes = new AtomicReference<>("");
             encryptedRoomName = StringUtils.substringBeforeLast(name, "-");
             Arrays.stream(StringUtils.split(StringUtils.substringBeforeLast(name, "-"), "-")).forEach(

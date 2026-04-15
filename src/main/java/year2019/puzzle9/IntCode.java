@@ -1,6 +1,7 @@
 package year2019.puzzle9;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 public class IntCode {
 
@@ -116,7 +117,7 @@ public class IntCode {
 
     public int getOpCode(long curPos) {
         String op = StringUtils.leftPad(String.valueOf(curPos), 5, "0");
-        if (StringUtils.endsWith(op, "99")) {
+        if (Strings.CS.endsWith(op, "99")) {
             return 99;
         }
         return Integer.parseInt(StringUtils.substring(op, 4, 5));

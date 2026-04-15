@@ -1,6 +1,6 @@
 package year2019.puzzle12;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.math.BigInteger;
 
@@ -29,7 +29,7 @@ public class Puzzle12B {
         String startPosition = moon1 + "" + moon2 + "" + moon3 + "" + moon4;
         String currentPosition = "";
         BigInteger count = BigInteger.ZERO;
-        while (!StringUtils.equals(startPosition, currentPosition)) {
+        while (!Strings.CS.equals(startPosition, currentPosition)) {
             moon1.applyGravityX(moon2, moon3, moon4);
             moon2.applyGravityX(moon1, moon3, moon4);
             moon3.applyGravityX(moon2, moon1, moon4);
@@ -50,7 +50,7 @@ public class Puzzle12B {
         String startPosition = moon1 + "" + moon2 + "" + moon3 + "" + moon4;
         String currentPosition = "";
         BigInteger count = BigInteger.ZERO;
-        while (!StringUtils.equals(startPosition, currentPosition)) {
+        while (!Strings.CS.equals(startPosition, currentPosition)) {
             moon1.applyGravityY(moon2, moon3, moon4);
             moon2.applyGravityY(moon1, moon3, moon4);
             moon3.applyGravityY(moon2, moon1, moon4);
@@ -71,7 +71,7 @@ public class Puzzle12B {
         String startPosition = moon1 + "" + moon2 + "" + moon3 + "" + moon4;
         String currentPosition = "";
         BigInteger count = BigInteger.ZERO;
-        while (!StringUtils.equals(startPosition, currentPosition)) {
+        while (!Strings.CS.equals(startPosition, currentPosition)) {
             moon1.applyGravityZ(moon2, moon3, moon4);
             moon2.applyGravityZ(moon1, moon3, moon4);
             moon3.applyGravityZ(moon2, moon1, moon4);
