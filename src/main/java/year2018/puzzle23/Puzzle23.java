@@ -50,6 +50,7 @@ public class Puzzle23 {
 
         // hone in on the coordinate.
         // checking each takes too much time.
+        // in hindsight, I just might be lucky this works.
         for (long div = 100000000; true; div = div / 10) {
             for (long x = minX; x <= maxX; x += div) {
                 for (long y = minY; y <= maxY; y += div) {
