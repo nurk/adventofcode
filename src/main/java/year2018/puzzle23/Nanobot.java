@@ -33,10 +33,6 @@ public class Nanobot {
         return manhattanDistance(other) <= other.radius;
     }
 
-    public boolean inRangePartB(Nanobot other) {
-        return manhattanDistance(other) <= radius + other.radius;
-    }
-
     public boolean inRange(long x, long y, long z) {
         return manhattanDistance(x, y, z) <= radius;
     }
